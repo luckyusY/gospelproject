@@ -1,8 +1,32 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Globe, ChevronDown, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Search, Globe, ChevronDown, Menu, X } from "lucide-react";
 import styles from "./Header.module.css";
 
 export default function Header() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const pathname = usePathname();
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [pathname]);
+
+    // Prevent scrolling when menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isMobileMenuOpen]);
+
     return (
         <header className={styles.header}>
             <div className={`container ${styles.headerContainer}`}>
@@ -20,12 +44,12 @@ export default function Header() {
 
                 <nav className={styles.desktopNav}>
                     <ul className={styles.navLinks}>
-                        <li><Link href="/" className={styles.active}>Home</Link></li>
-                        <li><Link href="/news">Trending News</Link></li>
-                        <li><Link href="/study">Bible Study</Link></li>
-                        <li><Link href="/life">Christian Life</Link></li>
-                        <li><Link href="/events">Events</Link></li>
-                        <li><Link href="/entertainment">Entertainment</Link></li>
+                        <li><Link href="/" className={pathname === "/" ? styles.active : ""}>Home</Link></li>
+                        <li><Link href="/news" className={pathname?.startsWith("/news") ? styles.active : ""}>Trending News</Link></li>
+                        <li><Link href="/study" className={pathname?.startsWith("/study") ? styles.active : ""}>Bible Study</Link></li>
+                        <li><Link href="/life" className={pathname?.startsWith("/life") ? styles.active : ""}>Christian Life</Link></li>
+                        <li><Link href="/events" className={pathname?.startsWith("/events") ? styles.active : ""}>Events</Link></li>
+                        <li><Link href="/entertainment" className={pathname?.startsWith("/entertainment") ? styles.active : ""}>Entertainment</Link></li>
                     </ul>
                 </nav>
 
@@ -34,15 +58,42 @@ export default function Header() {
                         <Search className={styles.searchIcon} size={18} />
                         <input type="text" placeholder="Search stories..." className={styles.searchInput} />
                     </div>
-                    <button className="btn btn-primary">Subscribe</button>
+                    <button className={`btn btn-primary ${styles.subscribeBtnDesktop}`}>Subscribe</button>
                     <div className={styles.userProfile}>
                         <div className={styles.avatar}></div>
                     </div>
-                    <button className={styles.mobileMenuBtn}>
-                        <Menu />
+                    <button className={styles.mobileMenuBtn} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                        {isMobileMenuOpen ? <X /> : <Menu />}
                     </button>
                 </div>
             </div>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className={styles.mobileMenuOverlay}>
+                    <div className={styles.mobileSearch}>
+                        <Search className={styles.searchIcon} size={18} />
+                        <input type="text" placeholder="Search stories..." className={styles.searchInput} />
+                    </div>
+                    <nav className={styles.mobileNav}>
+                        <ul className={styles.mobileNavLinks}>
+                            <li><Link href="/" className={pathname === "/" ? styles.activeMobile : ""}>Home</Link></li>
+                            <li><Link href="/news" className={pathname?.startsWith("/news") ? styles.activeMobile : ""}>Trending News</Link></li>
+                            <li><Link href="/study" className={pathname?.startsWith("/study") ? styles.activeMobile : ""}>Bible Study</Link></li>
+                            <li><Link href="/life" className={pathname?.startsWith("/life") ? styles.activeMobile : ""}>Christian Life</Link></li>
+                            <li><Link href="/events" className={pathname?.startsWith("/events") ? styles.activeMobile : ""}>Events</Link></li>
+                            <li><Link href="/entertainment" className={pathname?.startsWith("/entertainment") ? styles.activeMobile : ""}>Entertainment</Link></li>
+                        </ul>
+                    </nav>
+                    <div className={styles.mobileFooter}>
+                        <button className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }}>Subscribe</button>
+                        <div className={styles.mobileUser}>
+                            <div className={styles.avatar}></div>
+                            <span style={{ fontWeight: 600 }}>My Account</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </header>
     );
 }

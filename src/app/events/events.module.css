@@ -27,7 +27,7 @@
 }
 
 .heroTitle {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 8vw, 3.5rem);
     font-weight: 900;
     color: white;
     margin-bottom: 1rem;
