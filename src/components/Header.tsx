@@ -3,97 +3,184 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Globe, ChevronDown, Menu, X } from "lucide-react";
+import { Search, Menu, X, Zap, ChevronRight, Bell } from "lucide-react";
 import styles from "./Header.module.css";
+
+const breakingNews = [
+    "Global Prayer Summit draws 50,000 attendees across 6 continents",
+    "New worship album tops Christian charts for the 8th consecutive week",
+    "Community outreach program feeds 10,000 families this season",
+];
+
+const navLinks = [
+    { href: "/",              label: "Home" },
+    { href: "/news",          label: "Trending" },
+    { href: "/study",         label: "Bible Study" },
+    { href: "/life",          label: "Christian Life" },
+    { href: "/events",        label: "Events" },
+    { href: "/entertainment", label: "Entertainment" },
+];
 
 export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [tickerIndex, setTickerIndex]           = useState(0);
     const pathname = usePathname();
 
-    // Close menu when route changes
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [pathname]);
+    useEffect(() => { setIsMobileMenuOpen(false); }, [pathname]);
 
-    // Prevent scrolling when menu is open
     useEffect(() => {
-        if (isMobileMenuOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
-        return () => {
-            document.body.style.overflow = "unset";
-        };
+        document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
+        return () => { document.body.style.overflow = "unset"; };
     }, [isMobileMenuOpen]);
 
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTickerIndex(i => (i + 1) % breakingNews.length);
+        }, 4500);
+        return () => clearInterval(timer);
+    }, []);
+
+    const today = new Date().toLocaleDateString("en-US", {
+        weekday: "long", month: "long", day: "numeric", year: "numeric",
+    });
+
     return (
-        <header className={styles.header}>
-            <div className={`container ${styles.headerContainer}`}>
-                <div className={styles.logo}>
-                    <Link href="/">
-                        <span className={styles.logoIcon}>
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 19.5V4.5C4 3.11929 5.11929 2 6.5 2H17.5C18.8807 2 20 3.11929 20 4.5V19.5C20 20.8807 18.8807 22 17.5 22H6.5C5.11929 22 4 20.8807 4 19.5Z" fill="#2563eb" />
-                                <path d="M8 7H16M8 11H16M8 15H12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
+        <header className={styles.headerWrapper}>
+
+            {/* ── Tier 1: Breaking Bar ──────────────────── */}
+            <div className={styles.breakingBar}>
+                <div className={`container ${styles.breakingInner}`}>
+                    <div className={styles.breakingLeft}>
+                        <span className={styles.breakingBadge}>
+                            <Zap size={10} fill="currentColor" />
+                            BREAKING
                         </span>
-                        <span className={styles.logoText}>GOSPEL<br />NEWS</span>
-                    </Link>
-                </div>
-
-                <nav className={styles.desktopNav}>
-                    <ul className={styles.navLinks}>
-                        <li><Link href="/" className={pathname === "/" ? styles.active : ""}>Home</Link></li>
-                        <li><Link href="/news" className={pathname?.startsWith("/news") ? styles.active : ""}>Trending News</Link></li>
-                        <li><Link href="/study" className={pathname?.startsWith("/study") ? styles.active : ""}>Bible Study</Link></li>
-                        <li><Link href="/life" className={pathname?.startsWith("/life") ? styles.active : ""}>Christian Life</Link></li>
-                        <li><Link href="/events" className={pathname?.startsWith("/events") ? styles.active : ""}>Events</Link></li>
-                        <li><Link href="/entertainment" className={pathname?.startsWith("/entertainment") ? styles.active : ""}>Entertainment</Link></li>
-                    </ul>
-                </nav>
-
-                <div className={styles.actions}>
-                    <div className={styles.searchBar}>
-                        <Search className={styles.searchIcon} size={18} />
-                        <input type="text" placeholder="Search stories..." className={styles.searchInput} />
+                        <span className={styles.tickerText} key={tickerIndex}>
+                            {breakingNews[tickerIndex]}
+                        </span>
+                        <ChevronRight size={13} className={styles.tickerArrow} />
                     </div>
-                    <button className={`btn btn-primary ${styles.subscribeBtnDesktop}`}>Subscribe</button>
-                    <div className={styles.userProfile}>
-                        <div className={styles.avatar}></div>
+                    <div className={styles.breakingRight}>
+                        <span className={styles.topBarDate}>{today}</span>
+                        <span className={styles.topDivider}>|</span>
+                        <span className={styles.topLink}>Subscribe</span>
+                        <span className={styles.topDivider}>|</span>
+                        <span className={styles.topLink}>Sign In</span>
                     </div>
-                    <button className={styles.mobileMenuBtn} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                        {isMobileMenuOpen ? <X /> : <Menu />}
-                    </button>
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay */}
-            {isMobileMenuOpen && (
-                <div className={styles.mobileMenuOverlay}>
-                    <div className={styles.mobileSearch}>
-                        <Search className={styles.searchIcon} size={18} />
-                        <input type="text" placeholder="Search stories..." className={styles.searchInput} />
+            {/* ── Tier 2: Masthead ──────────────────────── */}
+            <div className={styles.masthead}>
+                <div className={`container ${styles.mastheadInner}`}>
+
+                    <div className={styles.logo}>
+                        <Link href="/">
+                            <div className={styles.logoMark}>
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 19.5V4.5C4 3.12 5.12 2 6.5 2h11C18.88 2 20 3.12 20 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-11C5.12 22 4 20.88 4 19.5z" fill="#F59E0B"/>
+                                    <path d="M8 7h8M8 11h8M8 15h5" stroke="#0D1B2E" strokeWidth="2.2" strokeLinecap="round"/>
+                                </svg>
+                            </div>
+                            <div className={styles.logoText}>
+                                <span className={styles.logoTop}>GOSPEL</span>
+                                <span className={styles.logoBottom}>NEWS</span>
+                            </div>
+                        </Link>
                     </div>
-                    <nav className={styles.mobileNav}>
-                        <ul className={styles.mobileNavLinks}>
-                            <li><Link href="/" className={pathname === "/" ? styles.activeMobile : ""}>Home</Link></li>
-                            <li><Link href="/news" className={pathname?.startsWith("/news") ? styles.activeMobile : ""}>Trending News</Link></li>
-                            <li><Link href="/study" className={pathname?.startsWith("/study") ? styles.activeMobile : ""}>Bible Study</Link></li>
-                            <li><Link href="/life" className={pathname?.startsWith("/life") ? styles.activeMobile : ""}>Christian Life</Link></li>
-                            <li><Link href="/events" className={pathname?.startsWith("/events") ? styles.activeMobile : ""}>Events</Link></li>
-                            <li><Link href="/entertainment" className={pathname?.startsWith("/entertainment") ? styles.activeMobile : ""}>Entertainment</Link></li>
-                        </ul>
-                    </nav>
-                    <div className={styles.mobileFooter}>
-                        <button className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }}>Subscribe</button>
-                        <div className={styles.mobileUser}>
-                            <div className={styles.avatar}></div>
-                            <span style={{ fontWeight: 600 }}>My Account</span>
+
+                    <div className={styles.mastheadTagline}>
+                        Faith &nbsp;·&nbsp; Culture &nbsp;·&nbsp; Community
+                    </div>
+
+                    <div className={styles.mastheadActions}>
+                        <div className={styles.searchWrap}>
+                            <Search size={15} className={styles.searchIcon} />
+                            <input
+                                type="text"
+                                placeholder="Search stories..."
+                                className={styles.searchInput}
+                            />
                         </div>
+                        <button className={styles.subscribeBtn}>
+                            <Bell size={13} />
+                            Subscribe Free
+                        </button>
+                        <button
+                            className={styles.mobileMenuBtn}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* ── Tier 3: Nav Bar ───────────────────────── */}
+            <nav className={styles.navBar} aria-label="Main navigation">
+                <div className={`container ${styles.navInner}`}>
+                    <ul className={styles.navLinks}>
+                        {navLinks.map(({ href, label }) => {
+                            const isActive = href === "/"
+                                ? pathname === "/"
+                                : pathname?.startsWith(href);
+                            return (
+                                <li key={href}>
+                                    <Link
+                                        href={href}
+                                        className={isActive ? styles.navLinkActive : styles.navLink}
+                                    >
+                                        {label}
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    <div className={styles.navRight}>
+                        <span className={styles.liveBadge}>
+                            <span className={styles.liveDot} />
+                            LIVE
+                        </span>
+                        <span className={styles.liveText}>Sunday Service Stream</span>
                     </div>
                 </div>
+            </nav>
+
+            {/* ── Mobile Overlay ────────────────────────── */}
+            {isMobileMenuOpen && (
+                <div className={styles.mobileOverlay}>
+                    <div className={styles.mobileSearch}>
+                        <Search size={16} className={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Search stories..."
+                            className={styles.searchInput}
+                        />
+                    </div>
+                    <nav className={styles.mobileNav}>
+                        {navLinks.map(({ href, label }) => {
+                            const isActive = href === "/"
+                                ? pathname === "/"
+                                : pathname?.startsWith(href);
+                            return (
+                                <Link
+                                    key={href}
+                                    href={href}
+                                    className={`${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`}
+                                >
+                                    {label}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                    <button className={styles.mobileSubscribeBtn}>
+                        Subscribe Now — Free
+                    </button>
+                </div>
             )}
+
         </header>
     );
 }
