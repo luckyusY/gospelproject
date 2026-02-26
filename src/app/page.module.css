@@ -1,0 +1,447 @@
+.page {
+    padding-bottom: 4rem;
+}
+
+/* Hero Section */
+.heroSection {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.heroGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .heroGrid {
+        grid-template-columns: 2.5fr 1fr;
+        gap: 2rem;
+    }
+}
+
+.mainStories {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.featuredStory {
+    height: 400px;
+    border-radius: var(--radius-lg);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+@media (min-width: 768px) {
+    .featuredStory {
+        height: 450px;
+    }
+}
+
+.featuredStory::before,
+.subStory::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.1) 100%);
+    z-index: 1;
+}
+
+.storyOverlay {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    color: white;
+}
+
+.storyTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 1rem 0;
+    line-height: 1.2;
+}
+
+.storyExcerpt {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 80%;
+}
+
+.subStories {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .subStories {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.subStory {
+    height: 220px;
+    border-radius: var(--radius-lg);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.subStoryTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebarWidget {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.widgetHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.widgetHeader h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    flex: 1;
+}
+
+.widgetIcon {
+    color: var(--primary-color);
+}
+
+.viewAll {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: 0.05em;
+}
+
+.eventList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.eventItem {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.eventDate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+    border-radius: var(--radius-md);
+    min-width: 50px;
+    height: 55px;
+    color: var(--primary-color);
+}
+
+.eventMonth {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.eventDay {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.eventDetails h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.eventDetails p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.newsletterWidget {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+}
+
+.newsletterWidget h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.newsletterWidget p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+}
+
+.newsletterForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.newsletterForm input {
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.newsletterForm input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.newsletterForm input:focus {
+    border-color: white;
+}
+
+.newsletterForm button {
+    width: 100%;
+}
+
+/* Verse of the Day */
+.verseSection {
+    margin-bottom: 4rem;
+}
+
+.verseBox {
+    background-color: var(--bg-dark);
+    border-radius: var(--radius-lg);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.verseBox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.verseLabel {
+    position: relative;
+    z-index: 1;
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.verseText {
+    position: relative;
+    z-index: 1;
+    font-size: 1.75rem;
+    line-height: 1.4;
+    font-weight: 400;
+    font-style: italic;
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+}
+
+@media (min-width: 768px) {
+    .verseText {
+        font-size: 2.25rem;
+    }
+}
+
+.verseRef {
+    position: relative;
+    z-index: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    display: block;
+    font-style: normal;
+    margin-bottom: 2rem;
+}
+
+.verseActions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.verseBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.btnLight {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.btnLight:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.btnPrimary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btnPrimary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Testimonies */
+.testimonySection {
+    margin-bottom: 2rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.sectionTitleBlock {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sectionIcon {
+    color: var(--primary-color);
+}
+
+.sliderControls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.sliderBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.sliderBtn:hover {
+    background-color: var(--bg-color);
+}
+
+.testimonyGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .testimonyGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.testimonyCard {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.videoThumbnail {
+    height: 220px;
+    border-radius: var(--radius-lg);
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg-color);
+    /* fallback */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.playBtn {
+    background: white;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s;
+}
+
+.videoThumbnail:hover .playBtn {
+    transform: scale(1.1);
+}
+
+.testimonyContent h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.testimonyContent p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}

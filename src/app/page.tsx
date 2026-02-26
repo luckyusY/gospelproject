@@ -1,65 +1,159 @@
-import Image from "next/image";
+import Image from "next/link";
+import styles from "./page.module.css";
+import { PlayCircle, Calendar, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={styles.page}>
+
+      {/* Hero Section */}
+      <section className={`container ${styles.heroSection}`}>
+        <div className={styles.heroGrid}>
+
+          <div className={styles.mainStories}>
+            <div className={styles.featuredStory} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1000&auto=format&fit=crop)' }}>
+              <div className={styles.storyOverlay}>
+                <span className="tag">Featured Story</span>
+                <h1 className={styles.storyTitle}>The Global Impact of Modern Worship Movements</h1>
+                <p className={styles.storyExcerpt}>How new generations are reshaping the landscape of praise and worship across different cultures and continents.</p>
+              </div>
+            </div>
+
+            <div className={styles.subStories}>
+              <div className={styles.subStory} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1000&auto=format&fit=crop)' }}>
+                <div className={styles.storyOverlay}>
+                  <h3 className={styles.subStoryTitle}>Finding Peace in the Digital Age</h3>
+                </div>
+              </div>
+              <div className={styles.subStory} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=1000&auto=format&fit=crop)' }}>
+                <div className={styles.storyOverlay}>
+                  <h3 className={styles.subStoryTitle}>Youth Ministry Growth Trends for 2024</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside className={styles.sidebar}>
+            <div className={styles.sidebarWidget}>
+              <div className={styles.widgetHeader}>
+                <Calendar className={styles.widgetIcon} size={20} />
+                <h3>Upcoming Events</h3>
+                <a href="/events" className={styles.viewAll}>VIEW ALL</a>
+              </div>
+              <ul className={styles.eventList}>
+                <li className={styles.eventItem}>
+                  <div className={styles.eventDate}>
+                    <span className={styles.eventMonth}>OCT</span>
+                    <span className={styles.eventDay}>24</span>
+                  </div>
+                  <div className={styles.eventDetails}>
+                    <h4>National Prayer Summit</h4>
+                    <p>Washington, D.C. • 9:00 AM</p>
+                  </div>
+                </li>
+                <li className={styles.eventItem}>
+                  <div className={styles.eventDate}>
+                    <span className={styles.eventMonth}>NOV</span>
+                    <span className={styles.eventDay}>02</span>
+                  </div>
+                  <div className={styles.eventDetails}>
+                    <h4>Worship Night Live</h4>
+                    <p>Grace Cathedral • 7:30 PM</p>
+                  </div>
+                </li>
+                <li className={styles.eventItem}>
+                  <div className={styles.eventDate}>
+                    <span className={styles.eventMonth}>DEC</span>
+                    <span className={styles.eventDay}>15</span>
+                  </div>
+                  <div className={styles.eventDetails}>
+                    <h4>Christmas Gala Charity</h4>
+                    <p>Community Hall • 6:00 PM</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div className={styles.newsletterWidget}>
+              <h3>Bible Study Newsletter</h3>
+              <p>Deepen your faith with weekly insights delivered to your inbox.</p>
+              <form className={styles.newsletterForm}>
+                <input type="email" placeholder="Your email address" required />
+                <button type="button" className="btn btn-accent">Join 15k+ Readers</button>
+              </form>
+            </div>
+          </aside>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Verse of the Day */}
+      <section className={`container ${styles.verseSection}`}>
+        <div className={styles.verseBox}>
+          <h4 className={styles.verseLabel}>VERSE OF THE DAY</h4>
+          <blockquote className={styles.verseText}>
+            "For I know the plans I have for you," declares the LORD, "plans to prosper you and not to harm you, plans to give you hope and a future."
+          </blockquote>
+          <cite className={styles.verseRef}>— Jeremiah 29:11</cite>
+
+          <div className={styles.verseActions}>
+            <button className={`${styles.verseBtn} ${styles.btnLight}`}>
+              Share Verse
+            </button>
+            <button className={`${styles.verseBtn} ${styles.btnPrimary}`}>
+              Read Chapter
+            </button>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Multimedia Testimonies */}
+      <section className={`container ${styles.testimonySection}`}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionTitleBlock}>
+            <PlayCircle size={28} className={styles.sectionIcon} />
+            <h2 className="section-title" style={{ marginBottom: 0 }}>Multimedia Testimonies</h2>
+          </div>
+          <div className={styles.sliderControls}>
+            <button className={styles.sliderBtn}>&lt;</button>
+            <button className={styles.sliderBtn}>&gt;</button>
+          </div>
+        </div>
+
+        <div className={styles.testimonyGrid}>
+
+          <div className={styles.testimonyCard}>
+            <div className={styles.videoThumbnail} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop)' }}>
+              <button className={styles.playBtn}><PlayCircle size={48} fill="white" stroke="var(--primary-color)" /></button>
+            </div>
+            <div className={styles.testimonyContent}>
+              <h3>A Journey of Healing</h3>
+              <p>Watch Sarah's miraculous story of recovery and restored faith.</p>
+            </div>
+          </div>
+
+          <div className={styles.testimonyCard}>
+            <div className={styles.videoThumbnail} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop)' }}>
+              <button className={styles.playBtn}><PlayCircle size={48} fill="white" stroke="var(--primary-color)" /></button>
+            </div>
+            <div className={styles.testimonyContent}>
+              <h3>Finding Purpose in Grace</h3>
+              <p>Mark shares how he discovered his calling after a period of doubt.</p>
+            </div>
+          </div>
+
+          <div className={styles.testimonyCard}>
+            <div className={styles.videoThumbnail} style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop)' }}>
+            </div>
+            <div className={styles.testimonyContent}>
+              <h3>Stronger Together</h3>
+              <p>The Smiths talk about building community through small groups.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   );
 }
