@@ -6,10 +6,11 @@ const envSchema = z.object({
     NEXT_PUBLIC_SITE_URL:  z.string().url().default("http://localhost:3000"),
     NEXT_PUBLIC_SITE_NAME: z.string().default("Urugero Media"),
 
-    // CMS (optional until Phase 3)
-    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().optional(),
-    NEXT_PUBLIC_SANITY_DATASET:    z.string().default("production"),
-    SANITY_API_TOKEN:              z.string().optional(),
+    // Supabase
+    NEXT_PUBLIC_SUPABASE_URL:      z.string().url(),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(10),
+    SUPABASE_SERVICE_ROLE_KEY:     z.string().optional(),
+    ADMIN_PASSWORD:                z.string().min(8).default("urugero_admin_2026"),
 
     // Email (optional until Phase 4)
     RESEND_API_KEY: z.string().optional(),
