@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Abagore",
+    description: "Inyigisho z'Imana zigenewe abagore b'Ubukristu.",
+    path: "/inyigisho/abagore",
+});
 
 export default function AbagorePage() {
     return (

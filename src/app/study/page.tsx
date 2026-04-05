@@ -1,13 +1,27 @@
-export default function PlaceholderPage() {
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
+import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title:       "Inyigisho za Bibiliya",
+    description: "Inyigisho zijya mu bunike bw'Ijambo ry'Imana — Bible Study, Bible Quiz na Tumenye Bibiliya.",
+    path:        "/study",
+});
+
+export default function StudyPage() {
     return (
-        <div className="container" style={{ padding: '8rem 0', textAlign: 'center', minHeight: '60vh' }}>
-            <h1 className="section-title">Coming Soon</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
-                This category is currently under construction. Please check back later for spiritual insights and updates.
-            </p>
-            <div style={{ marginTop: '2rem' }}>
-                <a href="/" className="btn btn-primary">Return Home</a> {/* eslint-disable-line @next/next/no-html-link-for-pages */}
-            </div>
-        </div>
+        <SectionPage
+            title="Inyigisho za Bibiliya"
+            subtitle="TUMENYE BIBILIYA — KWIGA"
+            description="Inyigisho zijya mu bunike bw'Ijambo ry'Imana, zigufasha gusobanukirwa Bibiliya neza kandi ukore ibibazo bya Bible Quiz."
+            icon="📖"
+            color="var(--blue)"
+            subSections={[
+                { label: "Tumenye Bibiliya",   href: "/tumenye-bibiliya",         desc: "Inyigisho zijya mu bunike bw'Ijambo" },
+                { label: "Bible Quiz",          href: "/inyigisho/bible-quiz",     desc: "Ibibazo bya Bibiliya" },
+                { label: "Urugero Bible Quiz",  href: "/urugero-media-group/bible-quiz", desc: "Porogaramu ya Bible Quiz kuri YouTube" },
+                { label: "Inyigisho",           href: "/inyigisho",               desc: "Inyigisho zose" },
+            ]}
+        />
     );
 }

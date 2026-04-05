@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Amakuru",
+    description: "Amakuru mashya y'Ubukristu mu Rwanda no ku isi yose.",
+    path: "/amakuru",
+});
 
 export default function AmakuruPage() {
     return (

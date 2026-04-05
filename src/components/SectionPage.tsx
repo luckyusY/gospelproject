@@ -1,15 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import styles from "./SectionPage.module.css";
+
+type SubSection = {
+    label: string;
+    href:  string;
+    desc?: string;
+};
+
+type Crumb = {
+    label: string;
+    href:  string;
+};
 
 type SectionPageProps = {
-    title: string;
-    subtitle: string;
+    title:       string;
+    subtitle:    string;
     description: string;
-    breadcrumb?: { label: string; href: string }[];
-    color?: string;
-    icon?: string;
-    subSections?: { label: string; href: string; desc?: string }[];
+    breadcrumb?: Crumb[];
+    color?:      string;   // accent colour for hero border + card tops
+    icon?:       string;
+    subSections?: SubSection[];
 };
 
 export default function SectionPage({
@@ -17,94 +29,66 @@ export default function SectionPage({
     subtitle,
     description,
     breadcrumb = [],
-    color = "#F59E0B",
-    icon = "📰",
+    color = "var(--gold)",
+    icon  = "📰",
     subSections = [],
 }: SectionPageProps) {
     return (
-        <div style={{ minHeight: "60vh", padding: "2rem 0" }}>
-            {/* Hero banner */}
+        <div className={styles.page}>
+
+            {/* ── Hero Banner ──────────────────────────── */}
             <div
-                style={{
-                    background: `linear-gradient(135deg, #0D1B2E 0%, ${color}22 100%)`,
-                    borderBottom: `4px solid ${color}`,
-                    padding: "3rem 1.5rem",
-                    marginBottom: "2.5rem",
-                }}
+                className={styles.hero}
+                style={{ borderBottomColor: color }}
             >
                 <div className="container">
+
                     {/* Breadcrumb */}
                     {breadcrumb.length > 0 && (
-                        <nav style={{ marginBottom: "1rem", fontSize: "0.8rem", color: "rgba(255,255,255,0.5)" }}>
-                            <Link href="/" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Ahabanza</Link>
-                            {breadcrumb.map((b) => (
-                                <span key={b.href}>
-                                    {" / "}
-                                    <Link href={b.href} style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>
-                                        {b.label}
+                        <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+                            <Link href="/" className={styles.breadcrumbLink}>Ahabanza</Link>
+                            {breadcrumb.map((crumb) => (
+                                <span key={crumb.href} style={{ display: "contents" }}>
+                                    <span className={styles.breadcrumbSep} aria-hidden>›</span>
+                                    <Link href={crumb.href} className={styles.breadcrumbLink}>
+                                        {crumb.label}
                                     </Link>
                                 </span>
                             ))}
-                            {" / "}
-                            <span style={{ color: color }}>{title}</span>
+                            <span className={styles.breadcrumbSep} aria-hidden>›</span>
+                            <span className={styles.breadcrumbCurrent} aria-current="page">{title}</span>
                         </nav>
                     )}
 
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                        <span style={{ fontSize: "2.5rem" }}>{icon}</span>
-                        <div>
-                            <p style={{ color, fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.25rem" }}>
+                    {/* Title row */}
+                    <div className={styles.heroContent}>
+                        <span className={styles.heroIcon} aria-hidden>{icon}</span>
+                        <div className={styles.heroText}>
+                            <p className={styles.heroSubtitle} style={{ color }}>
                                 {subtitle}
                             </p>
-                            <h1 style={{ color: "#ffffff", fontSize: "clamp(1.6rem, 4vw, 2.8rem)", fontWeight: 900, lineHeight: 1.1 }}>
-                                {title}
-                            </h1>
+                            <h1 className={styles.heroTitle}>{title}</h1>
+                            <p className={styles.heroDescription}>{description}</p>
                         </div>
                     </div>
-                    <p style={{ color: "rgba(255,255,255,0.65)", maxWidth: "600px", lineHeight: 1.7, fontSize: "1rem" }}>
-                        {description}
-                    </p>
+
                 </div>
             </div>
 
-            {/* Sub-sections grid */}
+            {/* ── Sub-sections Grid ────────────────────── */}
             {subSections.length > 0 && (
                 <div className="container">
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                        gap: "1.25rem",
-                        marginBottom: "3rem",
-                    }}>
+                    <div className={styles.subSectionsGrid}>
                         {subSections.map((s) => (
                             <Link
                                 key={s.href}
                                 href={s.href}
-                                style={{
-                                    display: "block",
-                                    background: "#ffffff",
-                                    border: "1.5px solid #E2E8F0",
-                                    borderRadius: "12px",
-                                    padding: "1.25rem",
-                                    textDecoration: "none",
-                                    transition: "all 0.2s",
-                                    borderTop: `3px solid ${color}`,
-                                    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                                }}
-                                onMouseEnter={e => {
-                                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-3px)";
-                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)";
-                                }}
-                                onMouseLeave={e => {
-                                    (e.currentTarget as HTMLAnchorElement).style.transform = "none";
-                                    (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)";
-                                }}
+                                className={styles.subSectionCard}
+                                style={{ borderTopColor: color }}
                             >
-                                <h3 style={{ color: "#0D1B2E", fontWeight: 700, fontSize: "1rem", marginBottom: s.desc ? "0.4rem" : 0 }}>
-                                    {s.label}
-                                </h3>
+                                <h3 className={styles.subSectionTitle}>{s.label}</h3>
                                 {s.desc && (
-                                    <p style={{ color: "#64748B", fontSize: "0.82rem", lineHeight: 1.5, margin: 0 }}>{s.desc}</p>
+                                    <p className={styles.subSectionDesc}>{s.desc}</p>
                                 )}
                             </Link>
                         ))}
@@ -112,22 +96,18 @@ export default function SectionPage({
                 </div>
             )}
 
-            {/* Coming soon placeholder */}
+            {/* ── Coming Soon ──────────────────────────── */}
             <div className="container">
-                <div style={{
-                    background: "#F8FAFC",
-                    border: "2px dashed #CBD5E1",
-                    borderRadius: "16px",
-                    padding: "3rem",
-                    textAlign: "center",
-                }}>
-                    <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🚧</div>
-                    <h3 style={{ color: "#0D1B2E", fontWeight: 700, marginBottom: "0.5rem" }}>Ibikurikira biraza vuba</h3>
-                    <p style={{ color: "#64748B", maxWidth: "400px", margin: "0 auto" }}>
-                        Iri ciro ryuzuzwa. Garuka vuba kugira ngo ubone ibirimo byuzuye kuri {title}.
+                <div className={styles.comingSoon}>
+                    <span className={styles.comingSoonIcon}>🚧</span>
+                    <h3 className={styles.comingSoonTitle}>Ibikurikira biraza vuba</h3>
+                    <p className={styles.comingSoonText}>
+                        Iri ciro ryuzuzwa. Garuka vuba kugira ngo ubone ibirimo byuzuye kuri{" "}
+                        <strong>{title}</strong>.
                     </p>
                 </div>
             </div>
+
         </div>
     );
 }

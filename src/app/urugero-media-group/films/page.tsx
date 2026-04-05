@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Films",
+    description: "Urugero Films ikorera filimi, videos n'ibiganiro by'Ubukristu.",
+    path: "/urugero-media-group/films",
+});
 
 export default function FilmsPage() {
     return (

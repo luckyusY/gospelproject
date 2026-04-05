@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Media Group",
+    description: "Itsinda ry'ibikorwa bya media bigamije gusakaza Ubukristu mu Rwanda no ku isi yose.",
+    path: "/urugero-media-group",
+});
 
 export default function UrugeroMediaGroupPage() {
     return (

@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Podcast",
+    description: "Urugero Podcast — ibiganiro, ibibazo n'impaka ku bihuye n'Ubukristu n'ubuzima.",
+    path: "/urugero-media-group/podcast",
+});
 
 export default function PodcastPage() {
     return (

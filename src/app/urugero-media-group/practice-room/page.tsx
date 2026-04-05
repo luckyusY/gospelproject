@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Practice Room",
+    description: "Urugero Practice Room — ahantu abahanzi basezerana kwitoza no gusinya indirimbo z'Imana.",
+    path: "/urugero-media-group/practice-room",
+});
 
 export default function PracticeRoomPage() {
     return (

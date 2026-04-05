@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { rootMetadata } from "@/lib/metadata";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,10 +18,7 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
-export const metadata: Metadata = {
-  title: "Urugero Media — Ubuhamya · Inyigisho · Imyidagaduro",
-  description: "Urugero Media Group ni itsinda rya media rya Gikrisitu mu Rwanda rigabana ubuhamya, inyigisho, amakuru y'Ubukristu n'imyidagaduro y'Imana.",
-};
+export const metadata: Metadata = rootMetadata;
 
 export default function RootLayout({
   children,

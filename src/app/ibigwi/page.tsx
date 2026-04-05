@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Ibigwi",
+    description: "Ibigwi n'ibikorwa by'abakristu bisangirwa n'abandi.",
+    path: "/ibigwi",
+});
 
 export default function IbigwiPage() {
     return (

@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Music Academy",
+    description: "Urugero Music Academy itoza abakunzi b'Imana indirimbo, gusingiza no gukinira Imana.",
+    path: "/urugero-media-group/music-academy",
+});
 
 export default function MusicAcademyPage() {
     return (

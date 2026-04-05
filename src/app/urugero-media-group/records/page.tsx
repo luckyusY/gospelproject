@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Records",
+    description: "Urugero Records iteranya abahanzi bo gurecodi indirimbo z'Imana.",
+    path: "/urugero-media-group/records",
+});
 
 export default function RecordsPage() {
     return (

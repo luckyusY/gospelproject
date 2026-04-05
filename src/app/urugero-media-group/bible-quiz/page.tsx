@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero Bible Quiz",
+    description: "Urugero Bible Quiz iteranya amashuri, amatorero na YouTube mu gukora ibibazo bya Bibiliya.",
+    path: "/urugero-media-group/bible-quiz",
+});
 
 export default function BibleQuizPage() {
     return (

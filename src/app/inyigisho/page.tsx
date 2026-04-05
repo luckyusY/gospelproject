@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Inyigisho",
+    description: "Inyigisho z'Imana ku bihuye n'umuryango, abana, urubyiruko, abagabo n'abagore.",
+    path: "/inyigisho",
+});
 
 export default function InyigishoPage() {
     return (

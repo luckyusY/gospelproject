@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+import { buildMeta } from "@/lib/metadata";
 import SectionPage from "@/components/SectionPage";
+
+export const metadata: Metadata = buildMeta({
+    title: "Urugero TV & Radio",
+    description: "Urugero TV na Radio — amajwi y'Imana, inyigisho, ibitaramo n'ubuhamya buri munsi.",
+    path: "/urugero-tv-radio",
+});
 
 export default function UrgeroTvRadioPage() {
     return (
