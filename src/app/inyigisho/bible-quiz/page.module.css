@@ -1,0 +1,22 @@
+.page { padding-bottom: 4rem; }
+
+.hero {
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--blue-dark) 100%);
+    padding: 2.5rem 0 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.breadcrumb a { color: rgba(255,255,255,0.5); }
+.breadcrumb a:hover { color: var(--gold); }
+
+.heading { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 900; color: white; margin-bottom: 0.4rem; }
+.subtitle { color: #93C5FD; font-size: 1rem; }

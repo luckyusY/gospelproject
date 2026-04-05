@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Globe, Megaphone, Share2, Smartphone } from "lucide-react";
+import NewsletterForm from "./NewsletterForm";
 import styles from "./Footer.module.css";
 
 const stats = [
@@ -96,6 +97,15 @@ export default function Footer() {
                         </button>
                     </div>
 
+                </div>
+
+                {/* Newsletter strip */}
+                <div className={styles.newsletterStrip}>
+                    <div className={styles.newsletterText}>
+                        <h3 className={styles.newsletterTitle}>Iyandikishe ku makuru</h3>
+                        <p className={styles.newsletterDesc}>Akamaro ka buri cyumweru kuri imeyili yawe. Nta makuru azabura.</p>
+                    </div>
+                    <NewsletterForm variant="inline" />
                 </div>
 
                 <div className={styles.bottomBar}>

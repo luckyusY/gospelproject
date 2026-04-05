@@ -152,14 +152,21 @@ export default function Header() {
                     </div>
 
                     <div className={styles.mastheadActions}>
-                        <div className={styles.searchWrap}>
+                        <form
+                            action="/search"
+                            method="GET"
+                            className={styles.searchWrap}
+                            role="search"
+                        >
                             <Search size={15} className={styles.searchIcon} />
                             <input
-                                type="text"
+                                name="q"
+                                type="search"
                                 placeholder="Shakisha..."
                                 className={styles.searchInput}
+                                aria-label="Shakisha urubuga"
                             />
-                        </div>
+                        </form>
                         <button className={styles.subscribeBtn}>
                             <Bell size={13} />
                             Iyandikishe
