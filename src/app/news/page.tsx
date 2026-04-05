@@ -9,7 +9,7 @@ export default function NewsPage() {
             <section className={styles.pageHeader}>
                 <div className="container">
                     <div className={styles.breadcrumb}>
-                        <a href="/">Home</a> &gt; <span>Archive</span>
+                        <a href="/">Home</a> {/* eslint-disable-line @next/next/no-html-link-for-pages */}&gt; <span>Archive</span>
                     </div>
                     <h1 className={styles.pageTitle}>Trending News &<br />Entertainment</h1>
                     <p className={styles.pageDescription}>
@@ -80,7 +80,7 @@ export default function NewsPage() {
                                 Most Read <ChevronDown size={14} />
                             </button>
                             <button className={styles.filterBtn}>
-                                Editors' Pick <ChevronDown size={14} />
+                                Editors&apos; Pick <ChevronDown size={14} />
                             </button>
                             <button className={styles.filterBtn}>
                                 Video <ChevronDown size={14} />

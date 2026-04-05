@@ -1,32 +1,88 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Menu, X, Zap, ChevronRight, Bell } from "lucide-react";
+import { Search, Menu, X, Zap, ChevronRight, Bell, ChevronDown } from "lucide-react";
 import styles from "./Header.module.css";
 
 const breakingNews = [
-    "Global Prayer Summit draws 50,000 attendees across 6 continents",
-    "New worship album tops Christian charts for the 8th consecutive week",
-    "Community outreach program feeds 10,000 families this season",
+    "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
+    "Urugero Online Radio ikomeza guturika n'amajwi y'Imana buri munsi",
+    "Urugero Bible Quiz ifungura amashuri n'amatorero mu Rwanda hose",
 ];
 
-const navLinks = [
-    { href: "/",              label: "Home" },
-    { href: "/news",          label: "Trending" },
-    { href: "/study",         label: "Bible Study" },
-    { href: "/life",          label: "Christian Life" },
-    { href: "/events",        label: "Events" },
-    { href: "/entertainment", label: "Entertainment" },
+type NavChild = {
+    href: string;
+    label: string;
+    sub?: string[];
+};
+
+type NavItem = {
+    href: string;
+    label: string;
+    children?: NavChild[];
+};
+
+const navLinks: NavItem[] = [
+    { href: "/", label: "Ahabanza" },
+    {
+        href: "/amakuru",
+        label: "Amakuru",
+        children: [
+            { href: "/amakuru/abahanzi",       label: "Abahanzi" },
+            { href: "/amakuru/amakorali",       label: "Amakorali" },
+            { href: "/amakuru/amatorero",       label: "Amatorero" },
+            { href: "/amakuru/abanyempano",     label: "Abanyempano" },
+            { href: "/amakuru/ibitaramo",       label: "Ibitaramo" },
+            { href: "/amakuru/hanze-yu-rwanda", label: "Hanze y'u Rwanda" },
+        ],
+    },
+    { href: "/ubuhamya", label: "Ubuhamya" },
+    { href: "/ibigwi",   label: "Ibigwi" },
+    {
+        href: "/inyigisho",
+        label: "Inyigisho",
+        children: [
+            { href: "/inyigisho/umuryango",        label: "Umuryango" },
+            { href: "/inyigisho/abana",             label: "Abana" },
+            { href: "/inyigisho/urubyiruko",        label: "Urubyiruko" },
+            { href: "/inyigisho/abagabo",           label: "Abagabo" },
+            { href: "/inyigisho/abagore",           label: "Abagore" },
+            { href: "/inyigisho/ubuzima-bwumwuka", label: "Ubuzima bw'Umwuka" },
+            { href: "/inyigisho/bible-quiz",        label: "Bible Quiz" },
+        ],
+    },
+    { href: "/tumenye-bibiliya",  label: "Tumenye Bibiliya" },
+    { href: "/urugero-tv-radio",  label: "Urugero TV & Radio" },
+    {
+        href: "/urugero-media-group",
+        label: "Urugero Media Group",
+        children: [
+            { href: "/urugero-media-group/music-academy",  label: "🎵 Urugero Music Academy",  sub: ["Worship training", "Vocal & instruments"] },
+            { href: "/urugero-media-group/films",          label: "🎬 Urugero Films",           sub: ["Video Production", "Editing", "Event Coverage", "Documentary"] },
+            { href: "/urugero-media-group/records",        label: "🎙️ Urugero Records",         sub: ["Recording", "Music production"] },
+            { href: "/urugero-media-group/music-talent",   label: "🌟 Urugero Music Talent",    sub: ["Talent search", "Competitions"] },
+            { href: "/urugero-media-group/online-radio",   label: "📻 Urugero Online Radio",    sub: ["Shows", "Music", "Teaching"] },
+            { href: "/urugero-media-group/bible-quiz",     label: "📖 Urugero Bible Quiz",      sub: ["Schools", "Churches", "YouTube program"] },
+            { href: "/urugero-media-group/practice-room",  label: "🎹 Urugero Practice Room",   sub: ["Rehearsals", "Training", "YouTube sessions"] },
+            { href: "/urugero-media-group/podcast",        label: "🎧 Urugero Podcast",         sub: ["Discussions", "Interviews", "Debates"] },
+        ],
+    },
+    { href: "/abo-turibo", label: "Abo Turibo" },
+    { href: "/contact",    label: "Contact" },
 ];
 
 export default function Header() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [tickerIndex, setTickerIndex]           = useState(0);
-    const pathname = usePathname();
+    const [isMobileMenuOpen, setIsMobileMenuOpen]       = useState(false);
+    const [openMobileSection, setOpenMobileSection]     = useState<string | null>(null);
+    const [tickerIndex, setTickerIndex]                 = useState(0);
+    const [activeDropdown, setActiveDropdown]           = useState<string | null>(null);
+    const pathname  = usePathname();
+    const dropTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    useEffect(() => { setIsMobileMenuOpen(false); }, [pathname]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    useEffect(() => { setIsMobileMenuOpen(false); setOpenMobileSection(null); }, [pathname]);
 
     useEffect(() => {
         document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
@@ -34,11 +90,12 @@ export default function Header() {
     }, [isMobileMenuOpen]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTickerIndex(i => (i + 1) % breakingNews.length);
-        }, 4500);
-        return () => clearInterval(timer);
+        const t = setInterval(() => setTickerIndex(i => (i + 1) % breakingNews.length), 4500);
+        return () => clearInterval(t);
     }, []);
+
+    const openDrop  = (href: string) => { if (dropTimer.current) clearTimeout(dropTimer.current); setActiveDropdown(href); };
+    const closeDrop = ()             => { dropTimer.current = setTimeout(() => setActiveDropdown(null), 150); };
 
     const today = new Date().toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric", year: "numeric",
@@ -53,7 +110,7 @@ export default function Header() {
                     <div className={styles.breakingLeft}>
                         <span className={styles.breakingBadge}>
                             <Zap size={10} fill="currentColor" />
-                            BREAKING
+                            AMAKURU
                         </span>
                         <span className={styles.tickerText} key={tickerIndex}>
                             {breakingNews[tickerIndex]}
@@ -63,9 +120,9 @@ export default function Header() {
                     <div className={styles.breakingRight}>
                         <span className={styles.topBarDate}>{today}</span>
                         <span className={styles.topDivider}>|</span>
-                        <span className={styles.topLink}>Subscribe</span>
+                        <span className={styles.topLink}>Injira</span>
                         <span className={styles.topDivider}>|</span>
-                        <span className={styles.topLink}>Sign In</span>
+                        <span className={styles.topLink}>Iyandikishe</span>
                     </div>
                 </div>
             </div>
@@ -83,14 +140,14 @@ export default function Header() {
                                 </svg>
                             </div>
                             <div className={styles.logoText}>
-                                <span className={styles.logoTop}>GOSPEL</span>
-                                <span className={styles.logoBottom}>NEWS</span>
+                                <span className={styles.logoTop}>URUGERO</span>
+                                <span className={styles.logoBottom}>MEDIA</span>
                             </div>
                         </Link>
                     </div>
 
                     <div className={styles.mastheadTagline}>
-                        Faith &nbsp;·&nbsp; Culture &nbsp;·&nbsp; Community
+                        Ubuhamya &nbsp;·&nbsp; Inyigisho &nbsp;·&nbsp; Imyidagaduro
                     </div>
 
                     <div className={styles.mastheadActions}>
@@ -98,13 +155,13 @@ export default function Header() {
                             <Search size={15} className={styles.searchIcon} />
                             <input
                                 type="text"
-                                placeholder="Search stories..."
+                                placeholder="Shakisha..."
                                 className={styles.searchInput}
                             />
                         </div>
                         <button className={styles.subscribeBtn}>
                             <Bell size={13} />
-                            Subscribe Free
+                            Iyandikishe
                         </button>
                         <button
                             className={styles.mobileMenuBtn}
@@ -122,28 +179,78 @@ export default function Header() {
             <nav className={styles.navBar} aria-label="Main navigation">
                 <div className={`container ${styles.navInner}`}>
                     <ul className={styles.navLinks}>
-                        {navLinks.map(({ href, label }) => {
+                        {navLinks.map(({ href, label, children }) => {
                             const isActive = href === "/"
                                 ? pathname === "/"
                                 : pathname?.startsWith(href);
+                            const isOpen  = activeDropdown === href;
+                            const isMega  = href === "/urugero-media-group";
+
                             return (
-                                <li key={href}>
+                                <li
+                                    key={href}
+                                    className={styles.navItem}
+                                    onMouseEnter={() => children && openDrop(href)}
+                                    onMouseLeave={() => children && closeDrop()}
+                                >
                                     <Link
                                         href={href}
                                         className={isActive ? styles.navLinkActive : styles.navLink}
                                     >
                                         {label}
+                                        {children && (
+                                            <ChevronDown
+                                                size={11}
+                                                className={`${styles.navChevron} ${isOpen ? styles.navChevronOpen : ""}`}
+                                            />
+                                        )}
                                     </Link>
+
+                                    {children && isOpen && (
+                                        <div
+                                            className={`${styles.dropdown} ${isMega ? styles.megaDropdown : ""}`}
+                                            onMouseEnter={() => openDrop(href)}
+                                            onMouseLeave={closeDrop}
+                                        >
+                                            {isMega ? (
+                                                <div className={styles.megaGrid}>
+                                                    {children.map((child) => (
+                                                        <div key={child.href} className={styles.megaItem}>
+                                                            <Link href={child.href} className={styles.megaItemTitle}>
+                                                                {child.label}
+                                                            </Link>
+                                                            {child.sub && (
+                                                                <ul className={styles.megaSubList}>
+                                                                    {child.sub.map(s => <li key={s}>{s}</li>)}
+                                                                </ul>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <ul className={styles.dropdownList}>
+                                                    {children.map((child) => (
+                                                        <li key={child.href}>
+                                                            <Link href={child.href} className={styles.dropdownItem}>
+                                                                {child.label}
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    )}
                                 </li>
                             );
                         })}
                     </ul>
+
                     <div className={styles.navRight}>
                         <span className={styles.liveBadge}>
                             <span className={styles.liveDot} />
                             LIVE
                         </span>
-                        <span className={styles.liveText}>Sunday Service Stream</span>
+                        <span className={styles.liveText}>Urugero Online Radio</span>
                     </div>
                 </div>
             </nav>
@@ -155,28 +262,61 @@ export default function Header() {
                         <Search size={16} className={styles.searchIcon} />
                         <input
                             type="text"
-                            placeholder="Search stories..."
+                            placeholder="Shakisha..."
                             className={styles.searchInput}
                         />
                     </div>
                     <nav className={styles.mobileNav}>
-                        {navLinks.map(({ href, label }) => {
+                        {navLinks.map(({ href, label, children }) => {
                             const isActive = href === "/"
                                 ? pathname === "/"
                                 : pathname?.startsWith(href);
+                            const isOpen = openMobileSection === href;
+
                             return (
-                                <Link
-                                    key={href}
-                                    href={href}
-                                    className={`${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`}
-                                >
-                                    {label}
-                                </Link>
+                                <div key={href} className={styles.mobileNavSection}>
+                                    <div className={styles.mobileNavRow}>
+                                        <Link
+                                            href={href}
+                                            className={`${styles.mobileNavLink} ${isActive ? styles.mobileNavLinkActive : ""}`}
+                                        >
+                                            {label}
+                                        </Link>
+                                        {children && (
+                                            <button
+                                                className={styles.mobileExpandBtn}
+                                                onClick={() => setOpenMobileSection(isOpen ? null : href)}
+                                                aria-label={`Expand ${label}`}
+                                            >
+                                                <ChevronDown
+                                                    size={16}
+                                                    style={{
+                                                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                                        transition: "transform 0.2s",
+                                                    }}
+                                                />
+                                            </button>
+                                        )}
+                                    </div>
+                                    {children && isOpen && (
+                                        <div className={styles.mobileSubMenu}>
+                                            {children.map((child) => (
+                                                <Link
+                                                    key={child.href}
+                                                    href={child.href}
+                                                    className={styles.mobileSubLink}
+                                                >
+                                                    {child.label}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             );
                         })}
                     </nav>
                     <button className={styles.mobileSubscribeBtn}>
-                        Subscribe Now — Free
+                        Iyandikishe Kubuntu
                     </button>
                 </div>
             )}

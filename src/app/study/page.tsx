@@ -6,7 +6,7 @@ export default function PlaceholderPage() {
                 This category is currently under construction. Please check back later for spiritual insights and updates.
             </p>
             <div style={{ marginTop: '2rem' }}>
-                <a href="/" className="btn btn-primary">Return Home</a>
+                <a href="/" className="btn btn-primary">Return Home</a> {/* eslint-disable-line @next/next/no-html-link-for-pages */}
             </div>
         </div>
     );

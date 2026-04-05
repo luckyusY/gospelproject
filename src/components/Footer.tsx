@@ -3,10 +3,10 @@ import { Globe, Megaphone, Share2, Smartphone } from "lucide-react";
 import styles from "./Footer.module.css";
 
 const stats = [
-    { value: "15K+",  label: "Subscribers" },
-    { value: "500+",  label: "Stories Published" },
-    { value: "50+",   label: "Countries Reached" },
-    { value: "100+",  label: "Events Covered" },
+    { value: "15K+",  label: "Abiyandikishije" },
+    { value: "500+",  label: "Amakuru Atangajwe" },
+    { value: "8+",    label: "Serivisi za Media" },
+    { value: "100+",  label: "Ibitaramo Byakozwe" },
 ];
 
 export default function Footer() {
@@ -38,10 +38,10 @@ export default function Footer() {
                                     <path d="M8 7h8M8 11h8M8 15h5" stroke="#0D1B2E" strokeWidth="2" strokeLinecap="round"/>
                                 </svg>
                             </div>
-                            <span className={styles.logoText}>GOSPELNEWS</span>
+                            <span className={styles.logoText}>URUGERO MEDIA</span>
                         </div>
                         <p className={styles.description}>
-                            Bringing light to the world through uplifting stories, faith-based news, and spiritual guidance for the modern era.
+                            Urugero Media Group ni itsinda rya media rya Gikrisitu rigabana ubuhamya, inyigisho n&apos;imyidagaduro y&apos;Imana mu Rwanda no ku isi yose.
                         </p>
                         <div className={styles.socialIcons}>
                             <button className={styles.socialBtn} aria-label="Website"><Globe size={17} /></button>
@@ -50,46 +50,48 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Categories */}
+                    {/* Amakuru */}
                     <div className={styles.linksCol}>
-                        <h4 className={styles.columnTitle}>Categories</h4>
+                        <h4 className={styles.columnTitle}>Amakuru</h4>
                         <ul>
-                            <li><Link href="/news">Latest News</Link></li>
-                            <li><Link href="/study">Bible Study Tips</Link></li>
-                            <li><Link href="/life">Christian Living</Link></li>
-                            <li><Link href="/youth">Youth Ministry</Link></li>
+                            <li><Link href="/amakuru/abahanzi">Abahanzi</Link></li>
+                            <li><Link href="/amakuru/amakorali">Amakorali</Link></li>
+                            <li><Link href="/amakuru/amatorero">Amatorero</Link></li>
+                            <li><Link href="/amakuru/ibitaramo">Ibitaramo</Link></li>
+                            <li><Link href="/amakuru/hanze-yu-rwanda">Hanze y&apos;u Rwanda</Link></li>
                         </ul>
                     </div>
 
-                    {/* Resources */}
+                    {/* Inyigisho */}
                     <div className={styles.linksCol}>
-                        <h4 className={styles.columnTitle}>Resources</h4>
+                        <h4 className={styles.columnTitle}>Inyigisho</h4>
                         <ul>
-                            <li><Link href="/devotionals">Daily Devotionals</Link></li>
-                            <li><Link href="/directory">Church Directory</Link></li>
-                            <li><Link href="/prayer">Prayer Requests</Link></li>
-                            <li><Link href="/podcast">Podcast</Link></li>
+                            <li><Link href="/inyigisho/umuryango">Umuryango</Link></li>
+                            <li><Link href="/inyigisho/urubyiruko">Urubyiruko</Link></li>
+                            <li><Link href="/inyigisho/bible-quiz">Bible Quiz</Link></li>
+                            <li><Link href="/tumenye-bibiliya">Tumenye Bibiliya</Link></li>
+                            <li><Link href="/ubuhamya">Ubuhamya</Link></li>
                         </ul>
                     </div>
 
-                    {/* App download */}
+                    {/* Urugero Media Group */}
                     <div className={styles.downloadCol}>
-                        <h4 className={styles.columnTitle}>Mobile App</h4>
+                        <h4 className={styles.columnTitle}>Urugero Media Group</h4>
                         <p className={styles.appDescription}>
-                            Read your favourite gospel news anywhere. Available on iOS and Android.
+                            Serivisi zacu zirimo: Music Academy, Films, Records, Online Radio, Bible Quiz, Practice Room na Podcast.
                         </p>
                         <button className={styles.appBtn}>
                             <Smartphone size={20} />
                             <div className={styles.appBtnText}>
-                                <span>Download on the</span>
-                                <strong>App Store</strong>
+                                <span>Reba kuri</span>
+                                <strong>Urugero TV & Radio</strong>
                             </div>
                         </button>
                         <button className={`${styles.appBtn} ${styles.appBtnAlt}`}>
                             <Smartphone size={20} />
                             <div className={styles.appBtnText}>
-                                <span>Get it on</span>
-                                <strong>Google Play</strong>
+                                <span>Tugere kuri</span>
+                                <strong>Abo Turibo</strong>
                             </div>
                         </button>
                     </div>
@@ -97,11 +99,12 @@ export default function Footer() {
                 </div>
 
                 <div className={styles.bottomBar}>
-                    <p>&copy; {new Date().getFullYear()} Gospel News. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Urugero Media Group. Uburenganzira bwose bwifashishijwe.</p>
                     <div className={styles.bottomLinks}>
                         <Link href="/privacy">Privacy Policy</Link>
-                        <Link href="/terms">Terms of Service</Link>
-                        <Link href="/contact">Contact Us</Link>
+                        <Link href="/terms">Amategeko</Link>
+                        <Link href="/abo-turibo">Abo Turibo</Link>
+                        <Link href="/contact">Twandikire</Link>
                     </div>
                 </div>
             </div>

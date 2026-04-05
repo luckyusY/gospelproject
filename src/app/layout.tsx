@@ -18,8 +18,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Gospel News — Faith, Culture & Community",
-  description: "Elevating gospel culture through news, reviews, and lifestyle content that inspires and transforms.",
+  title: "Urugero Media — Ubuhamya · Inyigisho · Imyidagaduro",
+  description: "Urugero Media Group ni itsinda rya media rya Gikrisitu mu Rwanda rigabana ubuhamya, inyigisho, amakuru y'Ubukristu n'imyidagaduro y'Imana.",
 };
 
 export default function RootLayout({

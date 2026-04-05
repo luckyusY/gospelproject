@@ -1,77 +1,77 @@
 import Link from "next/link";
 import styles from "./page.module.css";
-import { PlayCircle, Calendar, ArrowRight, TrendingUp } from "lucide-react";
+import { PlayCircle, Calendar, ArrowRight } from "lucide-react";
 
 const categories = [
-    { name: "All",           active: true  },
-    { name: "Trending",      color: "#DC2626" },
-    { name: "Bible Study",   color: "#1E40AF" },
-    { name: "Christian Life",color: "#059669" },
-    { name: "Events",        color: "#7C3AED" },
-    { name: "Entertainment", color: "#F59E0B" },
-    { name: "Youth",         color: "#0D1B2E" },
+    { name: "Byose",        active: true  },
+    { name: "Abahanzi",     color: "#DC2626" },
+    { name: "Amakorali",    color: "#1E40AF" },
+    { name: "Amatorero",    color: "#059669" },
+    { name: "Ibitaramo",    color: "#7C3AED" },
+    { name: "Ubuhamya",     color: "#F59E0B" },
+    { name: "Urubyiruko",   color: "#0D1B2E" },
 ];
 
 const latestStories = [
     {
         id: 1,
-        category: "Trending",
+        category: "Abahanzi",
         categoryColor: "#DC2626",
-        title: "Revival Movement Spreads Across 40 Nations",
-        excerpt: "A historic wave of spiritual awakening is being reported in churches across Asia, Africa, and Latin America.",
-        image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=800&auto=format&fit=crop",
-        author: "James Okafor",
-        readTime: "5 min read",
+        title: "Umuhanzi Mushya Yatangije Indirimbo Yuzuyemo Ubuhamya",
+        excerpt: "Indirimbo nshya yavuzweho n'abantu benshi mu Rwanda, igaragaza ubuhamya bw'umuhanzi wagize ibihe bikomeye mu buzima.",
+        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",
+        author: "Urugero Media",
+        readTime: "5 min",
     },
     {
         id: 2,
-        category: "Bible Study",
+        category: "Inyigisho",
         categoryColor: "#1E40AF",
-        title: "The Book of Job: Finding Faith in Suffering",
-        excerpt: "A deep dive into one of Scripture's most challenging texts and what it means for believers today.",
+        title: "Inyigisho ku Gukunda Imana: Amateka ya Yobu",
+        excerpt: "Inyigisho nziza ku gitabo cya Yobu igaragaza uburyo twashobora kwizera Imana no mu bihe bikomeye.",
         image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop",
-        author: "Pastor Grace Lee",
-        readTime: "8 min read",
+        author: "Pasteri wa Urugero",
+        readTime: "8 min",
     },
     {
         id: 3,
-        category: "Events",
+        category: "Ibitaramo",
         categoryColor: "#7C3AED",
-        title: "Worship Night Live Returns to Madison Square Garden",
-        excerpt: "The annual event sold out in under 24 hours, with overflow venues set up across New York City.",
+        title: "Ibitaramo by'Urugero Byakuye Abantu 5,000 i Kigali",
+        excerpt: "Ibitaramo by'indirimbo z'Imana byabaye i Kigali byakusanyije abantu benshi basingiwe n'Imana.",
         image: "https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=800&auto=format&fit=crop",
-        author: "Sarah Mitchell",
-        readTime: "4 min read",
+        author: "Urugero Events",
+        readTime: "4 min",
     },
     {
         id: 4,
-        category: "Christian Life",
+        category: "Ubuhamya",
         categoryColor: "#059669",
-        title: "How Fasting Transformed My Relationship With God",
-        excerpt: "One believer shares her 40-day journey and the surprising lessons she learned along the way.",
+        title: "Ubuhamya: Imana Yankoranije Mu Bihe Bikomeye",
+        excerpt: "Umukrisitu asangira ubuhamya bwe bw'uburwayi bwagira akamaro ko kumwibutsa ingufu z'Imana.",
         image: "https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop",
-        author: "Maria Santos",
-        readTime: "6 min read",
+        author: "Urugero Ubuhamya",
+        readTime: "6 min",
     },
     {
         id: 5,
-        category: "Entertainment",
+        category: "Amakorali",
         categoryColor: "#D97706",
-        title: "Top 10 Gospel Albums That Defined the Decade",
-        excerpt: "From intimate acoustic sessions to stadium anthems — the records that shaped a generation of faith.",
-        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",
-        author: "DJ Kingdom",
-        readTime: "7 min read",
+        title: "Amakorali 10 Azwi Cyane Mu Rwanda Muri 2025",
+        excerpt: "Reba urutonde rw'amakorali azwi cyane mu Rwanda ari hafi kurekura indirimbo nshya.",
+        image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=800&auto=format&fit=crop",
+        author: "Urugero Music",
+        readTime: "7 min",
     },
     {
         id: 6,
-        category: "Youth",
+        category: "Urubyiruko",
         categoryColor: "#0D1B2E",
-        title: "Gen Z Is Reshaping What Church Looks Like",
-        excerpt: "A new generation of believers is challenging traditions and breathing fresh life into old spaces.",
+        title: "Urubyiruko rw'u Rwanda Ruriyongera mu Bikorwa by'Imana",
+        excerpt: "Urubyiruko rwinshi rwarinjiye mu bikorwa by'Imana bigaragaza ko Itorero rikura mu Rwanda.",
         image: "https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop",
-        author: "Caleb Torres",
-        readTime: "5 min read",
+        author: "Urugero Youth",
+        readTime: "5 min",
     },
 ];
 
@@ -105,17 +105,17 @@ export default function Home() {
                             style={{ backgroundImage: "url(https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1400&auto=format&fit=crop)" }}
                         >
                             <div className={styles.featuredOverlay}>
-                                <span className="tag">Featured Story</span>
+                                <span className="tag">Inkuru Nkuru</span>
                                 <h1 className={styles.featuredTitle}>
-                                    The Global Impact of Modern Worship Movements
+                                    Urugero Media Group: Ijwi ry&apos;Imana mu Rwanda no ku Isi Yose
                                 </h1>
                                 <p className={styles.featuredExcerpt}>
-                                    How new generations are reshaping the landscape of praise and worship across different cultures and continents.
+                                    Urugero Media Group ikomeza gusakaza ubuhamya, inyigisho n&apos;imyidagaduro y&apos;Imana binyuze mu Music Academy, Films, Records, Online Radio na Podcast.
                                 </p>
                                 <div className={styles.featuredMeta}>
-                                    <span>By Michael Davis</span>
+                                    <span>Na Urugero Media</span>
                                     <span>•</span>
-                                    <span>6 min read</span>
+                                    <span>6 min</span>
                                 </div>
                             </div>
                         </div>
@@ -126,8 +126,8 @@ export default function Home() {
                                 style={{ backgroundImage: "url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=800&auto=format&fit=crop)" }}
                             >
                                 <div className={styles.subOverlay}>
-                                    <span className="tag tag-blue">Christian Life</span>
-                                    <h3 className={styles.subTitle}>Finding Peace in the Digital Age</h3>
+                                    <span className="tag tag-blue">Inyigisho</span>
+                                    <h3 className={styles.subTitle}>Ubuzima bw&apos;Umwuka mu Gihe cya Tekinoloji</h3>
                                 </div>
                             </div>
                             <div
@@ -135,8 +135,8 @@ export default function Home() {
                                 style={{ backgroundImage: "url(https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop)" }}
                             >
                                 <div className={styles.subOverlay}>
-                                    <span className="tag tag-gold">Youth</span>
-                                    <h3 className={styles.subTitle}>Youth Ministry Growth Trends for 2025</h3>
+                                    <span className="tag tag-gold">Urubyiruko</span>
+                                    <h3 className={styles.subTitle}>Urubyiruko Rw&apos;u Rwanda mu Bikorwa by&apos;Imana 2025</h3>
                                 </div>
                             </div>
                         </div>
@@ -148,14 +148,14 @@ export default function Home() {
                         <div className={styles.widget}>
                             <div className={styles.widgetHead}>
                                 <Calendar size={16} className={styles.widgetIcon} />
-                                <h3>Upcoming Events</h3>
-                                <Link href="/events" className={styles.viewAll}>VIEW ALL</Link>
+                                <h3>Ibitaramo Bizaza</h3>
+                                <Link href="/amakuru/ibitaramo" className={styles.viewAll}>REBA BYOSE</Link>
                             </div>
                             <ul className={styles.eventList}>
                                 {[
-                                    { month: "OCT", day: "24", title: "National Prayer Summit",  sub: "Washington, D.C. • 9:00 AM" },
-                                    { month: "NOV", day: "02", title: "Worship Night Live",       sub: "Grace Cathedral • 7:30 PM" },
-                                    { month: "DEC", day: "15", title: "Christmas Gala Charity",   sub: "Community Hall • 6:00 PM" },
+                                    { month: "MEI", day: "10", title: "Urugero Worship Night",      sub: "Kigali Arena • 18:00" },
+                                    { month: "JUN", day: "07", title: "Iminsi ya Bible Quiz",        sub: "IPRC Kigali • 9:00 AM" },
+                                    { month: "JUL", day: "20", title: "Urugero Music Academy Show", sub: "Amahoro Stadium • 15:00" },
                                 ].map((event) => (
                                     <li key={event.title} className={styles.eventItem}>
                                         <div className={styles.eventDate}>
@@ -173,11 +173,11 @@ export default function Home() {
 
                         <div className={styles.newsletterWidget}>
                             <div className={styles.newsletterIcon}>📖</div>
-                            <h3>Bible Study Newsletter</h3>
-                            <p>Deepen your faith with weekly insights delivered straight to your inbox.</p>
+                            <h3>Inyigisho za buri Cyumweru</h3>
+                            <p>Yandikisha kuri Urugero kugira ngo ubone inyigisho n&apos;amakuru y&apos;Imana buri cyumweru.</p>
                             <form className={styles.newsletterForm}>
-                                <input type="email" placeholder="Your email address" required />
-                                <button type="button" className="btn btn-accent">Join 15k+ Readers</button>
+                                <input type="email" placeholder="Emeyili yawe" required />
+                                <button type="button" className="btn btn-accent">Iyandikishe — Kubuntu</button>
                             </form>
                         </div>
 
@@ -190,14 +190,14 @@ export default function Home() {
             <section className={styles.verseSection}>
                 <div className={styles.verseQuoteMark}>&ldquo;</div>
                 <div className={styles.verseInner}>
-                    <span className={styles.verseBadge}>VERSE OF THE DAY</span>
+                    <span className={styles.verseBadge}>IJAMBO RY&apos;UMUNSI</span>
                     <blockquote className={styles.verseText}>
-                        For I know the plans I have for you, declares the LORD, plans to prosper you and not to harm you, plans to give you hope and a future.
+                        Kuko nzi imigambi ndimo ndibanza kuri wewe, ni Uhoraho uvuga, imigambi y&apos;amahoro si iy&apos;ibibazo, kugira ngo nkuhe amaherezo n&apos;icyiringiro.
                     </blockquote>
-                    <cite className={styles.verseRef}>— Jeremiah 29:11</cite>
+                    <cite className={styles.verseRef}>— Yeremiya 29:11</cite>
                     <div className={styles.verseActions}>
-                        <button className={styles.verseBtnOutline}>Share Verse</button>
-                        <button className={styles.verseBtnSolid}>Read Chapter</button>
+                        <button className={styles.verseBtnOutline}>Sangira Ijambo</button>
+                        <button className={styles.verseBtnSolid}>Soma Igice</button>
                     </div>
                 </div>
             </section>
@@ -205,9 +205,9 @@ export default function Home() {
             {/* ── Latest Stories ────────────────────────── */}
             <section className={`container ${styles.latestSection}`}>
                 <div className={styles.latestHeader}>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Latest Stories</h2>
-                    <Link href="/news" className={styles.seeAllLink}>
-                        See all stories <ArrowRight size={15} />
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>Inkuru Nshya</h2>
+                    <Link href="/amakuru" className={styles.seeAllLink}>
+                        Reba Inkuru Zose <ArrowRight size={15} />
                     </Link>
                 </div>
                 <div className={styles.storiesGrid}>
@@ -240,7 +240,7 @@ export default function Home() {
             <section className={`container ${styles.testimonySection}`}>
                 <div className={styles.testimonyHeader}>
                     <PlayCircle size={24} className={styles.sectionIcon} />
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Multimedia Testimonies</h2>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>Ubuhamya bw&apos;Abaturage</h2>
                     <div className={styles.sliderBtns}>
                         <button className={styles.sliderBtn} aria-label="Previous">&lt;</button>
                         <button className={styles.sliderBtn} aria-label="Next">&gt;</button>
@@ -251,20 +251,20 @@ export default function Home() {
                     {[
                         {
                             img:   "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
-                            title: "A Journey of Healing",
-                            desc:  "Watch Sarah's miraculous story of recovery and restored faith.",
+                            title: "Urugendo rw'Gukira",
+                            desc:  "Reba ubuhamya bw'uwakijijwe n'Imana mu burwayi bukomeye.",
                             hasPlay: true,
                         },
                         {
                             img:   "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-                            title: "Finding Purpose in Grace",
-                            desc:  "Mark shares how he discovered his calling after a period of doubt.",
+                            title: "Imana Yangaragarije Inzira",
+                            desc:  "Ubuhamya bw'umusore wabonetse inzira y'Imana nyuma y'ibihe bikomeye.",
                             hasPlay: true,
                         },
                         {
                             img:   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
-                            title: "Stronger Together",
-                            desc:  "The Smiths talk about building community through small groups.",
+                            title: "Twizerana Hamwe",
+                            desc:  "Umuryango usangira ubuhamya bw'ubumwe mu itorero no mu muryango.",
                             hasPlay: false,
                         },
                     ].map((t) => (
