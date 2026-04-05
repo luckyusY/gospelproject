@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMeta } from "@/lib/metadata";
+import { fetchVerse, getDailyVerseRef } from "@/lib/bible";
+import VerseSearch from "./VerseSearch";
 import styles from "./bible.module.css";
 
 export const metadata: Metadata = buildMeta({
@@ -9,17 +11,8 @@ export const metadata: Metadata = buildMeta({
     path: "/tumenye-bibiliya",
 });
 
-const dailyVerses = [
-    { text: "Kuko Imana yarkunze isi cyane, ndetse ihaye Umwana wayo w'ikinege, kugira ngo uwo wese wemera we ntazimu, ahubwo agire ubugingo buhoraho.", reference: "Yohana 3:16" },
-    { text: "Imana ni urukundo. Ukomeza mu rukundo akomera muri Imana, Imana na yo ikomera muri we.", reference: "1 Yohana 4:16" },
-    { text: "Shyira ibyifuzo byawe byose imbere y'Uwiteka, Nawe azakurikirana ibikorwa byawe byose.", reference: "Imigani 16:3" },
-    { text: "Nshobora ibintu byose muri Kristo unkomeza.", reference: "Abafilipo 4:13" },
-    { text: "Uwiteka ni Umwungeri wanjye, nzabura ikimwe cyo gukenesha.", reference: "Zaburi 23:1" },
-    { text: "Zera Uwiteka n'umutima wawe wose, ntwiringire ubwenge bwawe bwite.", reference: "Imigani 3:5" },
-    { text: "Musabire abo babatera nabi, muzeze abababaza.", reference: "Matayo 5:44" },
-];
-
-const todayVerse = dailyVerses[new Date().getDay() % dailyVerses.length]!;
+// Sidebar quick-reference list (static labels + live text fetched below)
+const sidebarRefs = ["John 3:16", "Psalm 23:1", "Philippians 4:13", "Romans 8:28", "Isaiah 40:31"];
 
 const books = [
     { name: "Isezerano rya Kera",  items: ["Itangiriro", "Kuva", "Zaburi", "Imigani", "Yesaya", "Yeremiya", "Ezekiele"] },
@@ -33,7 +26,14 @@ const plans = [
     { title: "Ubutumwa bwa Yohana",         desc: "Inyigisho zo kuri Injili ya Yohana — inzira nziza.",       duration: "1 Ukwezi", icon: "📖" },
 ];
 
-export default function TumenyeBibiliyaPage() {
+export default async function TumenyeBibiliyaPage() {
+    // Fetch today's verse live from bible-api.com (cached 24 h by Next.js)
+    const dailyRef   = getDailyVerseRef();
+    const dailyVerse = await fetchVerse(dailyRef);
+
+    // Fetch sidebar quick-reference verses in parallel
+    const sidebarVerses = await Promise.all(sidebarRefs.map(r => fetchVerse(r)));
+
     return (
         <div className={styles.page}>
             <div className={styles.hero}>
@@ -49,13 +49,24 @@ export default function TumenyeBibiliyaPage() {
             <div className="container">
                 <div className={styles.grid}>
                     <div className={styles.main}>
-                        {/* Daily verse */}
-                        <section className={styles.verseOfDay} aria-label="Ijambo ry'uyu munsi">
-                            <div className={styles.verseBadge}>📅 Ijambo ry&apos;uyu munsi</div>
-                            <blockquote className={styles.verseText}>
-                                &ldquo;{todayVerse.text}&rdquo;
-                            </blockquote>
-                            <cite className={styles.verseRef}>— {todayVerse.reference}</cite>
+                        {/* Daily verse — live from bible-api.com */}
+                        <section className={styles.verseOfDay} aria-label="Verse of the day">
+                            <div className={styles.verseBadge}>📅 Verse of the Day — {dailyRef}</div>
+                            {dailyVerse ? (
+                                <>
+                                    <blockquote className={styles.verseText}>
+                                        &ldquo;{dailyVerse.text}&rdquo;
+                                    </blockquote>
+                                    <div className={styles.verseFooter}>
+                                        <cite className={styles.verseRef}>— {dailyVerse.reference}</cite>
+                                        <span className={styles.verseTrans}>{dailyVerse.translation_name}</span>
+                                    </div>
+                                </>
+                            ) : (
+                                <p className={styles.verseText} style={{ opacity: 0.7 }}>
+                                    &ldquo;For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life.&rdquo;
+                                </p>
+                            )}
                         </section>
 
                         {/* Reading plans */}
@@ -102,14 +113,17 @@ export default function TumenyeBibiliyaPage() {
                             </Link>
                         </div>
 
+                        {/* Live verse search widget */}
+                        <VerseSearch />
+
                         <div className={styles.sideWidget}>
-                            <h3 className={styles.widgetTitle}>Imirongo ya buri munsi</h3>
+                            <h3 className={styles.widgetTitle}>Key Verses (KJV)</h3>
                             <div className={styles.verseList}>
-                                {dailyVerses.slice(0, 5).map((v, i) => (
+                                {sidebarVerses.map((v, i) => v && (
                                     <div key={i} className={styles.verseItem}>
                                         <span className={styles.verseRef2}>{v.reference}</span>
                                         <p className={styles.versePreview}>
-                                            &ldquo;{v.text.slice(0, 80)}&hellip;&rdquo;
+                                            &ldquo;{v.text.slice(0, 90)}&hellip;&rdquo;
                                         </p>
                                     </div>
                                 ))}
