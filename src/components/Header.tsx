@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, Menu, X, Zap, ChevronRight, Bell, ChevronDown } from "lucide-react";
 import styles from "./Header.module.css";
+import ThemeToggle from "./ThemeToggle";
 
 const breakingNews = [
     "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
@@ -163,6 +164,7 @@ export default function Header() {
                             <Bell size={13} />
                             Iyandikishe
                         </button>
+                        <ThemeToggle />
                         <button
                             className={styles.mobileMenuBtn}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

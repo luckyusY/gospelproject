@@ -1,0 +1,95 @@
+.card {
+    background-color: var(--bg-card);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+.card:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* ── Image ───────────────────────────────────────────── */
+.image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg-subtle);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+.image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13,27,46,0.18) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* ── Body ────────────────────────────────────────────── */
+.body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.tag {
+    display: inline-block;
+    padding: 0.22rem 0.65rem;
+    color: white;
+    font-size: 0.62rem;
+    font-weight: 800;
+    border-radius: var(--r-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    align-self: flex-start;
+    white-space: nowrap;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+
+.excerpt {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    font-weight: 500;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--bg-subtle);
+}
+
+/* ── Size variants ───────────────────────────────────── */
+.featured .image  { height: 280px; }
+.featured .title  { font-size: 1.15rem; }
+.featured .excerpt { -webkit-line-clamp: 4; }

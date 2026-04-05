@@ -1,0 +1,94 @@
+.header {
+    position: relative;
+    min-height: 280px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background-color: var(--navy);
+}
+
+/* Background image with parallax-like overlay */
+.bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.4s ease;
+}
+.header:hover .bg { transform: scale(1.02); }
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(13, 27, 46, 0.4) 0%,
+        rgba(13, 27, 46, 0.85) 100%
+    );
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 2.5rem 1.5rem;
+}
+
+/* ── Breadcrumb ──────────────────────────────────────── */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+    flex-wrap: wrap;
+}
+
+.crumbLink {
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.15s;
+}
+.crumbLink:hover { color: var(--gold); }
+
+.crumbSep { color: rgba(255, 255, 255, 0.28); }
+
+.crumbCurrent {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+/* ── Title ───────────────────────────────────────────── */
+.title {
+    font-family: var(--font-playfair), Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    max-width: 800px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.description {
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 600px;
+    line-height: 1.65;
+}
+
+/* ── Solid colour variant (no image) ────────────────── */
+.solid {
+    min-height: 200px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-bottom: 4px solid var(--gold);
+}
+.solid .bg,
+.solid .overlay { display: none; }
+
+@media (min-width: 768px) {
+    .header   { min-height: 340px; }
+    .content  { padding: 3rem 1.5rem; }
+}

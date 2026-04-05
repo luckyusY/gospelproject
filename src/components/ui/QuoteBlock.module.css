@@ -1,0 +1,123 @@
+.section {
+    background-color: var(--navy);
+    padding: 5rem 1.5rem;
+    margin: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.bg {
+    position: absolute;
+    top: -3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22rem;
+    font-weight: 900;
+    color: rgba(245, 158, 11, 0.05);
+    line-height: 1;
+    pointer-events: none;
+    font-family: Georgia, serif;
+    z-index: 0;
+    user-select: none;
+    aria-hidden: true;
+}
+
+.inner {
+    max-width: 840px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.badge {
+    display: inline-block;
+    background-color: var(--gold);
+    color: var(--navy);
+    padding: 0.3rem 1.2rem;
+    border-radius: var(--r-full);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+}
+
+.quote {
+    font-family: var(--font-playfair), Georgia, serif;
+    font-size: clamp(1.25rem, 3.5vw, 2rem);
+    line-height: 1.55;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 1.5rem;
+    border: none;
+    padding: 0;
+}
+
+.reference {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    font-style: normal;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.06em;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btnOutline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--r-full);
+    font-weight: 700;
+    font-size: 0.88rem;
+    background-color: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.btnOutline:hover {
+    border-color: rgba(255, 255, 255, 0.65);
+    background-color: rgba(255, 255, 255, 0.07);
+}
+.btnOutline:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.btnSolid {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--r-full);
+    font-weight: 800;
+    font-size: 0.88rem;
+    background-color: var(--gold);
+    color: var(--navy);
+    border: 2px solid var(--gold);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.btnSolid:hover {
+    background-color: #FBBF24;
+    border-color: #FBBF24;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+}
+.btnSolid:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 2px;
+}

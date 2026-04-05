@@ -26,10 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="rw">
       <body className={`${inter.variable} ${playfair.variable}`}>
+        <a href="#main-content" className="skip-to-content">
+          Jya ku birimo nyamukuru
+        </a>
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,0 +1,35 @@
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.42rem 1.05rem;
+    background-color: var(--bg-subtle);
+    color: var(--text-muted);
+    border-radius: var(--r-full);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.18s;
+    border: 1.5px solid transparent;
+    flex-shrink: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+.pill:hover {
+    background-color: var(--border);
+    color: var(--text);
+}
+.pill:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.active {
+    background-color: var(--navy);
+    color: white;
+    border-color: var(--navy);
+    font-weight: 700;
+}
+.active:hover {
+    background-color: var(--navy-mid);
+    color: white;
+}

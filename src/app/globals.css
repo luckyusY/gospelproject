@@ -80,6 +80,33 @@
   --green-color:    var(--green);
 }
 
+/* ── Dark Mode ────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:          #0F172A;
+  --bg-card:     #1E293B;
+  --bg-subtle:   #1E2D40;
+
+  --text:        #F1F5F9;
+  --text-muted:  #94A3B8;
+  --text-faint:  #64748B;
+  --text-light:  #F8FAFC;
+
+  --border:      #334155;
+  --border-dark: #475569;
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md:  0 4px 14px rgba(0,0,0,0.4);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.5);
+  --shadow-xl:  0 16px 40px rgba(0,0,0,0.6);
+
+  /* gold-light & other light tints need to darken in dark mode */
+  --gold-light:  #451A03;
+  --red-light:   #450A0A;
+  --blue-light:  #0C1A3A;
+  --green-light: #052E16;
+  --purple-light:#2E1065;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -110,6 +137,22 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 0 auto;
   padding: 0 1.5rem;
 }
+
+/* ── Fluid Typography Scale ───────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3.5rem); }
+h2 { font-size: clamp(1.35rem, 2.5vw + 0.5rem, 2.25rem); }
+h3 { font-size: clamp(1.1rem,  1.5vw + 0.5rem, 1.6rem); }
+h4 { font-size: clamp(1rem,    1vw  + 0.5rem, 1.25rem); }
+h5 { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1.05rem); }
+h6 { font-size: clamp(0.8rem,  0.25vw + 0.5rem, 0.9rem); }
+
+p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
 
 /* ── Typography utils ─────────────────────────────────── */
 .font-headline {
@@ -201,7 +244,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ── Section title (with gold left accent bar) ────────── */
 .section-title {
-  font-size: 1.85rem;
+  font-size: clamp(1.35rem, 2.5vw + 0.5rem, 1.85rem);
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.02em;
@@ -218,6 +261,25 @@ img { max-width: 100%; height: auto; display: block; }
   background-color: var(--gold);
   border-radius: 3px;
   flex-shrink: 0;
+}
+
+/* ── Skip to content ──────────────────────────────────── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: var(--r-md);
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-to-content:focus {
+  top: 1rem;
 }
 
 /* ── Utilities ────────────────────────────────────────── */
