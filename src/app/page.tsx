@@ -2,10 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { CalendarBlank, ArrowRight, Sparkle } from "@phosphor-icons/react";
 import styles from "./page.module.css";
-import { Calendar, ArrowRight } from "lucide-react";
 import { ArticleCard, CategoryPill, QuoteBlock, YoutubeEmbed } from "@/components/ui";
 import { EventMini } from "@/components/ui/EventCard";
+import FadeIn from "@/components/ui/FadeIn";
+import {
+    staggerContainer,
+    fadeUp,
+    fadeLeft,
+    scaleIn,
+    heroTitle,
+    drawLine,
+} from "@/lib/animations";
 
 const categories = [
     { name: "Byose" },
@@ -68,12 +78,6 @@ const latestStories = [
     },
 ];
 
-/**
- * Featured worship/testimony YouTube videos (real public videos):
- * - "Sinzarakaza" by Gloire Ishimwe  — Rwandan gospel worship
- * - "Ndagukunda" by The Remnant Choir — Rwandan choir praise
- * - "Way Maker" Sinach live           — Pan-African gospel classic
- */
 const featuredVideos = [
     {
         videoId:     "ZiCmBIyALYA",
@@ -109,70 +113,94 @@ export default function Home() {
         <div className={styles.page}>
 
             {/* ── Categories Strip ──────────────────────── */}
-            <section className={styles.categoriesStrip} aria-label="Inzego z'amakuru">
-                <div className="container">
-                    <div className={styles.categoriesRow}>
-                        {categories.map((cat) => (
-                            <CategoryPill
-                                key={cat.name}
-                                label={cat.name}
-                                active={activeCategory === cat.name}
-                                onClick={() => setActiveCategory(cat.name)}
-                            />
-                        ))}
+            <FadeIn direction="down" duration={0.4}>
+                <section className={styles.categoriesStrip} aria-label="Inzego z'amakuru">
+                    <div className="container">
+                        <div className={styles.categoriesRow}>
+                            {categories.map((cat) => (
+                                <CategoryPill
+                                    key={cat.name}
+                                    label={cat.name}
+                                    active={activeCategory === cat.name}
+                                    onClick={() => setActiveCategory(cat.name)}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </FadeIn>
 
             {/* ── Hero Section ──────────────────────────── */}
             <section className={`container ${styles.heroSection}`} aria-label="Inkuru Nkuru">
                 <div className={styles.heroGrid}>
 
-                    <div className={styles.mainStories}>
-                        <div
+                    <motion.div
+                        className={styles.mainStories}
+                        variants={staggerContainer}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <motion.div
                             className={styles.featuredStory}
                             style={{ backgroundImage: "url(https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?q=80&w=1400&auto=format&fit=crop)" }}
                             role="img"
                             aria-label="Inkuru Nkuru: Urugero Media Group"
+                            variants={scaleIn}
                         >
-                            <div className={styles.featuredOverlay}>
+                            <motion.div
+                                className={styles.featuredOverlay}
+                                variants={staggerContainer}
+                            >
                                 <span className="tag">Inkuru Nkuru</span>
-                                <h1 className={styles.featuredTitle}>
+                                <motion.h1 className={styles.featuredTitle} variants={heroTitle}>
                                     Urugero Media Group: Ijwi ry&apos;Imana mu Rwanda no ku Isi Yose
-                                </h1>
-                                <p className={styles.featuredExcerpt}>
+                                </motion.h1>
+                                <motion.p className={styles.featuredExcerpt} variants={fadeUp}>
                                     Urugero Media Group ikomeza gusakaza ubuhamya, inyigisho n&apos;imyidagaduro y&apos;Imana binyuze mu Music Academy, Films, Records, Online Radio na Podcast.
-                                </p>
-                                <div className={styles.featuredMeta}>
+                                </motion.p>
+                                <motion.div className={styles.featuredMeta} variants={fadeUp}>
                                     <span>Na Urugero Media</span>
                                     <span>•</span>
                                     <span>6 min</span>
-                                </div>
-                            </div>
-                        </div>
+                                </motion.div>
+                            </motion.div>
+                        </motion.div>
 
                         <div className={styles.subStories}>
-                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop)" }}>
+                            <motion.div
+                                className={styles.subStory}
+                                style={{ backgroundImage: "url(https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop)" }}
+                                variants={fadeLeft}
+                            >
                                 <div className={styles.subOverlay}>
                                     <span className="tag tag-blue">Inyigisho</span>
                                     <h3 className={styles.subTitle}>Ubuzima bw&apos;Umwuka mu Gihe cya Tekinoloji</h3>
                                 </div>
-                            </div>
-                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=800&auto=format&fit=crop)" }}>
+                            </motion.div>
+                            <motion.div
+                                className={styles.subStory}
+                                style={{ backgroundImage: "url(https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=800&auto=format&fit=crop)" }}
+                                variants={fadeUp}
+                            >
                                 <div className={styles.subOverlay}>
                                     <span className="tag tag-gold">Urubyiruko</span>
                                     <h3 className={styles.subTitle}>Urubyiruko Rw&apos;u Rwanda mu Bikorwa by&apos;Imana 2025</h3>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Sidebar */}
-                    <aside className={styles.sidebar} aria-label="Sidebar">
-
+                    <motion.aside
+                        className={styles.sidebar}
+                        aria-label="Sidebar"
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    >
                         <div className={styles.widget}>
                             <div className={styles.widgetHead}>
-                                <Calendar size={16} className={styles.widgetIcon} aria-hidden />
+                                <CalendarBlank size={16} weight="fill" className={styles.widgetIcon} aria-hidden />
                                 <h2>Ibitaramo Bizaza</h2>
                                 <Link href="/amakuru/ibitaramo" className={styles.viewAll} aria-label="Reba ibitaramo byose">
                                     REBA BYOSE
@@ -207,63 +235,90 @@ export default function Home() {
                                 <button type="submit" className="btn btn-accent">Iyandikishe — Kubuntu</button>
                             </form>
                         </div>
-
-                    </aside>
+                    </motion.aside>
                 </div>
             </section>
 
             {/* ── Verse of the Day ──────────────────────── */}
-            <QuoteBlock
-                badge="IJAMBO RY'UMUNSI"
-                quote="Kuko nzi imigambi ndimo ndibanza kuri wewe, ni Uhoraho uvuga, imigambi y'amahoro si iy'ibibazo, kugira ngo nkuhe amaherezo n'icyiringiro."
-                reference="— Yeremiya 29:11"
-            />
+            <FadeIn direction="scale">
+                <QuoteBlock
+                    badge="IJAMBO RY'UMUNSI"
+                    quote="Kuko nzi imigambi ndimo ndibanza kuri wewe, ni Uhoraho uvuga, imigambi y'amahoro si iy'ibibazo, kugira ngo nkuhe amaherezo n'icyiringiro."
+                    reference="— Yeremiya 29:11"
+                />
+            </FadeIn>
 
             {/* ── Latest Stories ────────────────────────── */}
             <section className={`container ${styles.latestSection}`} aria-label="Inkuru Nshya">
-                <div className={styles.latestHeader}>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Inkuru Nshya</h2>
-                    <Link href="/amakuru" className={styles.seeAllLink} aria-label="Reba inkuru zose">
-                        Reba Inkuru Zose <ArrowRight size={15} aria-hidden />
-                    </Link>
-                </div>
-                <div className={styles.storiesGrid}>
-                    {filtered.map((story) => (
-                        <ArticleCard
-                            key={story.id}
-                            href={`/amakuru/${story.category.toLowerCase()}`}
-                            category={story.category}
-                            categoryColor={story.categoryColor}
-                            title={story.title}
-                            excerpt={story.excerpt}
-                            image={story.image}
-                            author={story.author}
-                            readTime={story.readTime}
-                        />
+                <FadeIn direction="up">
+                    <div className={styles.latestHeader}>
+                        <div className={styles.sectionTitleWrap}>
+                            <Sparkle size={18} weight="fill" className={styles.sectionIcon} aria-hidden />
+                            <h2 className="section-title" style={{ marginBottom: 0 }}>Inkuru Nshya</h2>
+                        </div>
+                        <Link href="/amakuru" className={styles.seeAllLink} aria-label="Reba inkuru zose">
+                            Reba Inkuru Zose <ArrowRight size={15} weight="bold" aria-hidden />
+                        </Link>
+                    </div>
+                </FadeIn>
+
+                <motion.div
+                    className={styles.storiesGrid}
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.05 }}
+                >
+                    {filtered.map((story, i) => (
+                        <motion.div key={story.id} variants={fadeUp} custom={i}>
+                            <ArticleCard
+                                href={`/amakuru/${story.category.toLowerCase()}`}
+                                category={story.category}
+                                categoryColor={story.categoryColor}
+                                title={story.title}
+                                excerpt={story.excerpt}
+                                image={story.image}
+                                author={story.author}
+                                readTime={story.readTime}
+                            />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </section>
 
             {/* ── Featured Videos — Worship & Testimony ─── */}
             <section className={`container ${styles.videoSection}`} aria-label="Amashusho y'Indirimbo n'Ubuhamya">
-                <div className={styles.latestHeader}>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>
-                        🎵 Indirimbo z&apos;Imana — Ibiganiro
-                    </h2>
-                    <Link href="/urugero-tv-radio" className={styles.seeAllLink} aria-label="Reba amashusho yose">
-                        Urugero TV <ArrowRight size={15} aria-hidden />
-                    </Link>
-                </div>
-                <div className={styles.videoGrid}>
-                    {featuredVideos.map((v) => (
-                        <YoutubeEmbed
-                            key={v.videoId}
-                            videoId={v.videoId}
-                            title={v.title}
-                            description={v.description}
-                        />
+                <FadeIn direction="up">
+                    <div className={styles.latestHeader}>
+                        <div className={styles.sectionTitleWrap}>
+                            <span className={styles.sectionEmoji} aria-hidden>🎵</span>
+                            <h2 className="section-title" style={{ marginBottom: 0 }}>
+                                Indirimbo z&apos;Imana — Ibiganiro
+                            </h2>
+                        </div>
+                        <Link href="/urugero-tv-radio" className={styles.seeAllLink} aria-label="Reba amashusho yose">
+                            Urugero TV <ArrowRight size={15} weight="bold" aria-hidden />
+                        </Link>
+                    </div>
+                </FadeIn>
+
+                <motion.div
+                    className={styles.videoGrid}
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                >
+                    {featuredVideos.map((v, i) => (
+                        <motion.div key={v.videoId} variants={fadeUp} custom={i}>
+                            <YoutubeEmbed
+                                videoId={v.videoId}
+                                title={v.title}
+                                description={v.description}
+                            />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </section>
 
         </div>

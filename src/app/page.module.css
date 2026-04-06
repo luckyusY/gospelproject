@@ -474,6 +474,22 @@
     margin-bottom: 2rem;
 }
 
+.sectionTitleWrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sectionIcon {
+    color: var(--gold, #F59E0B);
+    flex-shrink: 0;
+}
+
+.sectionEmoji {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
 .seeAllLink {
     display: inline-flex;
     align-items: center;

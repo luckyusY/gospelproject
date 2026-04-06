@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import { rootMetadata } from "@/lib/metadata";
 
 const inter = Inter({
@@ -31,9 +32,11 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           Jya ku birimo nyamukuru
         </a>
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
+        <SmoothScrollProvider>
+          <Header />
+          <main id="main-content">{children}</main>
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

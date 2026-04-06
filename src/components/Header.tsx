@@ -3,7 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Menu, X, Zap, ChevronRight, Bell, ChevronDown } from "lucide-react";
+import {
+    MagnifyingGlass,
+    List,
+    X,
+    Lightning,
+    CaretRight,
+    CaretDown,
+    BellRinging,
+    Radio,
+} from "@phosphor-icons/react";
 import styles from "./Header.module.css";
 import ThemeToggle from "./ThemeToggle";
 
@@ -110,13 +119,13 @@ export default function Header() {
                 <div className={`container ${styles.breakingInner}`}>
                     <div className={styles.breakingLeft}>
                         <span className={styles.breakingBadge}>
-                            <Zap size={10} fill="currentColor" />
+                            <Lightning size={10} weight="fill" />
                             AMAKURU
                         </span>
                         <span className={styles.tickerText} key={tickerIndex}>
                             {breakingNews[tickerIndex]}
                         </span>
-                        <ChevronRight size={13} className={styles.tickerArrow} />
+                        <CaretRight size={13} weight="bold" className={styles.tickerArrow} />
                     </div>
                     <div className={styles.breakingRight}>
                         <span className={styles.topBarDate}>{today}</span>
@@ -158,7 +167,7 @@ export default function Header() {
                             className={styles.searchWrap}
                             role="search"
                         >
-                            <Search size={15} className={styles.searchIcon} />
+                            <MagnifyingGlass size={15} weight="bold" className={styles.searchIcon} />
                             <input
                                 name="q"
                                 type="search"
@@ -168,7 +177,7 @@ export default function Header() {
                             />
                         </form>
                         <button className={styles.subscribeBtn}>
-                            <Bell size={13} />
+                            <BellRinging size={14} weight="fill" />
                             Iyandikishe
                         </button>
                         <ThemeToggle />
@@ -177,7 +186,10 @@ export default function Header() {
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             aria-label="Toggle menu"
                         >
-                            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                            {isMobileMenuOpen
+                                ? <X size={22} weight="bold" />
+                                : <List size={22} weight="bold" />
+                            }
                         </button>
                     </div>
 
@@ -208,8 +220,9 @@ export default function Header() {
                                     >
                                         {label}
                                         {children && (
-                                            <ChevronDown
+                                            <CaretDown
                                                 size={11}
+                                                weight="bold"
                                                 className={`${styles.navChevron} ${isOpen ? styles.navChevronOpen : ""}`}
                                             />
                                         )}
@@ -256,7 +269,7 @@ export default function Header() {
 
                     <div className={styles.navRight}>
                         <span className={styles.liveBadge}>
-                            <span className={styles.liveDot} />
+                            <Radio size={11} weight="fill" className={styles.liveDot} />
                             LIVE
                         </span>
                         <span className={styles.liveText}>Urugero Online Radio</span>
@@ -268,7 +281,7 @@ export default function Header() {
             {isMobileMenuOpen && (
                 <div className={styles.mobileOverlay}>
                     <div className={styles.mobileSearch}>
-                        <Search size={16} className={styles.searchIcon} />
+                        <MagnifyingGlass size={16} weight="bold" className={styles.searchIcon} />
                         <input
                             type="text"
                             placeholder="Shakisha..."
@@ -297,8 +310,9 @@ export default function Header() {
                                                 onClick={() => setOpenMobileSection(isOpen ? null : href)}
                                                 aria-label={`Expand ${label}`}
                                             >
-                                                <ChevronDown
+                                                <CaretDown
                                                     size={16}
+                                                    weight="bold"
                                                     style={{
                                                         transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                                                         transition: "transform 0.2s",

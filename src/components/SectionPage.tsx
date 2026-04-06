@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { staggerContainer, heroTitle, fadeUp, fadeLeft, drawLine } from "@/lib/animations";
 import styles from "./SectionPage.module.css";
 
 type SubSection = {
@@ -54,7 +56,13 @@ export default function SectionPage({
 
                     {/* Breadcrumb */}
                     {breadcrumb.length > 0 && (
-                        <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+                        <motion.nav
+                            className={styles.breadcrumb}
+                            aria-label="Breadcrumb"
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                        >
                             <Link href="/" className={styles.breadcrumbLink}>Ahabanza</Link>
                             {breadcrumb.map((crumb) => (
                                 <span key={crumb.href} style={{ display: "contents" }}>
@@ -66,20 +74,50 @@ export default function SectionPage({
                             ))}
                             <span className={styles.breadcrumbSep} aria-hidden>›</span>
                             <span className={styles.breadcrumbCurrent} aria-current="page">{title}</span>
-                        </nav>
+                        </motion.nav>
                     )}
 
                     {/* Title row */}
-                    <div className={styles.heroContent}>
-                        <span className={styles.heroIcon} aria-hidden>{icon}</span>
+                    <motion.div
+                        className={styles.heroContent}
+                        variants={staggerContainer}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <motion.span
+                            className={styles.heroIcon}
+                            aria-hidden
+                            variants={fadeLeft}
+                        >
+                            {icon}
+                        </motion.span>
                         <div className={styles.heroText}>
-                            <p className={styles.heroSubtitle} style={{ color }}>
+                            <motion.p
+                                className={styles.heroSubtitle}
+                                style={{ color }}
+                                variants={heroTitle}
+                            >
                                 {subtitle}
-                            </p>
-                            <h1 className={styles.heroTitle}>{title}</h1>
-                            <p className={styles.heroDescription}>{description}</p>
+                            </motion.p>
+                            <motion.h1
+                                className={styles.heroTitle}
+                                variants={heroTitle}
+                            >
+                                {title}
+                            </motion.h1>
+                            <motion.div
+                                className={styles.heroDivider}
+                                variants={drawLine}
+                                style={{ backgroundColor: color }}
+                            />
+                            <motion.p
+                                className={styles.heroDescription}
+                                variants={fadeUp}
+                            >
+                                {description}
+                            </motion.p>
                         </div>
-                    </div>
+                    </motion.div>
 
                 </div>
             </div>
@@ -87,34 +125,47 @@ export default function SectionPage({
             {/* ── Sub-sections Grid ────────────────────── */}
             {subSections.length > 0 && (
                 <div className="container">
-                    <div className={styles.subSectionsGrid}>
+                    <motion.div
+                        className={styles.subSectionsGrid}
+                        variants={staggerContainer}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
+                    >
                         {subSections.map((s) => (
-                            <Link
-                                key={s.href}
-                                href={s.href}
-                                className={styles.subSectionCard}
-                                style={{ borderTopColor: color }}
-                            >
-                                <h3 className={styles.subSectionTitle}>{s.label}</h3>
-                                {s.desc && (
-                                    <p className={styles.subSectionDesc}>{s.desc}</p>
-                                )}
-                            </Link>
+                            <motion.div key={s.href} variants={fadeUp}>
+                                <Link
+                                    href={s.href}
+                                    className={styles.subSectionCard}
+                                    style={{ borderTopColor: color }}
+                                >
+                                    <h3 className={styles.subSectionTitle}>{s.label}</h3>
+                                    {s.desc && (
+                                        <p className={styles.subSectionDesc}>{s.desc}</p>
+                                    )}
+                                </Link>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             )}
 
             {/* ── Coming Soon ──────────────────────────── */}
             <div className="container">
-                <div className={styles.comingSoon}>
+                <motion.div
+                    className={styles.comingSoon}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                >
                     <span className={styles.comingSoonIcon}>🚧</span>
                     <h3 className={styles.comingSoonTitle}>Ibikurikira biraza vuba</h3>
                     <p className={styles.comingSoonText}>
                         Iri ciro ryuzuzwa. Garuka vuba kugira ngo ubone ibirimo byuzuye kuri{" "}
                         <strong>{title}</strong>.
                     </p>
-                </div>
+                </motion.div>
             </div>
 
         </div>

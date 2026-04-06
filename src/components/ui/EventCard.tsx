@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, Ticket, ArrowRight, CalendarBlank } from "@phosphor-icons/react";
 import styles from "./EventCard.module.css";
 
 // ── Mini variant (sidebar list item) ─────────────────────
@@ -20,8 +23,12 @@ export function EventMini({ month, day, title, subtitle, href = "#" }: EventMini
             </div>
             <div className={styles.info}>
                 <h4 className={styles.miniTitle}>{title}</h4>
-                <p className={styles.miniSub}>{subtitle}</p>
+                <p className={styles.miniSub}>
+                    <MapPin size={11} weight="fill" aria-hidden />
+                    {subtitle}
+                </p>
             </div>
+            <ArrowRight size={14} weight="bold" className={styles.miniArrow} aria-hidden />
         </Link>
     );
 }
@@ -59,12 +66,17 @@ export default function EventCard({
     href = "#",
 }: EventCardProps) {
     return (
-        <article className={styles.full}>
+        <motion.article
+            className={styles.full}
+            whileHover={{ y: -4, boxShadow: "0 20px 40px rgba(13,27,46,0.13)" }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
             <div
                 className={styles.fullImage}
                 style={{ backgroundImage: `url(${image})` }}
             >
                 <div className={styles.fullDateBadge}>
+                    <CalendarBlank size={12} weight="fill" className={styles.calIcon} aria-hidden />
                     <span className={styles.fullMonth}>{month}</span>
                     <span className={styles.fullDay}>{day}</span>
                 </div>
@@ -74,23 +86,26 @@ export default function EventCard({
             </div>
             <div className={styles.fullBody}>
                 <div className={styles.fullMeta}>
-                    <MapPin size={13} aria-hidden />
+                    <MapPin size={13} weight="fill" aria-hidden />
                     <span>{venue}</span>
                 </div>
                 <h2 className={styles.fullTitle}>{title}</h2>
                 <p className={styles.fullExcerpt}>{excerpt}</p>
                 <div className={styles.fullFooter}>
-                    <div>
-                        <span className={styles.priceLabel}>Kwinjira</span>
-                        <span className={styles.priceValue} style={priceColor ? { color: priceColor } : undefined}>
-                            {price}
-                        </span>
+                    <div className={styles.priceWrap}>
+                        <Ticket size={14} weight="fill" className={styles.ticketIcon} aria-hidden />
+                        <div>
+                            <span className={styles.priceLabel}>Kwinjira</span>
+                            <span className={styles.priceValue} style={priceColor ? { color: priceColor } : undefined}>
+                                {price}
+                            </span>
+                        </div>
                     </div>
                     <Link href={href} className={btnClass}>
                         {btnLabel}
                     </Link>
                 </div>
             </div>
-        </article>
+        </motion.article>
     );
 }

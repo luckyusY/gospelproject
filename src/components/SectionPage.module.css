@@ -81,6 +81,14 @@
     margin-bottom: 0.75rem;
 }
 
+.heroDivider {
+    height: 3px;
+    width: 60px;
+    border-radius: 99px;
+    margin-bottom: 0.9rem;
+    /* color set via inline style */
+}
+
 .heroDescription {
     color: rgba(255, 255, 255, 0.62);
     max-width: 600px;

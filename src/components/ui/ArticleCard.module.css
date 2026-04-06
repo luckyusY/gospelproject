@@ -89,6 +89,26 @@
     border-top: 1px solid var(--bg-subtle);
 }
 
+.metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.readMore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--green, #059669);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.1rem;
+    transition: gap 0.2s ease;
+}
+.card:hover .readMore { gap: 0.5rem; }
+
 /* ── Size variants ───────────────────────────────────── */
 .featured .image  { height: 280px; }
 .featured .title  { font-size: 1.15rem; }

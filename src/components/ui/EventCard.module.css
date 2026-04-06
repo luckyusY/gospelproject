@@ -63,7 +63,17 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
+
+.miniArrow {
+    color: var(--text-faint);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+.mini:hover .miniArrow { transform: translateX(3px); color: var(--gold); }
 
 /* ── Full card variant (grid) ────────────────────────── */
 .full {
@@ -108,7 +118,10 @@
     padding: 0.4rem 0.7rem;
     min-width: 52px;
     backdrop-filter: blur(4px);
+    gap: 0.1rem;
 }
+
+.calIcon { color: var(--red); margin-bottom: 0.1rem; }
 
 .fullMonth {
     font-size: 0.6rem;
@@ -163,6 +176,14 @@
     border-top: 1px solid var(--border);
     margin-top: 0.5rem;
 }
+
+.priceWrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ticketIcon { color: var(--gold); flex-shrink: 0; }
 
 .priceLabel {
     font-size: 0.7rem;

@@ -1,7 +1,18 @@
+"use client";
+
 import Link from "next/link";
-import { Globe, Megaphone, Share2, Smartphone } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+    YoutubeLogo,
+    InstagramLogo,
+    FacebookLogo,
+    TwitterLogo,
+    DeviceMobile,
+    Headphones,
+} from "@phosphor-icons/react";
 import NewsletterForm from "./NewsletterForm";
 import styles from "./Footer.module.css";
+import { staggerContainer, fadeUp, fadeLeft } from "@/lib/animations";
 
 const stats = [
     { value: "15K+",  label: "Abiyandikishije" },
@@ -10,28 +21,50 @@ const stats = [
     { value: "100+",  label: "Ibitaramo Byakozwe" },
 ];
 
+const socialLinks = [
+    { icon: YoutubeLogo,   label: "YouTube",   href: "https://youtube.com" },
+    { icon: FacebookLogo,  label: "Facebook",   href: "https://facebook.com" },
+    { icon: InstagramLogo, label: "Instagram",  href: "https://instagram.com" },
+    { icon: TwitterLogo,   label: "Twitter / X", href: "https://twitter.com" },
+];
+
 export default function Footer() {
     return (
         <footer className={styles.footer}>
 
             {/* ── Pre-footer stats bar ───────────────────── */}
-            <div className={styles.statsBar}>
+            <motion.div
+                className={styles.statsBar}
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+            >
                 <div className={`container ${styles.statsInner}`}>
                     {stats.map((s) => (
-                        <div key={s.label} className={styles.statItem}>
+                        <motion.div
+                            key={s.label}
+                            className={styles.statItem}
+                            variants={fadeUp}
+                        >
                             <span className={styles.statValue}>{s.value}</span>
                             <span className={styles.statLabel}>{s.label}</span>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
-            </div>
+            </motion.div>
 
             {/* ── Main footer ───────────────────────────── */}
             <div className={`container ${styles.footerContainer}`}>
-                <div className={styles.grid}>
-
+                <motion.div
+                    className={styles.grid}
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                >
                     {/* Brand column */}
-                    <div className={styles.brandCol}>
+                    <motion.div className={styles.brandCol} variants={fadeLeft}>
                         <div className={styles.logo}>
                             <div className={styles.logoIcon}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -45,14 +78,23 @@ export default function Footer() {
                             Urugero Media Group ni itsinda rya media rya Gikrisitu rigabana ubuhamya, inyigisho n&apos;imyidagaduro y&apos;Imana mu Rwanda no ku isi yose.
                         </p>
                         <div className={styles.socialIcons}>
-                            <button className={styles.socialBtn} aria-label="Website"><Globe size={17} /></button>
-                            <button className={styles.socialBtn} aria-label="Announcements"><Megaphone size={17} /></button>
-                            <button className={styles.socialBtn} aria-label="Share"><Share2 size={17} /></button>
+                            {socialLinks.map(({ icon: Icon, label, href }) => (
+                                <a
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.socialBtn}
+                                    aria-label={label}
+                                >
+                                    <Icon size={18} weight="fill" />
+                                </a>
+                            ))}
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Amakuru */}
-                    <div className={styles.linksCol}>
+                    <motion.div className={styles.linksCol} variants={fadeUp}>
                         <h4 className={styles.columnTitle}>Amakuru</h4>
                         <ul>
                             <li><Link href="/amakuru/abahanzi">Abahanzi</Link></li>
@@ -61,10 +103,10 @@ export default function Footer() {
                             <li><Link href="/amakuru/ibitaramo">Ibitaramo</Link></li>
                             <li><Link href="/amakuru/hanze-yu-rwanda">Hanze y&apos;u Rwanda</Link></li>
                         </ul>
-                    </div>
+                    </motion.div>
 
                     {/* Inyigisho */}
-                    <div className={styles.linksCol}>
+                    <motion.div className={styles.linksCol} variants={fadeUp}>
                         <h4 className={styles.columnTitle}>Inyigisho</h4>
                         <ul>
                             <li><Link href="/inyigisho/umuryango">Umuryango</Link></li>
@@ -73,31 +115,30 @@ export default function Footer() {
                             <li><Link href="/tumenye-bibiliya">Tumenye Bibiliya</Link></li>
                             <li><Link href="/ubuhamya">Ubuhamya</Link></li>
                         </ul>
-                    </div>
+                    </motion.div>
 
                     {/* Urugero Media Group */}
-                    <div className={styles.downloadCol}>
+                    <motion.div className={styles.downloadCol} variants={fadeUp}>
                         <h4 className={styles.columnTitle}>Urugero Media Group</h4>
                         <p className={styles.appDescription}>
                             Serivisi zacu zirimo: Music Academy, Films, Records, Online Radio, Bible Quiz, Practice Room na Podcast.
                         </p>
-                        <button className={styles.appBtn}>
-                            <Smartphone size={20} />
+                        <Link href="/urugero-tv-radio" className={styles.appBtn}>
+                            <Headphones size={20} weight="fill" />
                             <div className={styles.appBtnText}>
                                 <span>Reba kuri</span>
-                                <strong>Urugero TV & Radio</strong>
+                                <strong>Urugero TV &amp; Radio</strong>
                             </div>
-                        </button>
-                        <button className={`${styles.appBtn} ${styles.appBtnAlt}`}>
-                            <Smartphone size={20} />
+                        </Link>
+                        <Link href="/abo-turibo" className={`${styles.appBtn} ${styles.appBtnAlt}`}>
+                            <DeviceMobile size={20} weight="fill" />
                             <div className={styles.appBtnText}>
                                 <span>Tugere kuri</span>
                                 <strong>Abo Turibo</strong>
                             </div>
-                        </button>
-                    </div>
-
-                </div>
+                        </Link>
+                    </motion.div>
+                </motion.div>
 
                 {/* Newsletter strip */}
                 <div className={styles.newsletterStrip}>
