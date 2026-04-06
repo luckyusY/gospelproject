@@ -21,3 +21,5 @@ export type { CategoryPillProps }   from "./CategoryPill";
 
 export { default as Pagination }    from "./Pagination";
 export type { PaginationProps }     from "./Pagination";
+
+export { default as YoutubeEmbed }  from "./YoutubeEmbed";

@@ -16,6 +16,7 @@ export default function IbigwiPage() {
             description="Ibigwi n'ibikorwa by'abakristu bisangirwa n'abandi ngo bibihe imbaraga."
             icon="🏆"
             color="#7C3AED"
+            heroImage="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?q=80&w=1400&auto=format&fit=crop"
         />
     );
 }

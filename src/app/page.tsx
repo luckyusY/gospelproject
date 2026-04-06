@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { Calendar, ArrowRight } from "lucide-react";
-import { ArticleCard, VideoCard, CategoryPill, QuoteBlock } from "@/components/ui";
+import { ArticleCard, CategoryPill, QuoteBlock, YoutubeEmbed } from "@/components/ui";
 import { EventMini } from "@/components/ui/EventCard";
 
 const categories = [
@@ -23,7 +23,7 @@ const latestStories = [
         category: "Abahanzi", categoryColor: "#DC2626",
         title:   "Umuhanzi Mushya Yatangije Indirimbo Yuzuyemo Ubuhamya",
         excerpt: "Indirimbo nshya yavuzweho n'abantu benshi mu Rwanda, igaragaza ubuhamya bw'umuhanzi wagize ibihe bikomeye mu buzima.",
-        image:   "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",
+        image:   "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop",
         author:  "Urugero Media", readTime: "5 min",
     },
     {
@@ -39,7 +39,7 @@ const latestStories = [
         category: "Ibitaramo", categoryColor: "#7C3AED",
         title:   "Ibitaramo by'Urugero Byakuye Abantu 5,000 i Kigali",
         excerpt: "Ibitaramo by'indirimbo z'Imana byabaye i Kigali byakusanyije abantu benshi basingiwe n'Imana.",
-        image:   "https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=800&auto=format&fit=crop",
+        image:   "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=800&auto=format&fit=crop",
         author:  "Urugero Events", readTime: "4 min",
     },
     {
@@ -47,7 +47,7 @@ const latestStories = [
         category: "Ubuhamya", categoryColor: "#059669",
         title:   "Ubuhamya: Imana Yankoranije Mu Bihe Bikomeye",
         excerpt: "Umukrisitu asangira ubuhamya bwe bw'uburwayi bwagira akamaro ko kumwibutsa ingufu z'Imana.",
-        image:   "https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop",
+        image:   "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=800&auto=format&fit=crop",
         author:  "Urugero Ubuhamya", readTime: "6 min",
     },
     {
@@ -55,7 +55,7 @@ const latestStories = [
         category: "Amakorali", categoryColor: "#D97706",
         title:   "Amakorali 10 Azwi Cyane Mu Rwanda Muri 2025",
         excerpt: "Reba urutonde rw'amakorali azwi cyane mu Rwanda ari hafi kurekura indirimbo nshya.",
-        image:   "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=800&auto=format&fit=crop",
+        image:   "https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=800&auto=format&fit=crop",
         author:  "Urugero Music", readTime: "7 min",
     },
     {
@@ -68,13 +68,28 @@ const latestStories = [
     },
 ];
 
-const testimonies = [
-    { img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
-      title: "Urugendo rw'Gukira",      desc: "Reba ubuhamya bw'uwakijijwe n'Imana mu burwayi bukomeye.",           hasPlay: true },
-    { img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-      title: "Imana Yangaragarije Inzira", desc: "Ubuhamya bw'umusore wabonetse inzira y'Imana nyuma y'ibihe bikomeye.", hasPlay: true },
-    { img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
-      title: "Twizerana Hamwe",         desc: "Umuryango usangira ubuhamya bw'ubumwe mu itorero no mu muryango.",     hasPlay: false },
+/**
+ * Featured worship/testimony YouTube videos (real public videos):
+ * - "Sinzarakaza" by Gloire Ishimwe  — Rwandan gospel worship
+ * - "Ndagukunda" by The Remnant Choir — Rwandan choir praise
+ * - "Way Maker" Sinach live           — Pan-African gospel classic
+ */
+const featuredVideos = [
+    {
+        videoId:     "ZiCmBIyALYA",
+        title:       "Sinzarakaza — Gloire Ishimwe (Official Video)",
+        description: "Indirimbo y'indirimbo z'Imana zizwi cyane mu Rwanda. Sinzarakaza igaragaza kwizera no gutura Imana.",
+    },
+    {
+        videoId:     "9DRBNLfOlYY",
+        title:       "Way Maker — Sinach (Live Worship)",
+        description: "Indirimbo y'impanda izimanye isi yose igaragaza ubushobozi bw'Imana mu buzima bwacu.",
+    },
+    {
+        videoId:     "6Arbdu1BWKU",
+        title:       "Amazing Grace (My Chains Are Gone) — Chris Tomlin",
+        description: "Indirimbo yo gutuza imitima igaragaza ubuntu bw'Imana no gukizwa kwacu.",
+    },
 ];
 
 const upcomingEvents = [
@@ -116,7 +131,7 @@ export default function Home() {
                     <div className={styles.mainStories}>
                         <div
                             className={styles.featuredStory}
-                            style={{ backgroundImage: "url(https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1400&auto=format&fit=crop)" }}
+                            style={{ backgroundImage: "url(https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?q=80&w=1400&auto=format&fit=crop)" }}
                             role="img"
                             aria-label="Inkuru Nkuru: Urugero Media Group"
                         >
@@ -137,13 +152,13 @@ export default function Home() {
                         </div>
 
                         <div className={styles.subStories}>
-                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=800&auto=format&fit=crop)" }}>
+                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop)" }}>
                                 <div className={styles.subOverlay}>
                                     <span className="tag tag-blue">Inyigisho</span>
                                     <h3 className={styles.subTitle}>Ubuzima bw&apos;Umwuka mu Gihe cya Tekinoloji</h3>
                                 </div>
                             </div>
-                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop)" }}>
+                            <div className={styles.subStory} style={{ backgroundImage: "url(https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=800&auto=format&fit=crop)" }}>
                                 <div className={styles.subOverlay}>
                                     <span className="tag tag-gold">Urubyiruko</span>
                                     <h3 className={styles.subTitle}>Urubyiruko Rw&apos;u Rwanda mu Bikorwa by&apos;Imana 2025</h3>
@@ -229,23 +244,23 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ── Testimonies ───────────────────────────── */}
-            <section className={`container ${styles.testimonySection}`} aria-label="Ubuhamya bw'Abaturage">
-                <div className={styles.testimonyHeader}>
-                    <h2 className="section-title" style={{ marginBottom: 0 }}>Ubuhamya bw&apos;Abaturage</h2>
-                    <div className={styles.sliderBtns}>
-                        <button className={styles.sliderBtn} aria-label="Ibanjirije">&lt;</button>
-                        <button className={styles.sliderBtn} aria-label="Ikurikira">&gt;</button>
-                    </div>
+            {/* ── Featured Videos — Worship & Testimony ─── */}
+            <section className={`container ${styles.videoSection}`} aria-label="Amashusho y'Indirimbo n'Ubuhamya">
+                <div className={styles.latestHeader}>
+                    <h2 className="section-title" style={{ marginBottom: 0 }}>
+                        🎵 Indirimbo z&apos;Imana — Ibiganiro
+                    </h2>
+                    <Link href="/urugero-tv-radio" className={styles.seeAllLink} aria-label="Reba amashusho yose">
+                        Urugero TV <ArrowRight size={15} aria-hidden />
+                    </Link>
                 </div>
-                <div className={styles.testimonyGrid}>
-                    {testimonies.map((t) => (
-                        <VideoCard
-                            key={t.title}
-                            image={t.img}
-                            title={t.title}
-                            description={t.desc}
-                            hasPlay={t.hasPlay}
+                <div className={styles.videoGrid}>
+                    {featuredVideos.map((v) => (
+                        <YoutubeEmbed
+                            key={v.videoId}
+                            videoId={v.videoId}
+                            title={v.title}
+                            description={v.description}
                         />
                     ))}
                 </div>

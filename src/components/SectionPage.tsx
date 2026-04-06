@@ -21,6 +21,7 @@ type SectionPageProps = {
     breadcrumb?: Crumb[];
     color?:      string;   // accent colour for hero border + card tops
     icon?:       string;
+    heroImage?:  string;   // optional Unsplash/open-source background image URL
     subSections?: SubSection[];
 };
 
@@ -31,6 +32,7 @@ export default function SectionPage({
     breadcrumb = [],
     color = "var(--gold)",
     icon  = "📰",
+    heroImage,
     subSections = [],
 }: SectionPageProps) {
     return (
@@ -39,7 +41,14 @@ export default function SectionPage({
             {/* ── Hero Banner ──────────────────────────── */}
             <div
                 className={styles.hero}
-                style={{ borderBottomColor: color }}
+                style={{
+                    borderBottomColor: color,
+                    ...(heroImage && {
+                        backgroundImage: `linear-gradient(135deg, rgba(13,27,46,0.88) 0%, rgba(13,27,46,0.78) 100%), url(${heroImage})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }),
+                }}
             >
                 <div className="container">
 
