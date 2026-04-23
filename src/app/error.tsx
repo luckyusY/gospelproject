@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 
 type ErrorProps = {
     error:  Error & { digest?: string };
@@ -58,9 +59,9 @@ export default function GlobalError({ error, reset }: ErrorProps) {
                     <button onClick={reset} className="btn btn-accent">
                         Gerageza Nanone
                     </button>
-                    <a href="/" className="btn btn-navy">
+                    <Link href="/" className="btn btn-navy">
                         Subira Ahabanza
-                    </a>
+                    </Link>
                 </div>
 
             </div>

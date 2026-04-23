@@ -14,7 +14,6 @@ import {
     fadeLeft,
     scaleIn,
     heroTitle,
-    drawLine,
 } from "@/lib/animations";
 
 const categories = [

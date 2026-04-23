@@ -1,6 +1,6 @@
 import styles from "./news.module.css";
 import { Grid, Globe, Music, Heart, Star, Film, ChevronDown, Clock } from "lucide-react";
-import Image from "next/link";
+import Link from "next/link";
 
 export default function NewsPage() {
     return (
@@ -9,7 +9,7 @@ export default function NewsPage() {
             <section className={styles.pageHeader}>
                 <div className="container">
                     <div className={styles.breadcrumb}>
-                        <a href="/">Home</a> {/* eslint-disable-line @next/next/no-html-link-for-pages */}&gt; <span>Archive</span>
+                        <Link href="/">Home</Link> &gt; <span>Archive</span>
                     </div>
                     <h1 className={styles.pageTitle}>Trending News &<br />Entertainment</h1>
                     <p className={styles.pageDescription}>

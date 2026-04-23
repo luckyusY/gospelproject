@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import type { ReactNode, ElementType } from "react";
+import type { ReactNode } from "react";
 import { fadeUp, fadeDown, fadeLeft, fadeRight, fadeIn, scaleIn } from "@/lib/animations";
 
 type Direction = "up" | "down" | "left" | "right" | "scale" | "none";
@@ -15,6 +15,15 @@ const variantMap: Record<Direction, Variants> = {
     none:  fadeIn,
 };
 
+const motionTags = {
+    div:     motion.div,
+    section: motion.section,
+    article: motion.article,
+    aside:   motion.aside,
+    header:  motion.header,
+    footer:  motion.footer,
+} as const;
+
 type FadeInProps = {
     children:   ReactNode;
     direction?: Direction;
@@ -24,7 +33,7 @@ type FadeInProps = {
     once?:      boolean;
     amount?:    number | "some" | "all";
     /** Render as a different HTML element, default "div" */
-    as?:        ElementType;
+    as?:        keyof typeof motionTags;
 };
 
 export default function FadeIn({
@@ -55,7 +64,7 @@ export default function FadeIn({
         },
     };
 
-    const MotionTag = motion(Tag as "div");
+    const MotionTag = motionTags[Tag];
 
     return (
         <MotionTag

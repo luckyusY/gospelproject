@@ -1,26 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { Sun, Moon } from "lucide-react";
 import styles from "./ThemeToggle.module.css";
 
+type Theme = "dark" | "light";
+
+function getPreferredTheme(): Theme {
+    if (typeof window === "undefined") return "light";
+
+    const stored = window.localStorage.getItem("theme");
+    if (stored === "dark" || stored === "light") return stored;
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function subscribeToThemeChanges(onStoreChange: () => void) {
+    if (typeof window === "undefined") return () => {};
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const notify = () => onStoreChange();
+
+    window.addEventListener("storage", notify);
+    window.addEventListener("themechange", notify);
+    media.addEventListener("change", notify);
+
+    return () => {
+        window.removeEventListener("storage", notify);
+        window.removeEventListener("themechange", notify);
+        media.removeEventListener("change", notify);
+    };
+}
+
 export default function ThemeToggle() {
-    const [dark, setDark] = useState(false);
+    const theme = useSyncExternalStore(subscribeToThemeChanges, getPreferredTheme, () => "light");
+    const dark = theme === "dark";
 
     useEffect(() => {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const isDark = stored ? stored === "dark" : prefersDark;
-        setDark(isDark);
-        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-    }, []);
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [theme]);
 
     function toggle() {
-        const next = !dark;
-        setDark(next);
-        const value = next ? "dark" : "light";
+        const value = dark ? "light" : "dark";
         document.documentElement.setAttribute("data-theme", value);
         localStorage.setItem("theme", value);
+        window.dispatchEvent(new Event("themechange"));
     }
 
     return (

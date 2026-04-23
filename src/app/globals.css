@@ -53,6 +53,8 @@
 
   /* ── Layout ───────────────────────────────────────── */
   --container-width: 1280px;
+  --font-inter: "Aptos", "Segoe UI", system-ui, sans-serif;
+  --font-playfair: "Constantia", Georgia, "Times New Roman", serif;
 
   /* ── Legacy aliases ───────────────────────────────── */
   --bg-color:       var(--bg);
