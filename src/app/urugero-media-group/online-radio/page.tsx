@@ -15,7 +15,7 @@ export default function OnlineRadioPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Online Radio isakaza amajwi y'Imana buri munsi binyuze mu mishya, inyigisho n'indirimbo z'Imana."
             icon="📻"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Shows", href: "/urugero-media-group/online-radio", desc: "Gahunda za radio" },

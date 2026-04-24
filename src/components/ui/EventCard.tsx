@@ -68,7 +68,7 @@ export default function EventCard({
     return (
         <motion.article
             className={styles.full}
-            whileHover={{ y: -4, boxShadow: "0 20px 40px rgba(13,27,46,0.13)" }}
+            whileHover={{ y: -4, boxShadow: "0 20px 40px rgba(31,31,31,0.13)" }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
             <div

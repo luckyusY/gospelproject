@@ -15,7 +15,7 @@ export default function AbanyempanoPage() {
             subtitle="AMAKURU"
             description="Amakuru y'abanyempano b'Imana n'ibyo bakora."
             icon="🙌"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

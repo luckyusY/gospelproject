@@ -28,7 +28,7 @@ export default function ArticleForm({ article, categories }: Props) {
             content:        data.get("content") as string,
             image_url:      (data.get("image_url") as string) || null,
             category:       data.get("category") as string,
-            category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#1E40AF",
+            category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#B80000",
             author:         data.get("author") as string,
             read_time:      data.get("read_time") as string,
             is_published:   data.get("is_published") === "1",

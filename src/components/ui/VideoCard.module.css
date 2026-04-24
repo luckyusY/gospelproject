@@ -35,10 +35,10 @@
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(13, 27, 46, 0.38);
+    background: rgba(31, 31, 31, 0.38);
     transition: background 0.25s;
 }
-.card:hover .overlay { background: rgba(13, 27, 46, 0.18); }
+.card:hover .overlay { background: rgba(31, 31, 31, 0.18); }
 
 .playBtn {
     position: relative;

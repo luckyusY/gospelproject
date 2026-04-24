@@ -46,7 +46,7 @@ export default function SectionPage({
                 style={{
                     borderBottomColor: color,
                     ...(heroImage && {
-                        backgroundImage: `linear-gradient(135deg, rgba(13,27,46,0.88) 0%, rgba(13,27,46,0.78) 100%), url(${heroImage})`,
+                        backgroundImage: `linear-gradient(135deg, rgba(31,31,31,0.88) 0%, rgba(31,31,31,0.78) 100%), url(${heroImage})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }),

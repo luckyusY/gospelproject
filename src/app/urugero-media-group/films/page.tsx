@@ -15,7 +15,7 @@ export default function FilmsPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Films ikorera filimi, videos n'ibiganiro by'Ubukristu bifasha abantu kwizerana n'Imana."
             icon="🎬"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Video Production", href: "/urugero-media-group/films", desc: "Gukora videos za Gikrisitu" },

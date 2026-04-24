@@ -15,7 +15,7 @@ export default function UbuhamyaPage() {
             subtitle="URUGERO MEDIA — UBUHAMYA"
             description="Ubuhamya bw'abakristu basangira uko Imana yabakoranye mu buzima bwabo."
             icon="🙏"
-            color="#059669"
+            color="#B80000"
             heroImage="https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=1400&auto=format&fit=crop"
         />
     );

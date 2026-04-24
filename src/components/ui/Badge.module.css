@@ -13,7 +13,7 @@
 
 .red    { background-color: var(--red);    color: white; }
 .blue   { background-color: var(--blue);   color: white; }
-.gold   { background-color: var(--gold);   color: var(--navy); }
+.gold   { background-color: var(--gold);   color: white; }
 .green  { background-color: var(--green);  color: white; }
 .purple { background-color: var(--purple); color: white; }
 .navy   { background-color: var(--navy);   color: white; }

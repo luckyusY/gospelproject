@@ -15,7 +15,7 @@ export default function AmakoraliPage() {
             subtitle="AMAKURU"
             description="Amakuru y'amakorali azwi cyane mu Rwanda n'isi yose."
             icon="🎵"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

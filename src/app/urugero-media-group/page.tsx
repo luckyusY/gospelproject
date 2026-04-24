@@ -15,7 +15,7 @@ export default function UrugeroMediaGroupPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Media Group ni itsinda ry'ibikorwa bitandukanye bya media bigamije gusakaza Ubukristu mu Rwanda no ku isi yose."
             icon="🎬"
-            color="#F59E0B"
+            color="#B80000"
             heroImage="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1400&auto=format&fit=crop"
             subSections={[
                 { label: "🎵 Urugero Music Academy", href: "/urugero-media-group/music-academy", desc: "Worship training, Vocal & instruments" },

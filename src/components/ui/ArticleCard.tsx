@@ -30,7 +30,7 @@ export default function ArticleCard({
 }: ArticleCardProps) {
     return (
         <motion.div
-            whileHover={{ y: -6, boxShadow: "0 20px 40px rgba(13,27,46,0.14)" }}
+            whileHover={{ y: -6, boxShadow: "0 20px 40px rgba(31,31,31,0.14)" }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{ borderRadius: "var(--r-lg)" }}
         >

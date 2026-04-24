@@ -15,7 +15,7 @@ export default function MusicTalentPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Music Talent ishakisha no guteza imbere abahanzi bashya b'Imana mu Rwanda."
             icon="🌟"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Talent Search", href: "/urugero-media-group/music-talent", desc: "Gushaka abahanzi" },

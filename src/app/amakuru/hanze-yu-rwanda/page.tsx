@@ -15,7 +15,7 @@ export default function HanzeYuRwandaPage() {
             subtitle="AMAKURU"
             description="Amakuru y'Ubukristu avuye mu bihugu byo hanze y'u Rwanda."
             icon="🌍"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

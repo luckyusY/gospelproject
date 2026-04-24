@@ -37,7 +37,7 @@
 .searchBtn {
     padding: 0.85rem 1.75rem;
     background-color: var(--gold);
-    color: var(--navy);
+    color: white;
     font-weight: 800;
     font-size: 0.9rem;
     border-radius: var(--r-full);
@@ -89,7 +89,7 @@
     letter-spacing: 0.08em;
     color: white;
 }
-.kindEvent     { background-color: var(--gold); color: var(--navy); }
+.kindEvent     { background-color: var(--gold); color: white; }
 .kindTestimony { background-color: var(--red); }
 
 .categoryLabel { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }

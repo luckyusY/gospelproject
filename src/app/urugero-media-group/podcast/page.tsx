@@ -15,7 +15,7 @@ export default function PodcastPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Podcast ni gahunda y'ibiganiro, ibibazo n'ikiganiro ku bihuye n'Ubukristu n'ubuzima."
             icon="🎧"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Discussions", href: "/urugero-media-group/podcast", desc: "Ibiganiro by'indepth" },

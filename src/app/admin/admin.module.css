@@ -29,7 +29,7 @@
 
 .logoIcon { font-size: 1.5rem; }
 .logoName { font-weight: 800; font-size: 0.9rem; color: white; }
-.logoRole { font-size: 0.7rem; color: #94A3B8; }
+.logoRole { font-size: 0.7rem; color: #8A8A8A; }
 
 .sideNav {
     display: flex;
@@ -45,7 +45,7 @@
     border-radius: var(--r-md);
     font-size: 0.85rem;
     font-weight: 600;
-    color: #CBD5E1;
+    color: #BDBDBD;
     transition: all 0.15s;
     text-decoration: none;
 }
@@ -65,7 +65,7 @@
 
 .viewSiteLink {
     font-size: 0.8rem;
-    color: #94A3B8;
+    color: #8A8A8A;
     font-weight: 600;
 }
 .viewSiteLink:hover { color: var(--gold); }

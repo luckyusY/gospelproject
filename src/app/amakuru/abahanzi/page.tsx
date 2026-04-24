@@ -15,7 +15,7 @@ export default function AbahanziPage() {
             subtitle="AMAKURU"
             description="Amakuru mashya y'abahanzi b'Imana mu Rwanda no ku isi yose."
             icon="🎤"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

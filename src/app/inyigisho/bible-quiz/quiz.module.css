@@ -135,7 +135,7 @@
 .confirmBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .nextBtn {
     background-color: var(--gold);
-    color: var(--navy);
+    color: white;
 }
 .nextBtn:hover { background-color: var(--gold-dark); }
 

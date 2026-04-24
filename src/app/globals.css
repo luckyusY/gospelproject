@@ -1,42 +1,42 @@
 :root {
   /* ── Core Solid Palette ───────────────────────────── */
-  --navy:        #0D1B2E;
-  --navy-deep:   #060F1A;
-  --navy-mid:    #132438;
-  --navy-light:  #1E3A5F;
+  --navy:        #1F1F1F;
+  --navy-deep:   #111111;
+  --navy-mid:    #333333;
+  --navy-light:  #525252;
 
-  --gold:        #F59E0B;
-  --gold-dark:   #D97706;
-  --gold-light:  #FEF3C7;
+  --gold:        #B80000;
+  --gold-dark:   #8A0000;
+  --gold-light:  #FFF1F1;
 
-  --red:         #DC2626;
-  --red-dark:    #B91C1C;
+  --red:         #EB0000;
+  --red-dark:    #B80000;
   --red-light:   #FEF2F2;
 
-  --blue:        #1E40AF;
-  --blue-dark:   #1E3A8A;
-  --blue-light:  #EFF6FF;
+  --blue:        #B80000;
+  --blue-dark:   #8A0000;
+  --blue-light:  #FFF1F1;
 
-  --green:       #059669;
-  --green-light: #D1FAE5;
+  --green:       #B80000;
+  --green-light: #FFF1F1;
 
-  --purple:      #7C3AED;
-  --purple-light:#EDE9FE;
+  --purple:      #1F1F1F;
+  --purple-light:#F2F2F2;
 
   /* ── Backgrounds ──────────────────────────────────── */
-  --bg:          #F8FAFC;
+  --bg:          #F7F7F7;
   --bg-card:     #FFFFFF;
-  --bg-subtle:   #F1F5F9;
+  --bg-subtle:   #F2F2F2;
 
   /* ── Text ─────────────────────────────────────────── */
-  --text:        #0F172A;
-  --text-muted:  #64748B;
-  --text-faint:  #94A3B8;
-  --text-light:  #F8FAFC;
+  --text:        #1F1F1F;
+  --text-muted:  #6F6F6F;
+  --text-faint:  #8A8A8A;
+  --text-light:  #F7F7F7;
 
   /* ── Borders ──────────────────────────────────────── */
-  --border:      #E2E8F0;
-  --border-dark: #CBD5E1;
+  --border:      #D8D8D8;
+  --border-dark: #BDBDBD;
 
   /* ── Shadows ──────────────────────────────────────── */
   --shadow-sm:  0 1px 3px rgba(0,0,0,0.07);
@@ -84,29 +84,29 @@
 
 /* ── Dark Mode ────────────────────────────────────────── */
 [data-theme="dark"] {
-  --bg:          #0F172A;
-  --bg-card:     #1E293B;
-  --bg-subtle:   #1E2D40;
+  --bg:          #1F1F1F;
+  --bg-card:     #2A2A2A;
+  --bg-subtle:   #333333;
 
-  --text:        #F1F5F9;
-  --text-muted:  #94A3B8;
-  --text-faint:  #64748B;
-  --text-light:  #F8FAFC;
+  --text:        #F2F2F2;
+  --text-muted:  #8A8A8A;
+  --text-faint:  #6F6F6F;
+  --text-light:  #F7F7F7;
 
-  --border:      #334155;
-  --border-dark: #475569;
+  --border:      #4A4A4A;
+  --border-dark: #5F5F5F;
 
   --shadow-sm:  0 1px 3px rgba(0,0,0,0.3);
   --shadow-md:  0 4px 14px rgba(0,0,0,0.4);
   --shadow-lg:  0 8px 24px rgba(0,0,0,0.5);
   --shadow-xl:  0 16px 40px rgba(0,0,0,0.6);
 
-  /* gold-light & other light tints need to darken in dark mode */
-  --gold-light:  #451A03;
-  --red-light:   #450A0A;
-  --blue-light:  #0C1A3A;
-  --green-light: #052E16;
-  --purple-light:#2E1065;
+  /* Light tints need darker equivalents against the black editorial theme. */
+  --gold-light:  #3A0000;
+  --red-light:   #3A0000;
+  --blue-light:  #3A0000;
+  --green-light: #3A0000;
+  --purple-light:#333333;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -186,12 +186,12 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
   background-color: var(--blue-dark);
   border-color: var(--blue-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(30,64,175,0.35);
+  box-shadow: 0 4px 14px rgba(184,0,0,0.35);
 }
 
 .btn-accent {
   background-color: var(--gold);
-  color: var(--navy);
+  color: white;
   font-weight: 800;
   border-color: var(--gold);
 }
@@ -199,7 +199,7 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
   background-color: var(--gold-dark);
   border-color: var(--gold-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(245,158,11,0.4);
+  box-shadow: 0 4px 14px rgba(184,0,0,0.4);
 }
 
 .btn-navy {
@@ -240,7 +240,7 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
 }
 .tag        { background-color: var(--red);    color: white; }
 .tag-blue   { background-color: var(--blue);   color: white; }
-.tag-gold   { background-color: var(--gold);   color: var(--navy); }
+.tag-gold   { background-color: var(--gold);   color: white; }
 .tag-green  { background-color: var(--green);  color: white; }
 .tag-purple { background-color: var(--purple); color: white; }
 
@@ -273,7 +273,7 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
   z-index: 9999;
   padding: 0.6rem 1.2rem;
   background-color: var(--gold);
-  color: var(--navy);
+  color: white;
   font-weight: 700;
   font-size: 0.875rem;
   border-radius: var(--r-md);

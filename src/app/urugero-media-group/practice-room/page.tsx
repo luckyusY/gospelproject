@@ -15,7 +15,7 @@ export default function PracticeRoomPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Practice Room ni ahantu abahanzi basezerana kwitoza no gusinya indirimbo z'Imana hamwe."
             icon="🎹"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Rehearsals", href: "/urugero-media-group/practice-room", desc: "Gusesengura indirimbo" },

@@ -37,7 +37,7 @@
 }
 
 .thumbnailBtn:focus-visible {
-    outline: 3px solid var(--gold, #F59E0B);
+    outline: 3px solid var(--gold, #B80000);
     outline-offset: 3px;
 }
 

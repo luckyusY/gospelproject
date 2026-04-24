@@ -33,7 +33,7 @@ export default function VideoCard({
                         aria-label={`Tangira video: ${title}`}
                         onClick={(e) => { e.stopPropagation(); onClick?.(); }}
                     >
-                        <PlayCircle size={44} fill="white" stroke="#0D1B2E" aria-hidden />
+                        <PlayCircle size={44} fill="white" stroke="#1F1F1F" aria-hidden />
                     </button>
                 )}
                 {duration && (

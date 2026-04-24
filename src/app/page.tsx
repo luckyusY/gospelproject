@@ -18,18 +18,18 @@ import {
 
 const categories = [
     { name: "Byose" },
-    { name: "Abahanzi",   color: "#DC2626" },
-    { name: "Amakorali",  color: "#1E40AF" },
-    { name: "Amatorero",  color: "#059669" },
-    { name: "Ibitaramo",  color: "#7C3AED" },
-    { name: "Ubuhamya",   color: "#F59E0B" },
-    { name: "Urubyiruko", color: "#0D1B2E" },
+    { name: "Abahanzi",   color: "#EB0000" },
+    { name: "Amakorali",  color: "#B80000" },
+    { name: "Amatorero",  color: "#B80000" },
+    { name: "Ibitaramo",  color: "#1F1F1F" },
+    { name: "Ubuhamya",   color: "#B80000" },
+    { name: "Urubyiruko", color: "#1F1F1F" },
 ];
 
 const latestStories = [
     {
         id: 1,
-        category: "Abahanzi", categoryColor: "#DC2626",
+        category: "Abahanzi", categoryColor: "#EB0000",
         title:   "Umuhanzi Mushya Yatangije Indirimbo Yuzuyemo Ubuhamya",
         excerpt: "Indirimbo nshya yavuzweho n'abantu benshi mu Rwanda, igaragaza ubuhamya bw'umuhanzi wagize ibihe bikomeye mu buzima.",
         image:   "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop",
@@ -37,7 +37,7 @@ const latestStories = [
     },
     {
         id: 2,
-        category: "Inyigisho", categoryColor: "#1E40AF",
+        category: "Inyigisho", categoryColor: "#B80000",
         title:   "Inyigisho ku Gukunda Imana: Amateka ya Yobu",
         excerpt: "Inyigisho nziza ku gitabo cya Yobu igaragaza uburyo twashobora kwizera Imana no mu bihe bikomeye.",
         image:   "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop",
@@ -45,7 +45,7 @@ const latestStories = [
     },
     {
         id: 3,
-        category: "Ibitaramo", categoryColor: "#7C3AED",
+        category: "Ibitaramo", categoryColor: "#1F1F1F",
         title:   "Ibitaramo by'Urugero Byakuye Abantu 5,000 i Kigali",
         excerpt: "Ibitaramo by'indirimbo z'Imana byabaye i Kigali byakusanyije abantu benshi basingiwe n'Imana.",
         image:   "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=800&auto=format&fit=crop",
@@ -53,7 +53,7 @@ const latestStories = [
     },
     {
         id: 4,
-        category: "Ubuhamya", categoryColor: "#059669",
+        category: "Ubuhamya", categoryColor: "#B80000",
         title:   "Ubuhamya: Imana Yankoranije Mu Bihe Bikomeye",
         excerpt: "Umukrisitu asangira ubuhamya bwe bw'uburwayi bwagira akamaro ko kumwibutsa ingufu z'Imana.",
         image:   "https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=800&auto=format&fit=crop",
@@ -61,7 +61,7 @@ const latestStories = [
     },
     {
         id: 5,
-        category: "Amakorali", categoryColor: "#D97706",
+        category: "Amakorali", categoryColor: "#8A0000",
         title:   "Amakorali 10 Azwi Cyane Mu Rwanda Muri 2025",
         excerpt: "Reba urutonde rw'amakorali azwi cyane mu Rwanda ari hafi kurekura indirimbo nshya.",
         image:   "https://images.unsplash.com/photo-1507838153414-b4b713384a76?q=80&w=800&auto=format&fit=crop",
@@ -69,7 +69,7 @@ const latestStories = [
     },
     {
         id: 6,
-        category: "Urubyiruko", categoryColor: "#0D1B2E",
+        category: "Urubyiruko", categoryColor: "#1F1F1F",
         title:   "Urubyiruko rw'u Rwanda Ruriyongera mu Bikorwa by'Imana",
         excerpt: "Urubyiruko rwinshi rwarinjiye mu bikorwa by'Imana bigaragaza ko Itorero rikura mu Rwanda.",
         image:   "https://images.unsplash.com/photo-1529156069898-49953eb1b5ce?q=80&w=800&auto=format&fit=crop",

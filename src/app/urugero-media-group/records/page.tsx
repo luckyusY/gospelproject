@@ -15,7 +15,7 @@ export default function RecordsPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Records iteranya abahanzi bo gurecodi indirimbo z'Imana mu studio yabo ya kinyaboneka."
             icon="🎙️"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Recording", href: "/urugero-media-group/records", desc: "Gurecodi indirimbo" },

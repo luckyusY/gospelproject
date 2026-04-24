@@ -102,20 +102,19 @@
 }
 
 .categoryList a:hover {
-    background-color: rgba(37, 99, 235, 0.05);
-    /* very light primary */
+    background-color: rgba(184, 0, 0, 0.06);
+    /* very light BBC red */
     color: var(--primary-color);
 }
 
 .activeCategory {
-    background-color: rgba(37, 99, 235, 0.1) !important;
+    background-color: rgba(184, 0, 0, 0.1) !important;
     color: var(--primary-color) !important;
 }
 
 .newsletterWidget {
-    background-color: #ebf0fe;
-    /* light blue */
-    border-color: #dbeafe;
+    background-color: #FFF1F1;
+    border-color: rgba(184, 0, 0, 0.16);
 }
 
 .subscribeForm {

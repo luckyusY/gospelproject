@@ -15,7 +15,7 @@ export default function UbuzimaBwumwukaPage() {
             subtitle="INYIGISHO"
             description="Inyigisho ku buzima bw'umwuka n'uburyo bwo kwiyungurura mu Mana."
             icon="✨"
-            color="#1E40AF"
+            color="#B80000"
             breadcrumb={[{ label: "Inyigisho", href: "/inyigisho" }]}
         />
     );

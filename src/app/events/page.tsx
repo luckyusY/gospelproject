@@ -13,7 +13,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1540039155732-6114b09ec4d5?q=80&w=800&auto=format&fit=crop",
         month:  "MEI", day: "10",
-        tag:    "AMAKONFERANSI", tagColor: "#DC2626",
+        tag:    "AMAKONFERANSI", tagColor: "#EB0000",
         icon:   <MapPin size={14} />,
         venue:  "Kigali Arena, Kigali",
         title:  "Urugero Worship Night 2025",
@@ -24,7 +24,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1516280440508-3a1ecf92b76b?q=80&w=800&auto=format&fit=crop",
         month:  "JUN", day: "07",
-        tag:    "IBITARAMO BY'INDIRIMBO", tagColor: "#7C3AED",
+        tag:    "IBITARAMO BY'INDIRIMBO", tagColor: "#1F1F1F",
         icon:   <Video size={14} />,
         venue:  "Online — Live kuri Urugero TV",
         title:  "Iminsi ya Urugero Bible Quiz",
@@ -35,7 +35,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1470229722913-7c090be5c5a4?q=80&w=800&auto=format&fit=crop",
         month:  "JUL", day: "20",
-        tag:    "IMIKORERE", tagColor: "#F59E0B",
+        tag:    "IMIKORERE", tagColor: "#B80000",
         icon:   <MapPin size={14} />,
         venue:  "Amahoro Stadium, Kigali",
         title:  "Urugero Music Academy Annual Show",
@@ -46,7 +46,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=800&auto=format&fit=crop",
         month:  "AGO", day: "15",
-        tag:    "URUBYIRUKO", tagColor: "#059669",
+        tag:    "URUBYIRUKO", tagColor: "#B80000",
         icon:   <MapPin size={14} />,
         venue:  "IPRC Kigali",
         title:  "Urugero Youth Revival Night",
@@ -57,7 +57,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
         month:  "SEP", day: "06",
-        tag:    "ABAGORE", tagColor: "#DC2626",
+        tag:    "ABAGORE", tagColor: "#EB0000",
         icon:   <MapPin size={14} />,
         venue:  "Hôtel des Mille Collines, Kigali",
         title:  "Urugero Women of Faith Summit",
@@ -68,7 +68,7 @@ const events = [
     {
         img:    "https://images.unsplash.com/photo-1511522851441-2b6d51bbd811?q=80&w=800&auto=format&fit=crop",
         month:  "DEC", day: "25",
-        tag:    "NOHELI", tagColor: "#DC2626",
+        tag:    "NOHELI", tagColor: "#EB0000",
         icon:   <MapPin size={14} />,
         venue:  "Amatorero yose mu Rwanda",
         title:  "Urugero Christmas Celebration",

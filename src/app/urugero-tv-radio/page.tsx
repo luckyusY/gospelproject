@@ -15,7 +15,7 @@ export default function UrgeroTvRadioPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero TV na Radio ni ahantu usangirira amajwi y'Imana, inyigisho, ibitaramo n'ubuhamya buri munsi."
             icon="📺"
-            color="#DC2626"
+            color="#EB0000"
             heroImage="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1400&auto=format&fit=crop"
         />
     );

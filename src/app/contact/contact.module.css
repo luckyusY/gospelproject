@@ -11,7 +11,7 @@
     color: white;
     margin-bottom: 0.5rem;
 }
-.subtitle { color: #94A3B8; font-size: 1rem; }
+.subtitle { color: #8A8A8A; font-size: 1rem; }
 
 .grid {
     display: grid;
@@ -138,14 +138,14 @@
 .socialLink {
     padding: 0.4rem 0.85rem;
     background-color: rgba(255,255,255,0.1);
-    color: #CBD5E1;
+    color: #BDBDBD;
     border-radius: var(--r-full);
     font-size: 0.8rem;
     font-weight: 600;
     border: 1px solid rgba(255,255,255,0.15);
     transition: all 0.2s;
 }
-.socialLink:hover { background-color: var(--gold); color: var(--navy); border-color: var(--gold); }
+.socialLink:hover { background-color: var(--gold); color: white; border-color: var(--gold); }
 
 @media (max-width: 900px) {
     .grid { grid-template-columns: 1fr; }

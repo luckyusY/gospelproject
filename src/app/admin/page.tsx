@@ -26,9 +26,9 @@ export default async function AdminDashboard() {
     const recentArticles = (recentResult.data ?? []) as ArticleRow[];
 
     const stats = [
-        { label: "Inyandiko", count: articleCount ?? 0, href: "/admin/articles", color: "#1E40AF" },
-        { label: "Ibikorwa",  count: eventCount ?? 0,   href: "/admin/events",   color: "#F59E0B" },
-        { label: "Ubuhamya",  count: testimonyCount ?? 0, href: "/admin/testimonies", color: "#DC2626" },
+        { label: "Inyandiko", count: articleCount ?? 0, href: "/admin/articles", color: "#B80000" },
+        { label: "Ibikorwa",  count: eventCount ?? 0,   href: "/admin/events",   color: "#B80000" },
+        { label: "Ubuhamya",  count: testimonyCount ?? 0, href: "/admin/testimonies", color: "#EB0000" },
     ];
 
     return (

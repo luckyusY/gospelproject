@@ -15,7 +15,7 @@ export default function AbagorePage() {
             subtitle="INYIGISHO"
             description="Inyigisho z'Imana zigenewe abagore b'Ubukristu."
             icon="👩"
-            color="#1E40AF"
+            color="#B80000"
             breadcrumb={[{ label: "Inyigisho", href: "/inyigisho" }]}
         />
     );

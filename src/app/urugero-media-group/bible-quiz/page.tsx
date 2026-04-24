@@ -15,7 +15,7 @@ export default function BibleQuizPage() {
             subtitle="URUGERO MEDIA GROUP"
             description="Urugero Bible Quiz iteranya amashuri, amatorero na YouTube mu gukora ibibazo bya Bibiliya."
             icon="📖"
-            color="#F59E0B"
+            color="#B80000"
             breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
             subSections={[
                 { label: "Schools", href: "/urugero-media-group/bible-quiz", desc: "Bible Quiz mu mashuri" },

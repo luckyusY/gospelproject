@@ -14,7 +14,7 @@
     transform: translateX(-50%);
     font-size: 22rem;
     font-weight: 900;
-    color: rgba(245, 158, 11, 0.05);
+    color: rgba(184, 0, 0, 0.05);
     line-height: 1;
     pointer-events: none;
     font-family: Georgia, serif;
@@ -33,7 +33,7 @@
 .badge {
     display: inline-block;
     background-color: var(--gold);
-    color: var(--navy);
+    color: white;
     padding: 0.3rem 1.2rem;
     border-radius: var(--r-full);
     font-size: 0.68rem;
@@ -105,17 +105,17 @@
     font-weight: 800;
     font-size: 0.88rem;
     background-color: var(--gold);
-    color: var(--navy);
+    color: white;
     border: 2px solid var(--gold);
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
 }
 .btnSolid:hover {
-    background-color: #FBBF24;
-    border-color: #FBBF24;
+    background-color: #EB0000;
+    border-color: #EB0000;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+    box-shadow: 0 4px 14px rgba(184, 0, 0, 0.45);
 }
 .btnSolid:focus-visible {
     outline: 3px solid white;

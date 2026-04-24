@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
         description:      "Urugero Media Group — Ubuhamya, Inyigisho n'Imyidagaduro y'Imana",
         start_url:        "/",
         display:          "standalone",
-        background_color: "#0D1B2E",
-        theme_color:      "#F59E0B",
+        background_color: "#FFFFFF",
+        theme_color:      "#B80000",
         orientation:      "portrait",
         lang:             "rw",
         icons: [

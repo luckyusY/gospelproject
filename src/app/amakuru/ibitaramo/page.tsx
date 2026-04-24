@@ -15,7 +15,7 @@ export default function IbitaramoPage() {
             subtitle="AMAKURU"
             description="Amakuru y'ibitaramo bya Gikrisitu mu Rwanda."
             icon="🎪"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

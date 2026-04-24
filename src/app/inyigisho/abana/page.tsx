@@ -15,7 +15,7 @@ export default function AbanaPage() {
             subtitle="INYIGISHO"
             description="Inyigisho z'Imana zigenewe abana ngo bakure mu kwizera."
             icon="👶"
-            color="#1E40AF"
+            color="#B80000"
             breadcrumb={[{ label: "Inyigisho", href: "/inyigisho" }]}
         />
     );

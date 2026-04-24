@@ -15,7 +15,7 @@ export default function AmatoreroPage() {
             subtitle="AMAKURU"
             description="Amakuru y'amatorero n'ibikorwa by'itorero mu Rwanda."
             icon="⛪"
-            color="#DC2626"
+            color="#EB0000"
             breadcrumb={[{ label: "Amakuru", href: "/amakuru" }]}
         />
     );

@@ -1,13 +1,13 @@
 .page { padding-bottom: 4rem; }
 
 .hero {
-    background: linear-gradient(135deg, var(--navy-deep) 0%, #064e3b 100%);
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--gold-dark) 100%);
     padding: 3rem 0 2.5rem;
     margin-bottom: 3rem;
 }
 .eyebrow { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); display: block; margin-bottom: 0.75rem; }
 .heading { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: white; margin-bottom: 0.5rem; }
-.subtitle { color: #6EE7B7; font-size: 1rem; line-height: 1.6; max-width: 560px; }
+.subtitle { color: #FFF1F1; font-size: 1rem; line-height: 1.6; max-width: 560px; }
 
 .grid {
     display: grid;
@@ -20,7 +20,7 @@
 
 /* Daily verse */
 .verseOfDay {
-    background: linear-gradient(135deg, var(--navy) 0%, #064e3b 100%);
+    background: linear-gradient(135deg, var(--navy) 0%, var(--gold-dark) 100%);
     border-radius: var(--r-xl);
     padding: 2.5rem;
     position: relative;
@@ -39,7 +39,7 @@
 }
 .verseBadge {
     display: inline-block;
-    background-color: rgba(245,158,11,0.2);
+    background-color: rgba(184,0,0,0.2);
     color: var(--gold);
     padding: 0.25rem 0.75rem;
     border-radius: var(--r-full);

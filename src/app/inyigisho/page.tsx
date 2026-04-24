@@ -15,7 +15,7 @@ export default function InyigishoPage() {
             subtitle="URUGERO MEDIA — INYIGISHO"
             description="Inyigisho z'Imana ku bihuye n'umuryango, abana, urubyiruko, abagabo, abagore n'ubuzima bw'umwuka."
             icon="📚"
-            color="#1E40AF"
+            color="#B80000"
             heroImage="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1400&auto=format&fit=crop"
             subSections={[
                 { label: "Umuryango", href: "/inyigisho/umuryango", desc: "Inyigisho z'umuryango" },

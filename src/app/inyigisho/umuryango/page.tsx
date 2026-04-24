@@ -15,7 +15,7 @@ export default function UmuryangaPage() {
             subtitle="INYIGISHO"
             description="Inyigisho z'Imana ku bihuye n'umuryango n'uburere bw'abana."
             icon="👨‍👩‍👧‍👦"
-            color="#1E40AF"
+            color="#B80000"
             breadcrumb={[{ label: "Inyigisho", href: "/inyigisho" }]}
         />
     );

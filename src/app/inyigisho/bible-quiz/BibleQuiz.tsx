@@ -123,10 +123,10 @@ export default function BibleQuiz() {
 
     const pct = Math.round((score / questions.length) * 100);
     const grade =
-        pct >= 90 ? { label: "Ikirenga!", color: "#059669" } :
-        pct >= 70 ? { label: "Byagenze neza!",   color: "#1E40AF" } :
-        pct >= 50 ? { label: "Biragenda!",   color: "#F59E0B" } :
-                    { label: "Komeza kwiga",  color: "#DC2626" };
+        pct >= 90 ? { label: "Ikirenga!", color: "#B80000" } :
+        pct >= 70 ? { label: "Byagenze neza!",   color: "#B80000" } :
+        pct >= 50 ? { label: "Biragenda!",   color: "#B80000" } :
+                    { label: "Komeza kwiga",  color: "#EB0000" };
 
     // ── Intro ───────────────────────────────────────────────
     if (phase === "intro") return (
