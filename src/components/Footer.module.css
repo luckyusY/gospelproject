@@ -78,25 +78,14 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
 }
 
-.logoIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #B80000;
+.logoImage {
+    display: block;
+    width: min(100%, 290px);
+    height: auto;
     border-radius: 10px;
-    padding: 0.55rem;
-    flex-shrink: 0;
-    border: 1px solid rgba(184, 0, 0, 0.3);
-}
-
-.logoText {
-    font-weight: 900;
-    font-size: 1.3rem;
-    letter-spacing: -0.02em;
-    color: white;
+    object-fit: contain;
 }
 
 .description {

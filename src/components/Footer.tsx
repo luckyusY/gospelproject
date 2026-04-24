@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -66,13 +67,13 @@ export default function Footer() {
                     {/* Brand column */}
                     <motion.div className={styles.brandCol} variants={fadeLeft}>
                         <div className={styles.logo}>
-                            <div className={styles.logoIcon}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                                    <path d="M4 19.5V4.5C4 3.12 5.12 2 6.5 2h11C18.88 2 20 3.12 20 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-11C5.12 22 4 20.88 4 19.5z" fill="#FFFFFF"/>
-                                    <path d="M8 7h8M8 11h8M8 15h5" stroke="#B80000" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
-                            </div>
-                            <span className={styles.logoText}>URUGERO MEDIA</span>
+                            <Image
+                                src="/urugero-media-logo.png"
+                                alt="Urugero Gospel News"
+                                width={900}
+                                height={193}
+                                className={styles.logoImage}
+                            />
                         </div>
                         <p className={styles.description}>
                             Urugero Media Group ni itsinda rya media rya Gikrisitu rigabana ubuhamya, inyigisho n&apos;imyidagaduro y&apos;Imana mu Rwanda no ku isi yose.
