@@ -730,3 +730,133 @@
 @media (min-width: 1024px) {
     .videoGrid { grid-template-columns: repeat(3, 1fr); }
 }
+
+@media (max-width: 640px) {
+    .page {
+        padding-bottom: 3rem;
+    }
+
+    .categoriesStrip {
+        padding: 0.7rem 0;
+    }
+
+    .categoriesRow {
+        gap: 0.45rem;
+        scroll-padding-inline: 1rem;
+    }
+
+    .categoryPill {
+        padding: 0.36rem 0.85rem;
+        font-size: 0.78rem;
+    }
+
+    .heroSection {
+        margin-top: 1.5rem;
+        margin-bottom: 2.75rem;
+    }
+
+    .heroGrid,
+    .mainStories,
+    .subStories,
+    .sidebar,
+    .storiesGrid,
+    .testimonyGrid,
+    .videoGrid {
+        gap: 1.25rem;
+    }
+
+    .featuredStory {
+        height: clamp(380px, 118vw, 450px);
+        border-radius: 14px;
+    }
+
+    .featuredOverlay {
+        padding: 1.5rem;
+    }
+
+    .featuredTitle,
+    .featuredExcerpt {
+        max-width: 100%;
+    }
+
+    .featuredTitle {
+        font-size: clamp(1.45rem, 8vw, 2rem);
+    }
+
+    .featuredExcerpt {
+        font-size: 0.9rem;
+    }
+
+    .subStory {
+        height: 205px;
+    }
+
+    .subOverlay {
+        padding: 1rem;
+    }
+
+    .widget,
+    .newsletterWidget,
+    .storyCardBody,
+    .testimonyBody {
+        padding: 1.15rem;
+    }
+
+    .verseSection {
+        padding: 3.25rem 1rem;
+        margin: 3rem 0;
+    }
+
+    .verseQuoteMark {
+        top: -2rem;
+        font-size: 13rem;
+    }
+
+    .verseBadge {
+        margin-bottom: 1.4rem;
+    }
+
+    .verseText {
+        font-size: clamp(1.2rem, 7vw, 1.65rem);
+    }
+
+    .verseActions {
+        gap: 0.7rem;
+    }
+
+    .verseBtnOutline,
+    .verseBtnSolid {
+        width: 100%;
+        padding: 0.75rem 1.2rem;
+    }
+
+    .latestHeader,
+    .testimonyHeader {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .seeAllLink {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .sliderBtns {
+        margin-left: 0;
+    }
+
+    .storyCardImg {
+        height: 180px;
+    }
+
+    .videoThumb {
+        height: 190px;
+    }
+
+    .videoSection,
+    .latestSection {
+        margin-bottom: 3rem;
+    }
+}

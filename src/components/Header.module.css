@@ -130,14 +130,61 @@
 }
 
 @media (max-width: 640px) {
+    .breakingBar {
+        padding: 0.35rem 0;
+    }
+
+    .breakingInner {
+        gap: 0.55rem;
+    }
+
+    .breakingLeft {
+        gap: 0.55rem;
+    }
+
+    .breakingBadge {
+        padding: 0.18rem 0.5rem;
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+    }
+
+    .tickerText {
+        font-size: 0.72rem;
+    }
+
+    .tickerArrow {
+        display: none;
+    }
+
+    .mastheadInner {
+        height: 64px;
+        gap: 0.55rem;
+    }
+
     .logoImage {
-        width: 210px;
+        width: clamp(172px, 52vw, 198px);
         max-height: 45px;
+        border-radius: 6px;
+    }
+
+    .mastheadActions {
+        gap: 0.45rem;
+    }
+
+    .mobileMenuBtn {
+        width: 34px;
+        height: 34px;
+        padding: 0;
     }
 }
 
 @media (max-width: 420px) {
-    .logoImage { width: 188px; }
+    .logoImage { width: 170px; }
+}
+
+@media (max-width: 360px) {
+    .logoImage { width: 152px; }
+    .mastheadActions { gap: 0.35rem; }
 }
 
 /* ── Tagline ───────────────────────────────────────── */
@@ -460,6 +507,24 @@
     overflow-y: auto;
     animation: slideDown 0.22s ease forwards;
     border-top: 3px solid #B80000;
+}
+
+@media (max-width: 640px) {
+    .mobileOverlay {
+        top: 93px;
+        padding: 1rem;
+    }
+
+    .mobileNavLink,
+    .mobileNavLinkActive {
+        padding: 0.85rem 0.35rem;
+        font-size: 1rem;
+    }
+
+    .mobileSubscribeBtn {
+        padding: 0.85rem;
+        margin-top: 1rem;
+    }
 }
 
 @keyframes slideDown {

@@ -261,3 +261,66 @@
 .newsletterText { flex: 1; min-width: 200px; }
 .newsletterTitle { font-size: 1rem; font-weight: 800; color: white; margin-bottom: 0.25rem; }
 .newsletterDesc  { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+
+@media (max-width: 640px) {
+    .statsBar {
+        padding: 1.5rem 0;
+    }
+
+    .statsInner {
+        gap: 1.1rem 0.75rem;
+    }
+
+    .statValue {
+        font-size: 1.65rem;
+    }
+
+    .statLabel {
+        font-size: 0.68rem;
+    }
+
+    .footerContainer {
+        padding: 3rem 0 0 0;
+    }
+
+    .grid {
+        gap: 2.25rem;
+        margin-bottom: 2.75rem;
+    }
+
+    .brandCol {
+        align-items: center;
+        text-align: center;
+    }
+
+    .logoImage {
+        width: min(100%, 260px);
+    }
+
+    .description {
+        max-width: 32rem;
+    }
+
+    .socialIcons {
+        justify-content: center;
+    }
+
+    .appBtn {
+        padding: 0.75rem 1rem;
+    }
+
+    .newsletterStrip {
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem 0;
+    }
+
+    .bottomBar {
+        padding: 1.5rem 0;
+    }
+
+    .bottomLinks {
+        justify-content: center;
+        gap: 0.75rem 1.2rem;
+    }
+}

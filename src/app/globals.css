@@ -140,6 +140,12 @@ img { max-width: 100%; height: auto; display: block; }
   padding: 0 1.5rem;
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
 /* ── Fluid Typography Scale ───────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;

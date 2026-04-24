@@ -23,3 +23,17 @@
     outline: 3px solid var(--gold);
     outline-offset: 2px;
 }
+
+@media (max-width: 640px) {
+    .toggle {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 360px) {
+    .toggle {
+        width: 32px;
+        height: 32px;
+    }
+}
