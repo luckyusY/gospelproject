@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { buildMeta } from "@/lib/metadata";
+import { isRichHtmlContent, sanitizeArticleContent } from "@/lib/articleContent";
 import type { ArticleRow } from "@/types/database";
 import type { Metadata } from "next";
 import styles from "./article.module.css";
@@ -55,7 +56,10 @@ export default async function ArticlePage({ params }: Props) {
           })
         : null;
 
-    // Simple MDX-like rendering: split on ## and render as sections
+    const richHtmlContent = isRichHtmlContent(article.content)
+        ? sanitizeArticleContent(article.content)
+        : null;
+    // Legacy rendering for older articles: split on ## and render as sections.
     const sections = article.content.split(/\n##\s+/).filter(Boolean);
 
     return (
@@ -109,22 +113,29 @@ export default async function ArticlePage({ params }: Props) {
 
             {/* Content */}
             <div className={styles.body}>
-                {sections.map((section, i) => {
-                    const lines = section.split("\n").filter(Boolean);
-                    const heading = i === 0 && !article.content.startsWith("##")
-                        ? null
-                        : lines[0];
-                    const body = heading ? lines.slice(1) : lines;
+                {richHtmlContent ? (
+                    <div
+                        className={styles.richContent}
+                        dangerouslySetInnerHTML={{ __html: richHtmlContent }}
+                    />
+                ) : (
+                    sections.map((section, i) => {
+                        const lines = section.split("\n").filter(Boolean);
+                        const heading = i === 0 && !article.content.startsWith("##")
+                            ? null
+                            : lines[0];
+                        const body = heading ? lines.slice(1) : lines;
 
-                    return (
-                        <section key={i} className={styles.section}>
-                            {heading && <h2 className={styles.sectionHeading}>{heading}</h2>}
-                            {body.map((para, j) => (
-                                <p key={j} className={styles.para}>{para}</p>
-                            ))}
-                        </section>
-                    );
-                })}
+                        return (
+                            <section key={i} className={styles.section}>
+                                {heading && <h2 className={styles.sectionHeading}>{heading}</h2>}
+                                {body.map((para, j) => (
+                                    <p key={j} className={styles.para}>{para}</p>
+                                ))}
+                            </section>
+                        );
+                    })
+                )}
             </div>
 
             {/* Back link */}

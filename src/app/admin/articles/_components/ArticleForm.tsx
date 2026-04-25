@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ArticleRow } from "@/types/database";
 import styles from "../../form.module.css";
+import RichTextEditor from "./RichTextEditor";
 
 type Category = { slug: string; name: string; color: string };
 type Props = { article?: ArticleRow; categories: Category[] };
@@ -12,6 +13,7 @@ export default function ArticleForm({ article, categories }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [content, setContent] = useState(article?.content ?? "");
 
     const isEdit = Boolean(article);
 
@@ -20,12 +22,18 @@ export default function ArticleForm({ article, categories }: Props) {
         setError(null);
         const form = e.currentTarget;
         const data = new FormData(form);
+        const plainContent = content.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").trim();
+
+        if (!plainContent) {
+            setError("Andika ibiri mu nyandiko mbere yo kuyibika.");
+            return;
+        }
 
         const payload = {
             title:          data.get("title") as string,
             slug:           data.get("slug") as string,
             excerpt:        data.get("excerpt") as string,
-            content:        data.get("content") as string,
+            content,
             image_url:      (data.get("image_url") as string) || null,
             category:       data.get("category") as string,
             category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#B80000",
@@ -115,18 +123,10 @@ export default function ArticleForm({ article, categories }: Props) {
                             />
                         </label>
 
-                        <label className={styles.label}>
-                            Ibiri mu nyandiko <span className={styles.req}>*</span>
-                            <textarea
-                                name="content"
-                                defaultValue={article?.content}
-                                required
-                                rows={16}
-                                className={styles.textarea}
-                                placeholder={"## Umutwe w'igice\n\nIngingo za mbere...\n\n## Igice cya 2\n\nIngingo..."}
-                            />
-                            <span className={styles.hint}>Koresha ## kugira ngo wongere imitwe y&apos;ibice</span>
-                        </label>
+                        <div className={styles.label}>
+                            <span>Ibiri mu nyandiko <span className={styles.req}>*</span></span>
+                            <RichTextEditor value={content} onChange={setContent} />
+                        </div>
                     </div>
 
                     {/* Right column — meta */}

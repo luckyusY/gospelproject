@@ -94,6 +94,101 @@
     font-size: 1.05rem;
 }
 
+.richContent {
+    font-size: 1.05rem;
+    line-height: 1.78;
+    color: var(--text);
+}
+
+.richContent :where(p, ul, ol, blockquote, table, figure, pre) {
+    margin-bottom: 1.25rem;
+}
+
+.richContent :where(h2, h3, h4) {
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 2rem 0 0.85rem;
+}
+
+.richContent h2 {
+    font-size: 1.45rem;
+    border-left: 4px solid var(--red);
+    padding-left: 0.75rem;
+}
+
+.richContent h3 { font-size: 1.22rem; }
+.richContent h4 { font-size: 1.05rem; }
+
+.richContent :where(ul, ol) {
+    padding-left: 1.5rem;
+}
+
+.richContent li {
+    margin-bottom: 0.45rem;
+}
+
+.richContent a {
+    color: var(--red);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+
+.richContent blockquote {
+    border-left: 4px solid var(--red);
+    padding: 0.75rem 0 0.75rem 1rem;
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    font-style: italic;
+}
+
+.richContent img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--r-lg);
+    margin: 1.5rem auto;
+}
+
+.richContent figure {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.richContent figcaption {
+    margin-top: -0.75rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.richContent table {
+    width: 100%;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+}
+
+.richContent :where(th, td) {
+    border: 1px solid var(--border);
+    padding: 0.7rem;
+    text-align: left;
+}
+
+.richContent th {
+    background-color: var(--surface);
+    font-weight: 900;
+}
+
+.richContent pre {
+    overflow-x: auto;
+    border-radius: var(--r-md);
+    background-color: var(--surface);
+    padding: 1rem;
+}
+
 .footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
 
 .backLink {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabase";
+import { sanitizeArticleContent } from "@/lib/articleContent";
 import type { ArticleInsert } from "@/types/database";
 
 async function requireAuth() {
@@ -19,6 +20,10 @@ export async function PUT(req: NextRequest, { params }: Params) {
 
     const { id } = await params;
     const body = await req.json() as Partial<ArticleInsert>;
+
+    if (typeof body.content === "string") {
+        body.content = sanitizeArticleContent(body.content);
+    }
 
     const { data, error } = await supabaseAdmin()
         .from("articles")
