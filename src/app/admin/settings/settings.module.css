@@ -1,0 +1,73 @@
+.section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+}
+
+.sectionDesc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.55;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.fieldLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.fieldIcon { color: var(--text-muted); }
+
+.successMsg {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+    border-radius: var(--r-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+
+.noTable {
+    grid-column: 1 / -1;
+    background: var(--red-light);
+    border: 1px solid var(--red);
+    border-radius: var(--r-md);
+    padding: 1rem 1.25rem;
+    color: var(--red);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.noTable code {
+    background: rgba(0,0,0,0.1);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}

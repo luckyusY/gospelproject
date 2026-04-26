@@ -27,11 +27,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 </div>
 
                 <nav className={styles.sideNav}>
-                    <a href="/admin"           className={styles.navLink}>📊 Dashboard</a>
-                    <a href="/admin/articles"  className={styles.navLink}>📰 Inyandiko</a>
-                    <a href="/admin/events"    className={styles.navLink}>📅 Ibikorwa</a>
+                    <a href="/admin"             className={styles.navLink}>📊 Dashboard</a>
+                    <a href="/admin/articles"    className={styles.navLink}>📰 Inyandiko</a>
+                    <a href="/admin/events"      className={styles.navLink}>📅 Ibikorwa</a>
                     <a href="/admin/testimonies" className={styles.navLink}>🙌 Ubuhamya</a>
-                    <a href="/admin/media"     className={styles.navLink}>🖼️ Amafoto</a>
+                    <a href="/admin/media"       className={styles.navLink}>🖼️ Amafoto</a>
+                    <a href="/admin/settings"    className={styles.navLink}>⚙️ Igenamiterere</a>
                 </nav>
 
                 <div className={styles.sidebarFooter}>

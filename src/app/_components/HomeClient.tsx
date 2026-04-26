@@ -15,7 +15,7 @@ import {
     scaleIn,
     heroTitle,
 } from "@/lib/animations";
-import type { ArticleRow, EventRow } from "@/types/database";
+import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
 
 const FALLBACK_HERO   = "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?q=80&w=1400&auto=format&fit=crop";
 const FALLBACK_SUB1   = "https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop";
@@ -47,22 +47,30 @@ const EVENTS_FALLBACK = [
     { month: "JUL", day: "20", title: "Urugero Music Academy Show",  subtitle: "Amahoro Stadium • 15:00" },
 ];
 
+type CatMeta = Pick<CategoryRow, "slug" | "name" | "color">;
+
 type Props = {
     featured:     ArticleRow | null;
     subStories:   ArticleRow[];      // first two non-featured articles (for hero sub-panels)
     gridStories:  ArticleRow[];      // all non-featured articles for the grid
     events:       EventRow[];
+    categories:   CatMeta[];         // from the categories table (proper display names)
 };
 
-export default function HomeClient({ featured, subStories, gridStories, events }: Props) {
+export default function HomeClient({ featured, subStories, gridStories, events, categories }: Props) {
 
-    // Build category list from real articles
-    const uniqueCats = Array.from(new Set(gridStories.map(a => a.category)));
-    const categories = [{ name: "Byose" }, ...uniqueCats.map(c => ({ name: c }))];
+    // Only show category pills for categories that actually have articles in the grid
+    const activeSlugs = new Set(gridStories.map(a => a.category));
+    const catPills = [
+        { slug: "byose", name: "Byose" },
+        ...categories
+            .filter(c => activeSlugs.has(c.slug))
+            .map(c => ({ slug: c.slug, name: c.name })),
+    ];
 
-    const [activeCategory, setActiveCategory] = useState("Byose");
+    const [activeCategory, setActiveCategory] = useState("byose");
 
-    const filtered = activeCategory === "Byose"
+    const filtered = activeCategory === "byose"
         ? gridStories
         : gridStories.filter(s => s.category === activeCategory);
 
@@ -77,12 +85,12 @@ export default function HomeClient({ featured, subStories, gridStories, events }
                 <section className={styles.categoriesStrip} aria-label="Inzego z'amakuru">
                     <div className="container">
                         <div className={styles.categoriesRow}>
-                            {categories.map((cat) => (
+                            {catPills.map((cat) => (
                                 <CategoryPill
-                                    key={cat.name}
+                                    key={cat.slug}
                                     label={cat.name}
-                                    active={activeCategory === cat.name}
-                                    onClick={() => setActiveCategory(cat.name)}
+                                    active={activeCategory === cat.slug}
+                                    onClick={() => setActiveCategory(cat.slug)}
                                 />
                             ))}
                         </div>

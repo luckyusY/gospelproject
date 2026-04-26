@@ -23,9 +23,9 @@ const stats = [
 ];
 
 const socialLinks = [
-    { icon: YoutubeLogo,   label: "YouTube",   href: "https://youtube.com" },
+    { icon: YoutubeLogo,   label: "YouTube",    href: "https://youtube.com" },
     { icon: FacebookLogo,  label: "Facebook",   href: "https://facebook.com" },
-    { icon: InstagramLogo, label: "Instagram",  href: "https://instagram.com" },
+    { icon: InstagramLogo, label: "Instagram",  href: "https://www.instagram.com/rwandagospelnews/" },
     { icon: TwitterLogo,   label: "Twitter / X", href: "https://twitter.com" },
 ];
 

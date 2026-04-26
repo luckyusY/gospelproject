@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import type { ArticleRow, EventRow } from "@/types/database";
+import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
 import HomeClient from "./_components/HomeClient";
 
 export const revalidate = 60; // ISR: re-fetch every 60 s in production
@@ -36,12 +36,21 @@ export default async function Home() {
 
     const events = (eventsData ?? []) as EventRow[];
 
+    // ── Categories (for labelled filter pills)
+    const { data: catsData } = await supabase
+        .from("categories")
+        .select("slug, name, color")
+        .order("name", { ascending: true });
+
+    const categories = (catsData ?? []) as Pick<CategoryRow, "slug" | "name" | "color">[];
+
     return (
         <HomeClient
             featured={featured}
             subStories={subStories}
             gridStories={gridStories}
             events={events}
+            categories={categories}
         />
     );
 }
