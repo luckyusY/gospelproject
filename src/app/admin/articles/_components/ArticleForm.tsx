@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { ArticleRow } from "@/types/database";
 import styles from "../../form.module.css";
 import RichTextEditor from "./RichTextEditor";
+import CloudinaryUploader from "./CloudinaryUploader";
 
 type Category = { slug: string; name: string; color: string };
 type Props = { article?: ArticleRow; categories: Category[] };
@@ -12,8 +13,9 @@ type Props = { article?: ArticleRow; categories: Category[] };
 export default function ArticleForm({ article, categories }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError]     = useState<string | null>(null);
     const [content, setContent] = useState(article?.content ?? "");
+    const [imageUrl, setImageUrl] = useState(article?.image_url ?? "");
 
     const isEdit = Boolean(article);
 
@@ -34,7 +36,7 @@ export default function ArticleForm({ article, categories }: Props) {
             slug:           data.get("slug") as string,
             excerpt:        data.get("excerpt") as string,
             content,
-            image_url:      (data.get("image_url") as string) || null,
+            image_url:      imageUrl || null,
             category:       data.get("category") as string,
             category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#B80000",
             author:         data.get("author") as string,
@@ -160,16 +162,13 @@ export default function ArticleForm({ article, categories }: Props) {
                             />
                         </label>
 
-                        <label className={styles.label}>
-                            Ifoto (URL)
-                            <input
-                                name="image_url"
-                                defaultValue={article?.image_url ?? ""}
-                                className={styles.input}
-                                type="url"
-                                placeholder="https://..."
+                        <div className={styles.label}>
+                            Ifoto y'ingenzi
+                            <CloudinaryUploader
+                                value={imageUrl}
+                                onChange={setImageUrl}
                             />
-                        </label>
+                        </div>
 
                         <div className={styles.checkRow}>
                             <input

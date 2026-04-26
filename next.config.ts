@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
             { protocol: "https", hostname: "img.youtube.com" },      // YouTube thumbnails alt
             { protocol: "https", hostname: "lh3.googleusercontent.com" },
             { protocol: "https", hostname: "qtgmcbdkfqnwqshtimpz.supabase.co" }, // Supabase storage
+            { protocol: "https", hostname: "res.cloudinary.com" },               // Cloudinary uploads
         ],
     },
 
