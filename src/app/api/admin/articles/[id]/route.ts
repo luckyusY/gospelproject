@@ -28,11 +28,18 @@ export async function PUT(req: NextRequest, { params }: Params) {
         .from("articles")
         .update(body as never)
         .eq("id", Number(id))
-        .select()
-        .single();
+        .select();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-    return NextResponse.json(data);
+
+    const row = Array.isArray(data) ? data[0] : null;
+    if (!row) {
+        return NextResponse.json(
+            { error: "Ntibishobotse kubika impinduka. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { status: 500 },
+        );
+    }
+    return NextResponse.json(row);
 }
 
 export async function DELETE(_req: NextRequest, { params }: Params) {

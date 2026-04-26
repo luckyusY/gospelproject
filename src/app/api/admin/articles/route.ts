@@ -23,9 +23,16 @@ export async function POST(req: NextRequest) {
     const { data, error } = await supabaseAdmin()
         .from("articles")
         .insert(body as never)
-        .select()
-        .single();
+        .select();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-    return NextResponse.json(data, { status: 201 });
+
+    const row = Array.isArray(data) ? data[0] : null;
+    if (!row) {
+        return NextResponse.json(
+            { error: "Ntibishobotse kubika inyandiko. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { status: 500 },
+        );
+    }
+    return NextResponse.json(row, { status: 201 });
 }
