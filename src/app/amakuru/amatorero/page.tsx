@@ -45,11 +45,13 @@ export default async function AmatoreroPage() {
             <div className="container">
                 {featured && (
                     <Link href={`/amakuru/${featured.slug}`} className={styles.featured}>
-                        {featured.image_url && (
-                            <div className={styles.featuredImgWrap}>
+                        <div className={styles.featuredImgWrap}>
+                            {featured.image_url ? (
                                 <Image src={featured.image_url} alt={featured.title} fill className={styles.featuredImg} priority />
-                            </div>
-                        )}
+                            ) : (
+                                <div className={styles.imgPlaceholder}>📰</div>
+                            )}
+                        </div>
                         <div className={styles.featuredBody}>
                             <span className={styles.catBadge} style={{ backgroundColor: featured.category_color }}>
                                 {featured.category}
@@ -69,11 +71,13 @@ export default async function AmatoreroPage() {
                     <div className={styles.grid}>
                         {rest.map(article => (
                             <Link key={article.id} href={`/amakuru/${article.slug}`} className={styles.card}>
-                                {article.image_url && (
-                                    <div className={styles.cardImgWrap}>
+                                <div className={styles.cardImgWrap}>
+                                    {article.image_url ? (
                                         <Image src={article.image_url} alt={article.title} fill className={styles.cardImg} />
-                                    </div>
-                                )}
+                                    ) : (
+                                        <div className={styles.imgPlaceholder}>📰</div>
+                                    )}
+                                </div>
                                 <div className={styles.cardBody}>
                                     <span className={styles.catBadge} style={{ backgroundColor: article.category_color }}>
                                         {article.category}
