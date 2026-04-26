@@ -21,7 +21,7 @@ const FALLBACK_HERO   = "https://images.unsplash.com/photo-1508854710579-5cecc3a
 const FALLBACK_SUB1   = "https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop";
 const FALLBACK_SUB2   = "https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=800&auto=format&fit=crop";
 const FALLBACK_CARD   = "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop";
-const MONTH_LABELS    = ["JAN","FEV","MAR","APR","MEI","JUN","JUL","AGO","SEP","OKT","NOV","DES"];
+const MONTH_LABELS: string[] = ["JAN","FEV","MAR","APR","MEI","JUN","JUL","AGO","SEP","OKT","NOV","DES"];
 
 const FEATURED_VIDEOS = [
     {
@@ -185,7 +185,7 @@ export default function HomeClient({ featured, subStories, gridStories, events }
                                 {events.length > 0
                                     ? events.map((ev) => {
                                         const d     = new Date(ev.event_date);
-                                        const month = MONTH_LABELS[d.getMonth()];
+                                        const month = MONTH_LABELS[d.getMonth()] ?? "---";
                                         const day   = String(d.getDate()).padStart(2, "0");
                                         return (
                                             <li key={ev.id}>
