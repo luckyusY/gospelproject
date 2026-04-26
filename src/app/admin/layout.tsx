@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getCurrentAdmin } from "@/lib/adminAuth";
 import styles from "./admin.module.css";
 
 export const metadata: Metadata = {
@@ -9,16 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-    const cookieStore = await cookies();
-    const auth = cookieStore.get("admin_auth");
+    const admin = await getCurrentAdmin();
 
-    // Allow access to /admin/login without auth
-    // (Next.js will render children; the login page itself doesn't need redirect)
-    const isAuthenticated = auth?.value === "1";
-
-    // We can't easily get the current pathname in a layout without a client component,
-    // so we check cookies and let the login page handle the redirect logic.
-    if (!isAuthenticated) {
+    if (!admin) {
         redirect("/admin/login");
     }
 
@@ -29,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     <span className={styles.logoIcon}>✝</span>
                     <div>
                         <p className={styles.logoName}>Urugero Media</p>
-                        <p className={styles.logoRole}>Admin Panel</p>
+                        <p className={styles.logoRole}>Admin: {admin.username}</p>
                     </div>
                 </div>
 

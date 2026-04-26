@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { getCurrentAdmin } from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { sanitizeArticleContent } from "@/lib/articleContent";
 import type { ArticleInsert } from "@/types/database";
 
 async function requireAuth() {
-    const cookieStore = await cookies();
-    return cookieStore.get("admin_auth")?.value === "1";
+    return Boolean(await getCurrentAdmin());
 }
 
 function unauthorized() {

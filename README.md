@@ -20,6 +20,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Admin Accounts
+
+The admin panel is available at `/admin/login`.
+
+- `ADMIN_USERNAME` and `ADMIN_PASSWORD` define the default admin account.
+- `ADMIN_USERS` adds extra accounts with comma-separated `username:password` entries.
+- `ADMIN_SESSION_SECRET` signs admin session cookies. If omitted, the app falls back to existing auth secrets.
+
+Example:
+
+```bash
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-this-password
+ADMIN_USERS=editor:another-strong-password
+ADMIN_SESSION_SECRET=use-a-long-random-secret
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

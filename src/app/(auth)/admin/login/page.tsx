@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getCurrentAdmin } from "@/lib/adminAuth";
 import styles from "./login.module.css";
 
 export const metadata: Metadata = {
-    title: "Injira — Admin | Urugero Media",
+    title: "Injira - Admin | Urugero Media",
     robots: { index: false, follow: false },
 };
 
@@ -13,8 +13,7 @@ export default async function LoginPage({
 }: {
     searchParams: Promise<{ error?: string }>;
 }) {
-    const cookieStore = await cookies();
-    if (cookieStore.get("admin_auth")?.value === "1") {
+    if (await getCurrentAdmin()) {
         redirect("/admin");
     }
 
@@ -24,18 +23,33 @@ export default async function LoginPage({
         <div className={styles.page}>
             <div className={styles.card}>
                 <div className={styles.logo}>
-                    <span className={styles.cross}>✝</span>
+                    <span className={styles.cross}>+</span>
                     <h1 className={styles.title}>Urugero Media</h1>
-                    <p className={styles.subtitle}>Admin Panel — Injira</p>
+                    <p className={styles.subtitle}>Admin Panel - Injira</p>
                 </div>
 
                 {error && (
                     <div className={styles.error} role="alert">
-                        Ijambo banga ntiryo. Gerageza nanone.
+                        Izina rya admin cyangwa ijambo banga ntibihuye.
                     </div>
                 )}
 
                 <form action="/api/admin/login" method="POST" className={styles.form}>
+                    <label className={styles.label} htmlFor="username">
+                        Izina rya admin
+                    </label>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        className={styles.input}
+                        placeholder="admin"
+                        autoComplete="username"
+                        defaultValue="admin"
+                        required
+                        autoFocus
+                    />
+
                     <label className={styles.label} htmlFor="password">
                         Ijambo banga
                     </label>
@@ -44,9 +58,9 @@ export default async function LoginPage({
                         name="password"
                         type="password"
                         className={styles.input}
-                        placeholder="••••••••"
+                        placeholder="Password"
+                        autoComplete="current-password"
                         required
-                        autoFocus
                     />
                     <button type="submit" className={styles.btn}>
                         Injira
