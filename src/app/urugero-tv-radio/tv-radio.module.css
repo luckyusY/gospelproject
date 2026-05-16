@@ -1,42 +1,318 @@
 .page {
-    padding-bottom: 3.5rem;
+    padding-bottom: 4rem;
+    background:
+        linear-gradient(180deg, rgba(184, 0, 0, 0.04), transparent 24rem),
+        var(--bg);
 }
 
 .hero {
-    margin-bottom: 2.25rem;
-    padding: 3.5rem 0;
+    margin-bottom: 2.5rem;
+    padding: 4.25rem 0 3.25rem;
     color: #fff;
     background:
-        linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(31, 31, 31, 0.78)),
-        url("https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1400&auto=format&fit=crop");
+        linear-gradient(90deg, rgba(8, 8, 8, 0.94), rgba(34, 7, 7, 0.82) 52%, rgba(10, 10, 10, 0.66)),
+        url("/ads/urugero-tv-banner.png");
     background-size: cover;
     background-position: center;
     border-bottom: 4px solid var(--red);
 }
 
-.eyebrow {
-    color: #ffb4b4;
+.heroInner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.75fr);
+    gap: 2rem;
+    align-items: center;
+}
+
+.heroCopy {
+    max-width: 720px;
+}
+
+.eyebrow,
+.sectionEyebrow {
+    color: #ffce6a;
     font-size: 0.72rem;
     font-weight: 900;
     letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 .title {
     max-width: 760px;
     margin-top: 0.35rem;
     color: #fff;
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(2.35rem, 5vw, 4.65rem);
+    line-height: 0.98;
     letter-spacing: 0;
 }
 
 .description {
     max-width: 690px;
-    margin-top: 0.85rem;
-    color: rgba(255, 255, 255, 0.76);
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.05rem;
     line-height: 1.7;
+}
+
+.heroActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.45rem;
+}
+
+.primaryAction,
+.secondaryAction,
+.channelButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    font-size: 0.86rem;
+    font-weight: 900;
+}
+
+.primaryAction {
+    background: #fff;
+    color: #b80000;
+}
+
+.secondaryAction {
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.heroPlayer {
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--r-lg);
+    background: rgba(0, 0, 0, 0.32);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
 }
 
 .content {
     display: grid;
-    gap: 2rem;
+    gap: 3rem;
+}
+
+.mediaIntro {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.programGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.programCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 155px;
+    padding: 1.15rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background:
+        linear-gradient(145deg, rgba(184, 0, 0, 0.09), rgba(255, 255, 255, 0)),
+        var(--bg-card);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+}
+
+.programCard:hover {
+    border-color: rgba(184, 0, 0, 0.42);
+    transform: translateY(-2px);
+}
+
+.programCard span {
+    color: var(--red);
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.programCard p {
+    margin-top: 0.4rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+}
+
+.featuredSection,
+.videoSection,
+.moreSection {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.sectionHeader h2 {
+    margin-top: 0.18rem;
+    color: var(--text);
+    font-size: clamp(1.45rem, 3vw, 2.1rem);
+    letter-spacing: 0;
+}
+
+.sectionEyebrow {
+    color: var(--red);
+}
+
+.channelButton {
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+}
+
+.channelButton:hover {
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.featuredGrid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 0.85fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.videoFeature {
+    position: relative;
+}
+
+.videoFeature:first-child {
+    grid-row: span 2;
+}
+
+.videoCategory {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    z-index: 5;
+    min-height: 26px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.7rem;
+    border-radius: 999px;
+    background: rgba(184, 0, 0, 0.92);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.videoGrid,
+.videoGridThree {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.15rem;
+}
+
+.videoGridThree {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.moreGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.moreCard {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    background: #111;
+    box-shadow: var(--shadow-sm);
+}
+
+.moreCard img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.25s;
+}
+
+.moreCard:hover img {
+    transform: scale(1.06);
+}
+
+.moreCard span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2rem 0.8rem 0.7rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+@media (max-width: 1100px) {
+    .heroInner,
+    .mediaIntro {
+        grid-template-columns: 1fr;
+    }
+
+    .featuredGrid,
+    .videoGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 780px) {
+    .hero {
+        padding: 3rem 0 2.4rem;
+    }
+
+    .heroInner {
+        gap: 1.4rem;
+    }
+
+    .heroPlayer {
+        padding: 0.45rem;
+    }
+
+    .programGrid,
+    .featuredGrid,
+    .videoGrid,
+    .videoGridThree,
+    .moreGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sectionHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 520px) {
+    .title {
+        font-size: 2.25rem;
+    }
+
+    .description {
+        font-size: 0.95rem;
+    }
+
+    .programCard {
+        min-height: 130px;
+    }
 }
