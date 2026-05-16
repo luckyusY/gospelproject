@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMeta } from "@/lib/metadata";
-import LiveRadioTool from "@/components/LiveRadioTool";
 import LiveRadioPlayer from "@/components/LiveRadioPlayer";
 import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
 import styles from "./online-radio.module.css";
@@ -39,7 +38,6 @@ export default async function OnlineRadioPage() {
                     streamUrl={streamUrl}
                     stationName={settings.radio_station_name ?? "Urugero Live Radio"}
                 />
-                <LiveRadioTool defaultStreamUrl={streamUrl} />
             </div>
         </div>
     );

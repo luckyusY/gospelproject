@@ -18,6 +18,7 @@ import {
 } from "@phosphor-icons/react";
 import styles from "./Header.module.css";
 import ThemeToggle from "./ThemeToggle";
+import { useSharedRadio } from "@/hooks/useSharedRadio";
 
 const HEADER_RADIO_STREAM_URL = "https://s11.citrus3.com:8604/stream";
 
@@ -89,16 +90,22 @@ const navLinks: NavItem[] = [
     { href: "/contact",    label: "Contact" },
 ];
 
-export default function Header() {
+type HeaderProps = {
+    radioStreamUrl?: string;
+    radioStationName?: string;
+};
+
+export default function Header({
+    radioStreamUrl = HEADER_RADIO_STREAM_URL,
+    radioStationName = "Urugero Online Radio",
+}: HeaderProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen]       = useState(false);
     const [openMobileSection, setOpenMobileSection]     = useState<string | null>(null);
     const [tickerIndex, setTickerIndex]                 = useState(0);
     const [activeDropdown, setActiveDropdown]           = useState<string | null>(null);
-    const [isRadioPlaying, setIsRadioPlaying]           = useState(false);
-    const [radioError, setRadioError]                   = useState(false);
     const pathname  = usePathname();
     const dropTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const audioRef  = useRef<HTMLAudioElement | null>(null);
+    const radio = useSharedRadio(radioStreamUrl);
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { setIsMobileMenuOpen(false); setOpenMobileSection(null); }, [pathname]);
@@ -115,27 +122,6 @@ export default function Header() {
 
     const openDrop  = (href: string) => { if (dropTimer.current) clearTimeout(dropTimer.current); setActiveDropdown(href); };
     const closeDrop = ()             => { dropTimer.current = setTimeout(() => setActiveDropdown(null), 150); };
-
-    const toggleRadio = async () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        setRadioError(false);
-
-        if (!audio.paused) {
-            audio.pause();
-            setIsRadioPlaying(false);
-            return;
-        }
-
-        try {
-            await audio.play();
-            setIsRadioPlaying(true);
-        } catch {
-            setRadioError(true);
-            setIsRadioPlaying(false);
-        }
-    };
 
     const today = new Date().toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric", year: "numeric",
@@ -296,26 +282,15 @@ export default function Header() {
                     </ul>
 
                     <div className={styles.navRight}>
-                        <audio
-                            ref={audioRef}
-                            src={HEADER_RADIO_STREAM_URL}
-                            preload="none"
-                            onPlay={() => setIsRadioPlaying(true)}
-                            onPause={() => setIsRadioPlaying(false)}
-                            onError={() => {
-                                setRadioError(true);
-                                setIsRadioPlaying(false);
-                            }}
-                        />
                         <button
                             type="button"
                             className={styles.radioToggle}
-                            onClick={toggleRadio}
-                            aria-label={isRadioPlaying ? "Pause Urugero Online Radio" : "Play Urugero Online Radio"}
-                            aria-pressed={isRadioPlaying}
-                            title={isRadioPlaying ? "Pause radio" : "Play radio"}
+                            onClick={radio.toggle}
+                            aria-label={radio.isPlaying ? "Pause Urugero Online Radio" : "Play Urugero Online Radio"}
+                            aria-pressed={radio.isPlaying}
+                            title={radio.isPlaying ? "Pause radio" : "Play radio"}
                         >
-                            {isRadioPlaying
+                            {radio.isPlaying
                                 ? <Pause size={12} weight="fill" />
                                 : <Play size={12} weight="fill" />
                             }
@@ -325,7 +300,7 @@ export default function Header() {
                             LIVE
                         </span>
                         <span className={styles.liveText}>
-                            {radioError ? "Radio iri kugerageza" : "Urugero Online Radio"}
+                            {radio.status === "error" ? "Radio iri kugerageza" : radioStationName}
                         </span>
                     </div>
                 </div>

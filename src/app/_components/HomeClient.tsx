@@ -69,6 +69,22 @@ const EVENTS_FALLBACK = [
     { month: "JUL", day: "20", title: "Urugero Music Academy Show",  subtitle: "Amahoro Stadium • 15:00" },
 ];
 
+const BANNER_AD_SLIDES = [
+    {
+        imageUrl: "/ads/urugero-tv-banner.svg",
+        href: "/urugero-tv-radio",
+        title: "Urugero TV videos",
+    },
+];
+
+const SQUARE_AD_SLIDES = [
+    {
+        imageUrl: "/ads/urugero-bible-quiz-square.svg",
+        href: "/inyigisho/bible-quiz",
+        title: "Urugero Bible Quiz",
+    },
+];
+
 type CatMeta = Pick<CategoryRow, "slug" | "name" | "color">;
 
 type Props = {
@@ -259,6 +275,7 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                             href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
                             title="Kwamamaza kuri Urugero Media"
                             variant="square"
+                            slides={SQUARE_AD_SLIDES}
                         />
 
                         <div className={styles.newsletterWidget}>
@@ -296,6 +313,7 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                     imageUrl={settings.ad_home_top_image ?? defaultSettings.ad_home_top_image ?? "/ads/urugero-live-radio-banner.svg"}
                     href={settings.ad_home_top_link ?? defaultSettings.ad_home_top_link ?? "/urugero-tv-radio"}
                     title="Urugero Live Radio"
+                    slides={BANNER_AD_SLIDES}
                 />
             </div>
 
