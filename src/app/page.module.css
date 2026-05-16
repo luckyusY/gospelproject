@@ -719,6 +719,10 @@
     margin-bottom: 4rem;
 }
 
+.homeAd {
+    margin-bottom: 3rem;
+}
+
 .videoGrid {
     display: grid;
     grid-template-columns: 1fr;

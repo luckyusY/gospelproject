@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMeta } from "@/lib/metadata";
 import LiveRadioTool from "@/components/LiveRadioTool";
+import LiveRadioPlayer from "@/components/LiveRadioPlayer";
+import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
 import styles from "./online-radio.module.css";
 
 export const metadata: Metadata = buildMeta({
@@ -10,8 +12,9 @@ export const metadata: Metadata = buildMeta({
     path: "/urugero-media-group/online-radio",
 });
 
-export default function OnlineRadioPage() {
-    const streamUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL ?? "";
+export default async function OnlineRadioPage() {
+    const settings = await getPublicSiteSettings();
+    const streamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
 
     return (
         <div className={styles.page}>
@@ -31,7 +34,11 @@ export default function OnlineRadioPage() {
                 </div>
             </section>
 
-            <div className="container">
+            <div className={`container ${styles.content}`}>
+                <LiveRadioPlayer
+                    streamUrl={streamUrl}
+                    stationName={settings.radio_station_name ?? "Urugero Live Radio"}
+                />
                 <LiveRadioTool defaultStreamUrl={streamUrl} />
             </div>
         </div>

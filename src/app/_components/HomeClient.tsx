@@ -7,7 +7,9 @@ import { CalendarBlank, ArrowRight, Sparkle } from "@phosphor-icons/react";
 import styles from "../page.module.css";
 import { ArticleCard, CategoryPill, QuoteBlock, YoutubeEmbed } from "@/components/ui";
 import { EventMini } from "@/components/ui/EventCard";
+import AdSlot from "@/components/AdSlot";
 import FadeIn from "@/components/ui/FadeIn";
+import LiveRadioPlayer from "@/components/LiveRadioPlayer";
 import {
     staggerContainer,
     fadeUp,
@@ -16,6 +18,11 @@ import {
     heroTitle,
 } from "@/lib/animations";
 import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
+import {
+    DEFAULT_RADIO_STREAM_URL,
+    defaultsAsSettingsMap,
+    type SiteSettingsMap,
+} from "@/lib/siteSettings";
 
 const FALLBACK_HERO   = "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?q=80&w=1400&auto=format&fit=crop";
 const FALLBACK_SUB1   = "https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop";
@@ -39,6 +46,21 @@ const FEATURED_VIDEOS = [
         title:       "Ibyahishwe: Vestine na Dorcas",
         description: "Ikiganiro gisesengura amakuru ya Gospel n'ibitekerezo by'abakunzi ba Urugero TV & Radio.",
     },
+    {
+        videoId:     "BlhLoe_YYP4",
+        title:       "Ibaruwa ifunguye ivuye ku mutima",
+        description: "Ikiganiro cyubaka ku rukundo, umuryango n'ubuzima bwa buri munsi.",
+    },
+    {
+        videoId:     "yhK2yce8kfs",
+        title:       "Ibiganiro bya Gospel na Sport",
+        description: "Amakuru n'ibiganiro byo kuri Urugero TV & Radio Official.",
+    },
+    {
+        videoId:     "hdcWJLKejn0",
+        title:       "Inshundura Sports News",
+        description: "Amakuru ya sport n'ibivugwa mu mikino kuri Urugero TV.",
+    },
 ];
 
 const EVENTS_FALLBACK = [
@@ -55,9 +77,10 @@ type Props = {
     gridStories:  ArticleRow[];      // all non-featured articles for the grid
     events:       EventRow[];
     categories:   CatMeta[];         // from the categories table (proper display names)
+    settings:     SiteSettingsMap;
 };
 
-export default function HomeClient({ featured, subStories, gridStories, events, categories }: Props) {
+export default function HomeClient({ featured, subStories, gridStories, events, categories, settings }: Props) {
 
     // Only show category pills for categories that actually have articles in the grid
     const activeSlugs = new Set(gridStories.map(a => a.category));
@@ -76,6 +99,9 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
 
     const sub1 = subStories[0] ?? null;
     const sub2 = subStories[1] ?? null;
+    const defaultSettings = defaultsAsSettingsMap();
+    const radioStreamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
+    const radioStationName = settings.radio_station_name ?? defaultSettings.radio_station_name ?? "Urugero Live Radio";
 
     return (
         <div className={styles.page}>
@@ -222,6 +248,19 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                             </ul>
                         </div>
 
+                        <LiveRadioPlayer
+                            streamUrl={radioStreamUrl}
+                            stationName={radioStationName}
+                            compact
+                        />
+
+                        <AdSlot
+                            imageUrl={settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image ?? "/ads/urugero-gospel-news-square.svg"}
+                            href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
+                            title="Kwamamaza kuri Urugero Media"
+                            variant="square"
+                        />
+
                         <div className={styles.newsletterWidget}>
                             <div className={styles.newsletterIcon} aria-hidden>📖</div>
                             <h2>Inyigisho za buri Cyumweru</h2>
@@ -252,6 +291,14 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
             </FadeIn>
 
             {/* ── Latest Stories ────────────────────────── */}
+            <div className={`container ${styles.homeAd}`}>
+                <AdSlot
+                    imageUrl={settings.ad_home_top_image ?? defaultSettings.ad_home_top_image ?? "/ads/urugero-live-radio-banner.svg"}
+                    href={settings.ad_home_top_link ?? defaultSettings.ad_home_top_link ?? "/urugero-tv-radio"}
+                    title="Urugero Live Radio"
+                />
+            </div>
+
             <section className={`container ${styles.latestSection}`} aria-label="Inkuru Nshya">
                 <FadeIn direction="up">
                     <div className={styles.latestHeader}>

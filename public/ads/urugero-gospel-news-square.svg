@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title desc">
+  <title id="title">Urugero Gospel News advertisement</title>
+  <desc id="desc">Square ad for gospel news, radio and YouTube programs.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff1f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" rx="28" fill="url(#bg)"/>
+  <rect x="28" y="28" width="544" height="544" rx="24" fill="none" stroke="#b80000" stroke-width="8"/>
+  <circle cx="300" cy="190" r="86" fill="#b80000"/>
+  <path d="M276 142v96l76-48z" fill="#ffffff"/>
+  <text x="300" y="330" fill="#111111" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="900" text-anchor="middle">Urugero TV</text>
+  <text x="300" y="380" fill="#b80000" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" text-anchor="middle">&amp; Live Radio</text>
+  <text x="300" y="430" fill="#555555" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Gospel News • Ibiganiro • Sport</text>
+  <rect x="147" y="480" width="306" height="58" rx="29" fill="#111111"/>
+  <text x="300" y="517" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" text-anchor="middle">Kwamamaza hano</text>
+</svg>

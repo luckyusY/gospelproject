@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { buildMeta } from "@/lib/metadata";
 import LiveRadioTool from "@/components/LiveRadioTool";
+import LiveRadioPlayer from "@/components/LiveRadioPlayer";
 import YouTubePlaylistEmbed from "@/components/YouTubePlaylistEmbed";
+import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
 import styles from "./tv-radio.module.css";
 
 export const metadata: Metadata = buildMeta({
@@ -10,8 +12,9 @@ export const metadata: Metadata = buildMeta({
     path: "/urugero-tv-radio",
 });
 
-export default function UrgeroTvRadioPage() {
-    const streamUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL ?? "";
+export default async function UrgeroTvRadioPage() {
+    const settings = await getPublicSiteSettings();
+    const streamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
 
     return (
         <div className={styles.page}>
@@ -27,6 +30,10 @@ export default function UrgeroTvRadioPage() {
             </section>
 
             <div className={`container ${styles.content}`}>
+                <LiveRadioPlayer
+                    streamUrl={streamUrl}
+                    stationName={settings.radio_station_name ?? "Urugero Live Radio"}
+                />
                 <LiveRadioTool defaultStreamUrl={streamUrl} />
                 <YouTubePlaylistEmbed
                     title="Amashusho yose ya Urugero TV"

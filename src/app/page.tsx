@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
 import HomeClient from "./_components/HomeClient";
+import { getPublicSiteSettings } from "@/lib/siteSettings";
 
 export const revalidate = 60; // ISR: re-fetch every 60 s in production
 
@@ -43,6 +44,7 @@ export default async function Home() {
         .order("name", { ascending: true });
 
     const categories = (catsData ?? []) as Pick<CategoryRow, "slug" | "name" | "color">[];
+    const settings = await getPublicSiteSettings();
 
     return (
         <HomeClient
@@ -51,6 +53,7 @@ export default async function Home() {
             gridStories={gridStories}
             events={events}
             categories={categories}
+            settings={settings}
         />
     );
 }
