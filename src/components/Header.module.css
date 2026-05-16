@@ -453,7 +453,40 @@
 .navRight {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.45rem;
+    flex-shrink: 0;
+}
+
+.radioToggle {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 999px;
+    background-color: #FFFFFF;
+    color: #B80000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22);
+    transition: background-color 0.15s, color 0.15s, transform 0.15s;
+}
+
+.radioToggle:hover,
+.radioToggle:focus-visible {
+    background-color: #FFF0F0;
+    color: #8A0000;
+    transform: translateY(-1px);
+}
+
+.radioToggle:focus-visible {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 2px;
+}
+
+.radioToggle[aria-pressed="true"] {
+    background-color: #1F1F1F;
+    color: #FFFFFF;
 }
 
 .liveBadge {
@@ -488,6 +521,7 @@
     color: rgba(255, 255, 255, 0.58);
     font-size: 0.76rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════

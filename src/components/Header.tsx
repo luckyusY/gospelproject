@@ -13,9 +13,13 @@ import {
     CaretDown,
     BellRinging,
     Radio,
+    Play,
+    Pause,
 } from "@phosphor-icons/react";
 import styles from "./Header.module.css";
 import ThemeToggle from "./ThemeToggle";
+
+const HEADER_RADIO_STREAM_URL = "https://s11.citrus3.com:8604/stream";
 
 const breakingNews = [
     "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
@@ -90,8 +94,11 @@ export default function Header() {
     const [openMobileSection, setOpenMobileSection]     = useState<string | null>(null);
     const [tickerIndex, setTickerIndex]                 = useState(0);
     const [activeDropdown, setActiveDropdown]           = useState<string | null>(null);
+    const [isRadioPlaying, setIsRadioPlaying]           = useState(false);
+    const [radioError, setRadioError]                   = useState(false);
     const pathname  = usePathname();
     const dropTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const audioRef  = useRef<HTMLAudioElement | null>(null);
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { setIsMobileMenuOpen(false); setOpenMobileSection(null); }, [pathname]);
@@ -108,6 +115,27 @@ export default function Header() {
 
     const openDrop  = (href: string) => { if (dropTimer.current) clearTimeout(dropTimer.current); setActiveDropdown(href); };
     const closeDrop = ()             => { dropTimer.current = setTimeout(() => setActiveDropdown(null), 150); };
+
+    const toggleRadio = async () => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        setRadioError(false);
+
+        if (!audio.paused) {
+            audio.pause();
+            setIsRadioPlaying(false);
+            return;
+        }
+
+        try {
+            await audio.play();
+            setIsRadioPlaying(true);
+        } catch {
+            setRadioError(true);
+            setIsRadioPlaying(false);
+        }
+    };
 
     const today = new Date().toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric", year: "numeric",
@@ -268,11 +296,37 @@ export default function Header() {
                     </ul>
 
                     <div className={styles.navRight}>
+                        <audio
+                            ref={audioRef}
+                            src={HEADER_RADIO_STREAM_URL}
+                            preload="none"
+                            onPlay={() => setIsRadioPlaying(true)}
+                            onPause={() => setIsRadioPlaying(false)}
+                            onError={() => {
+                                setRadioError(true);
+                                setIsRadioPlaying(false);
+                            }}
+                        />
+                        <button
+                            type="button"
+                            className={styles.radioToggle}
+                            onClick={toggleRadio}
+                            aria-label={isRadioPlaying ? "Pause Urugero Online Radio" : "Play Urugero Online Radio"}
+                            aria-pressed={isRadioPlaying}
+                            title={isRadioPlaying ? "Pause radio" : "Play radio"}
+                        >
+                            {isRadioPlaying
+                                ? <Pause size={12} weight="fill" />
+                                : <Play size={12} weight="fill" />
+                            }
+                        </button>
                         <span className={styles.liveBadge}>
                             <Radio size={11} weight="fill" className={styles.liveDot} />
                             LIVE
                         </span>
-                        <span className={styles.liveText}>Urugero Online Radio</span>
+                        <span className={styles.liveText}>
+                            {radioError ? "Radio iri kugerageza" : "Urugero Online Radio"}
+                        </span>
                     </div>
                 </div>
             </nav>
