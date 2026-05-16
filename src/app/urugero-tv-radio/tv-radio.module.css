@@ -277,16 +277,76 @@
 }
 
 @media (max-width: 780px) {
+    .page {
+        padding-bottom: 2.5rem;
+    }
+
     .hero {
-        padding: 3rem 0 2.4rem;
+        margin-bottom: 1.5rem;
+        padding: 2rem 0 1.55rem;
+        background-position: 64% center;
     }
 
     .heroInner {
-        gap: 1.4rem;
+        gap: 1rem;
     }
 
     .heroPlayer {
-        padding: 0.45rem;
+        padding: 0;
+        border-radius: var(--r-md);
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.32);
+    }
+
+    .description {
+        max-width: 36rem;
+        margin-top: 0.7rem;
+        line-height: 1.55;
+    }
+
+    .heroActions {
+        gap: 0.55rem;
+        margin-top: 1rem;
+    }
+
+    .primaryAction,
+    .secondaryAction,
+    .channelButton {
+        min-height: 38px;
+        padding: 0 0.85rem;
+        font-size: 0.8rem;
+    }
+
+    .content {
+        gap: 2rem;
+    }
+
+    .mediaIntro,
+    .featuredSection,
+    .videoSection,
+    .moreSection {
+        gap: 0.85rem;
+    }
+
+    .programGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+    }
+
+    .programCard {
+        min-height: 112px;
+        padding: 0.85rem;
+        border-radius: var(--r-sm);
+    }
+
+    .programCard span {
+        font-size: 0.92rem;
+    }
+
+    .programCard p {
+        margin-top: 0.28rem;
+        font-size: 0.76rem;
+        line-height: 1.35;
     }
 
     .programGrid,
@@ -300,19 +360,63 @@
     .sectionHeader {
         align-items: flex-start;
         flex-direction: column;
+        gap: 0.55rem;
+        padding-bottom: 0.65rem;
+    }
+
+    .sectionHeader h2 {
+        font-size: 1.35rem;
+    }
+
+    .videoCategory {
+        top: 0.55rem;
+        left: 0.55rem;
+        min-height: 23px;
+        padding: 0 0.58rem;
+        font-size: 0.58rem;
+    }
+
+    .moreGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem;
+    }
+
+    .moreCard {
+        border-radius: var(--r-sm);
+    }
+
+    .moreCard span {
+        padding: 1.5rem 0.65rem 0.55rem;
+        font-size: 0.72rem;
     }
 }
 
 @media (max-width: 520px) {
     .title {
-        font-size: 2.25rem;
+        font-size: 2rem;
+        line-height: 1.02;
     }
 
     .description {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
 
     .programCard {
-        min-height: 130px;
+        min-height: 104px;
+    }
+
+    .heroActions a {
+        flex: 1;
+    }
+}
+
+@media (max-width: 390px) {
+    .programGrid,
+    .moreGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .programCard {
+        min-height: auto;
     }
 }

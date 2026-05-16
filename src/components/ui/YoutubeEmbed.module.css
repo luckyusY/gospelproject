@@ -103,3 +103,35 @@
     color: var(--text-muted, #6b7280);
     line-height: 1.5;
 }
+
+@media (max-width: 640px) {
+    .playerBox {
+        border-radius: var(--r-md, 0.5rem);
+    }
+
+    .playBtn svg {
+        width: 54px;
+        height: 38px;
+    }
+
+    .videoTitle {
+        padding: 2rem 0.72rem 0.68rem;
+        font-size: 0.8rem;
+        line-height: 1.25;
+    }
+
+    .description {
+        margin-top: 0.45rem;
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 420px) {
+    .description {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
