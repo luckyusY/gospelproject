@@ -8,6 +8,10 @@ type AdSlide = {
     imageUrl: string;
     href: string;
     title: string;
+    badge?: string;
+    headline?: string;
+    description?: string;
+    cta?: string;
 };
 
 type Props = {
@@ -16,12 +20,29 @@ type Props = {
     title: string;
     variant?: "banner" | "square";
     slides?: AdSlide[];
+    badge?: string;
+    headline?: string;
+    description?: string;
+    cta?: string;
 };
 
 const EMPTY_SLIDES: AdSlide[] = [];
 
-export default function AdSlot({ imageUrl, href, title, variant = "banner", slides = EMPTY_SLIDES }: Props) {
-    const fallbackSlide = useMemo(() => ({ imageUrl, href, title }), [href, imageUrl, title]);
+export default function AdSlot({
+    imageUrl,
+    href,
+    title,
+    variant = "banner",
+    slides = EMPTY_SLIDES,
+    badge = "Ad",
+    headline = title,
+    description,
+    cta = "Reba hano",
+}: Props) {
+    const fallbackSlide = useMemo(
+        () => ({ imageUrl, href, title, badge, headline, description, cta }),
+        [badge, cta, description, headline, href, imageUrl, title],
+    );
     const adSlides = useMemo(() => {
         const allSlides = [fallbackSlide, ...slides].filter(slide => slide.imageUrl && slide.href);
         return allSlides.length ? allSlides : [fallbackSlide];
@@ -47,6 +68,13 @@ export default function AdSlot({ imageUrl, href, title, variant = "banner", slid
         >
             <span className={styles.label}>Ad</span>
             <img key={active.imageUrl} src={active.imageUrl} alt={active.title} className={styles.image} loading="lazy" />
+            <span className={styles.scrim} aria-hidden />
+            <span className={styles.copy}>
+                <span className={styles.badge}>{active.badge ?? badge}</span>
+                <span className={styles.headline}>{active.headline ?? active.title}</span>
+                {active.description && <span className={styles.description}>{active.description}</span>}
+                <span className={styles.cta}>{active.cta ?? cta}</span>
+            </span>
             {adSlides.length > 1 && (
                 <span className={styles.dots} aria-hidden>
                     {adSlides.map((slide, index) => (

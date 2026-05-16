@@ -284,6 +284,53 @@
     .mobileMenuBtn { display: none; }
 }
 
+.mobileRadioToggle {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid #D8D8D8;
+    border-radius: 999px;
+    background: #B80000;
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(184, 0, 0, 0.18);
+    transition: transform 0.15s, background-color 0.15s;
+}
+
+.mobileRadioToggle:hover,
+.mobileRadioToggle:focus-visible {
+    background: #8A0000;
+    transform: translateY(-1px);
+}
+
+.mobileRadioToggle:focus-visible {
+    outline: 2px solid #B80000;
+    outline-offset: 2px;
+}
+
+.mobileRadioToggle[aria-pressed="true"] {
+    background: #111111;
+}
+
+.mobileRadioLive {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.24);
+    animation: blink 1.4s ease infinite;
+}
+
+@media (min-width: 1024px) {
+    .mobileRadioToggle { display: none; }
+}
+
 /* ═══════════════════════════════════════════════════════
    TIER 3 — NAV BAR  (solid navy)
 ═══════════════════════════════════════════════════════ */

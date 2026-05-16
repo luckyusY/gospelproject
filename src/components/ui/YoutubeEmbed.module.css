@@ -66,15 +66,18 @@
 /* ── Play button ──────────────────────────────────────────── */
 .playBtn {
     position: absolute;
+    top: 50%;
+    left: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: translate(-50%, -50%);
     transition: transform 0.2s ease, opacity 0.2s ease;
     filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.6));
 }
 
 .thumbnailBtn:hover .playBtn {
-    transform: scale(1.12);
+    transform: translate(-50%, -50%) scale(1.12);
 }
 
 /* ── Title overlay ───────────────────────────────────────── */

@@ -39,7 +39,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    z-index: 1;
+    z-index: 4;
     padding: 0.15rem 0.4rem;
     border-radius: var(--r-sm);
     background: rgba(17, 17, 17, 0.72);
@@ -50,15 +50,126 @@
     text-transform: uppercase;
 }
 
+.scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.36) 48%, rgba(0, 0, 0, 0.04)),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.22), transparent 58%);
+}
+
+.square .scrim {
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.78)),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.48), transparent 68%);
+}
+
+.copy {
+    position: absolute;
+    inset: 1.2rem auto 1.2rem 1.25rem;
+    z-index: 3;
+    width: min(58%, 520px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.45rem;
+    color: #FFFFFF;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.38);
+}
+
+.square .copy {
+    inset: auto 1.15rem 1.25rem 1.15rem;
+    width: auto;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 0.65rem;
+    border-radius: 999px;
+    background: rgba(184, 0, 0, 0.92);
+    color: #FFFFFF;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.headline {
+    max-width: 100%;
+    color: #FFFFFF;
+    font-size: clamp(1.15rem, 3vw, 2.55rem);
+    font-weight: 900;
+    line-height: 1.02;
+}
+
+.square .headline {
+    font-size: clamp(1.55rem, 7vw, 2.4rem);
+}
+
+.description {
+    max-width: 44rem;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: clamp(0.76rem, 1.55vw, 1.05rem);
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.square .description {
+    font-size: 0.88rem;
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    margin-top: 0.15rem;
+    padding: 0 0.9rem;
+    border-radius: 999px;
+    background: #FFFFFF;
+    color: #B80000;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-shadow: none;
+}
+
 .dots {
     position: absolute;
     left: 50%;
     bottom: 0.65rem;
-    z-index: 2;
+    z-index: 4;
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     transform: translateX(-50%);
+}
+
+@media (max-width: 640px) {
+    .copy {
+        inset: 0.9rem auto 0.9rem 0.9rem;
+        width: min(68%, 420px);
+        gap: 0.32rem;
+    }
+
+    .badge {
+        min-height: 20px;
+        padding: 0 0.52rem;
+        font-size: 0.58rem;
+    }
+
+    .description {
+        display: none;
+    }
+
+    .cta {
+        min-height: 28px;
+        padding: 0 0.72rem;
+        font-size: 0.68rem;
+    }
 }
 
 .dot,

@@ -66,7 +66,7 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
     },
     {
         key: "ad_home_top_image",
-        value: "/ads/urugero-live-radio-banner.svg",
+        value: "/ads/urugero-live-radio-banner.png",
         label: "Homepage banner ad image",
         description: "Ifoto ya ad igaragara hagati y'inkuru na live radio",
         group: "ads",
@@ -82,7 +82,7 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
     },
     {
         key: "ad_home_sidebar_image",
-        value: "/ads/urugero-gospel-news-square.svg",
+        value: "/ads/urugero-media-square.png",
         label: "Sidebar ad image",
         description: "Ifoto ya ad igaragara muri sidebar yo ku rupapuro rubanza",
         group: "ads",

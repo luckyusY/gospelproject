@@ -196,6 +196,20 @@ export default function Header({
                         </button>
                         <ThemeToggle />
                         <button
+                            type="button"
+                            className={styles.mobileRadioToggle}
+                            onClick={radio.toggle}
+                            aria-label={radio.isPlaying ? "Pause Urugero Online Radio" : "Play Urugero Online Radio"}
+                            aria-pressed={radio.isPlaying}
+                            title={radio.isPlaying ? "Pause radio" : "Play radio"}
+                        >
+                            <span className={styles.mobileRadioLive} aria-hidden />
+                            {radio.isPlaying
+                                ? <Pause size={15} weight="fill" />
+                                : <Play size={15} weight="fill" />
+                            }
+                        </button>
+                        <button
                             className={styles.mobileMenuBtn}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             aria-label="Toggle menu"

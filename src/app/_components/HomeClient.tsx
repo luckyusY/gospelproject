@@ -71,19 +71,40 @@ const EVENTS_FALLBACK = [
 
 const BANNER_AD_SLIDES = [
     {
-        imageUrl: "/ads/urugero-tv-banner.svg",
+        imageUrl: "/ads/urugero-tv-banner.png",
         href: "/urugero-tv-radio",
         title: "Urugero TV videos",
+        badge: "Urugero TV",
+        headline: "Amashusho mashya",
+        description: "Ibiganiro, ubuhamya, sport n'amakuru ya Gospel kuri YouTube.",
+        cta: "Reba videos",
     },
 ];
 
 const SQUARE_AD_SLIDES = [
     {
-        imageUrl: "/ads/urugero-bible-quiz-square.svg",
+        imageUrl: "/ads/urugero-media-square.png",
         href: "/inyigisho/bible-quiz",
         title: "Urugero Bible Quiz",
+        badge: "Bible Quiz",
+        headline: "Inyigisho zubaka",
+        description: "Tumenye Bibiliya n'ibiganiro byubaka umuryango.",
+        cta: "Tangira",
     },
 ];
+
+function adImage(imageUrl: string | undefined, fallback: string) {
+    if (!imageUrl) return fallback;
+
+    const oldSvgMap: Record<string, string> = {
+        "/ads/urugero-live-radio-banner.svg": "/ads/urugero-live-radio-banner.png",
+        "/ads/urugero-gospel-news-square.svg": "/ads/urugero-media-square.png",
+        "/ads/urugero-tv-banner.svg": "/ads/urugero-tv-banner.png",
+        "/ads/urugero-bible-quiz-square.svg": "/ads/urugero-media-square.png",
+    };
+
+    return oldSvgMap[imageUrl] ?? imageUrl;
+}
 
 type CatMeta = Pick<CategoryRow, "slug" | "name" | "color">;
 
@@ -271,10 +292,14 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                         />
 
                         <AdSlot
-                            imageUrl={settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image ?? "/ads/urugero-gospel-news-square.svg"}
+                            imageUrl={adImage(settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png")}
                             href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
                             title="Kwamamaza kuri Urugero Media"
                             variant="square"
+                            badge="Kwamamaza"
+                            headline="Urugero Gospel News"
+                            description="Amakuru, radio, sport n'ibiganiro bya Gospel."
+                            cta="Menya byinshi"
                             slides={SQUARE_AD_SLIDES}
                         />
 
@@ -310,9 +335,13 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
             {/* ── Latest Stories ────────────────────────── */}
             <div className={`container ${styles.homeAd}`}>
                 <AdSlot
-                    imageUrl={settings.ad_home_top_image ?? defaultSettings.ad_home_top_image ?? "/ads/urugero-live-radio-banner.svg"}
+                    imageUrl={adImage(settings.ad_home_top_image ?? defaultSettings.ad_home_top_image, "/ads/urugero-live-radio-banner.png")}
                     href={settings.ad_home_top_link ?? defaultSettings.ad_home_top_link ?? "/urugero-tv-radio"}
                     title="Urugero Live Radio"
+                    badge="Live Radio"
+                    headline="Urugero Online Radio"
+                    description="Indirimbo z'Imana, inyigisho, amakuru na gahunda za buri munsi."
+                    cta="Umva nonaha"
                     slides={BANNER_AD_SLIDES}
                 />
             </div>
