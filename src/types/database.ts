@@ -7,24 +7,34 @@ export interface Database {
     public: {
         Tables: {
             categories: {
-                Row:    CategoryRow;
-                Insert: CategoryInsert;
-                Update: Partial<CategoryInsert>;
+                Row:    CategoryRow & Record<string, unknown>;
+                Insert: CategoryInsert & Record<string, unknown>;
+                Update: Partial<CategoryInsert> & Record<string, unknown>;
+                Relationships: [];
             };
             articles: {
-                Row:    ArticleRow;
-                Insert: ArticleInsert;
-                Update: Partial<ArticleInsert>;
+                Row:    ArticleRow & Record<string, unknown>;
+                Insert: ArticleInsert & Record<string, unknown>;
+                Update: Partial<ArticleInsert> & Record<string, unknown>;
+                Relationships: [];
             };
             events: {
-                Row:    EventRow;
-                Insert: EventInsert;
-                Update: Partial<EventInsert>;
+                Row:    EventRow & Record<string, unknown>;
+                Insert: EventInsert & Record<string, unknown>;
+                Update: Partial<EventInsert> & Record<string, unknown>;
+                Relationships: [];
             };
             testimonies: {
-                Row:    TestimonyRow;
-                Insert: TestimonyInsert;
-                Update: Partial<TestimonyInsert>;
+                Row:    TestimonyRow & Record<string, unknown>;
+                Insert: TestimonyInsert & Record<string, unknown>;
+                Update: Partial<TestimonyInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
+            site_settings: {
+                Row:    SiteSettingRow & Record<string, unknown>;
+                Insert: SiteSettingInsert;
+                Update: Partial<SiteSettingInsert> & Record<string, unknown>;
+                Relationships: [];
             };
         };
         Views:     Record<string, never>;
@@ -101,3 +111,18 @@ export interface TestimonyRow {
     updated_at:     string;
 }
 export type TestimonyInsert = Omit<TestimonyRow, "id" | "created_at" | "updated_at">;
+
+// â”€â”€ Site Settings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+export interface SiteSettingRow {
+    key:         string;
+    value:       string;
+    label:       string;
+    description: string | null;
+    updated_at:  string;
+}
+export type SiteSettingInsert = Record<string, unknown> & {
+    key:         string;
+    value:       string;
+    label?:       string;
+    description?: string | null;
+};

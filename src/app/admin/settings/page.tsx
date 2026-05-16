@@ -81,7 +81,7 @@ export default function SettingsPage() {
                     <section className={settStyles.section}>
                         <h2 className={settStyles.sectionTitle}>📣 Imbuga Nkoranyambaga</h2>
                         <p className={settStyles.sectionDesc}>
-                            Hindura aho imbuga nkoranyambaga zawe ziherereye. Izi kiungo zizagaragara mu mpera y'urubuga.
+                            Hindura aho imbuga nkoranyambaga zawe ziherereye. Izi kiungo zizagaragara mu mpera y&apos;urubuga.
                         </p>
 
                         {message && (

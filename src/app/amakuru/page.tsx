@@ -19,6 +19,7 @@ const categories = [
     { label: "Amatorero",          href: "/amakuru/amatorero",        slug: "amatorero" },
     { label: "Abanyempano",        href: "/amakuru/abanyempano",      slug: "abanyempano" },
     { label: "Ibitaramo",          href: "/amakuru/ibitaramo",        slug: "ibitaramo" },
+    { label: "Sport",              href: "/amakuru/sport",            slug: "sport" },
     { label: "Hanze y'u Rwanda",   href: "/amakuru/hanze-yu-rwanda",  slug: "hanze-yu-rwanda" },
 ];
 

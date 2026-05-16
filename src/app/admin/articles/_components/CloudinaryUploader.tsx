@@ -164,7 +164,7 @@ export default function CloudinaryUploader({ value, onChange }: Props) {
 
             {/* ── URL fallback input ────────────────────── */}
             <details className={styles.urlFallback}>
-                <summary>Shyiramo URL y'ifoto (optional)</summary>
+                <summary>Shyiramo URL y&apos;ifoto (optional)</summary>
                 <input
                     type="url"
                     name="image_url"

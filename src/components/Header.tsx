@@ -46,6 +46,7 @@ const navLinks: NavItem[] = [
             { href: "/amakuru/amatorero",       label: "Amatorero" },
             { href: "/amakuru/abanyempano",     label: "Abanyempano" },
             { href: "/amakuru/ibitaramo",       label: "Ibitaramo" },
+            { href: "/amakuru/sport",           label: "Sport" },
             { href: "/amakuru/hanze-yu-rwanda", label: "Hanze y'u Rwanda" },
         ],
     },

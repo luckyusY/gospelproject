@@ -21,6 +21,7 @@ insert into public.categories (name, slug, color) values
     ('Amatorero',        'amatorero',         '#1E40AF'),
     ('Abanyempano',      'abanyempano',       '#DC2626'),
     ('Ibitaramo',        'ibitaramo',         '#F59E0B'),
+    ('Sport',            'sport',             '#047857'),
     ('Hanze y''u Rwanda','hanze-yu-rwanda',   '#0D1B2E'),
     ('Ubuhamya',         'ubuhamya',          '#DC2626'),
     ('Inyigisho',        'inyigisho',         '#1E40AF')

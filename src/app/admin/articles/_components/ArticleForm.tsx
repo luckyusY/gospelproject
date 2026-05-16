@@ -163,7 +163,7 @@ export default function ArticleForm({ article, categories }: Props) {
                         </label>
 
                         <div className={styles.label}>
-                            Ifoto y'ingenzi
+                            Ifoto y&apos;ingenzi
                             <CloudinaryUploader
                                 value={imageUrl}
                                 onChange={setImageUrl}

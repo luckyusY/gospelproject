@@ -102,6 +102,7 @@ export default function Footer() {
                             <li><Link href="/amakuru/amakorali">Amakorali</Link></li>
                             <li><Link href="/amakuru/amatorero">Amatorero</Link></li>
                             <li><Link href="/amakuru/ibitaramo">Ibitaramo</Link></li>
+                            <li><Link href="/amakuru/sport">Sport</Link></li>
                             <li><Link href="/amakuru/hanze-yu-rwanda">Hanze y&apos;u Rwanda</Link></li>
                         </ul>
                     </motion.div>

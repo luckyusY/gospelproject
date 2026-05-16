@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMeta } from "@/lib/metadata";
-import SectionPage from "@/components/SectionPage";
+import LiveRadioTool from "@/components/LiveRadioTool";
+import styles from "./online-radio.module.css";
 
 export const metadata: Metadata = buildMeta({
     title: "Urugero Online Radio",
@@ -9,19 +11,29 @@ export const metadata: Metadata = buildMeta({
 });
 
 export default function OnlineRadioPage() {
+    const streamUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL ?? "";
+
     return (
-        <SectionPage
-            title="Urugero Online Radio"
-            subtitle="URUGERO MEDIA GROUP"
-            description="Urugero Online Radio isakaza amajwi y'Imana buri munsi binyuze mu mishya, inyigisho n'indirimbo z'Imana."
-            icon="📻"
-            color="#B80000"
-            breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
-            subSections={[
-                { label: "Shows", href: "/urugero-media-group/online-radio", desc: "Gahunda za radio" },
-                { label: "Music", href: "/urugero-media-group/online-radio", desc: "Indirimbo z'Imana" },
-                { label: "Teaching", href: "/urugero-media-group/online-radio", desc: "Inyigisho kuri radio" },
-            ]}
-        />
+        <div className={styles.page}>
+            <section className={styles.hero}>
+                <div className="container">
+                    <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+                        <Link href="/">Ahabanza</Link>
+                        <span>/</span>
+                        <Link href="/urugero-media-group">Urugero Media Group</Link>
+                    </nav>
+                    <p className={styles.eyebrow}>URUGERO MEDIA GROUP</p>
+                    <h1 className={styles.title}>Urugero Online Radio</h1>
+                    <p className={styles.description}>
+                        Urugero Online Radio isakaza amajwi y&apos;Imana buri munsi binyuze
+                        mu makuru, inyigisho n&apos;indirimbo z&apos;Imana.
+                    </p>
+                </div>
+            </section>
+
+            <div className="container">
+                <LiveRadioTool defaultStreamUrl={streamUrl} />
+            </div>
+        </div>
     );
 }
