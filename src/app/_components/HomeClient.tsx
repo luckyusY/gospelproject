@@ -25,19 +25,19 @@ const MONTH_LABELS: string[] = ["JAN","FEV","MAR","APR","MEI","JUN","JUL","AGO",
 
 const FEATURED_VIDEOS = [
     {
-        videoId:     "ZiCmBIyALYA",
-        title:       "Sinzarakaza — Gloire Ishimwe (Official Video)",
-        description: "Indirimbo y'indirimbo z'Imana zizwi cyane mu Rwanda. Sinzarakaza igaragaza kwizera no gutura Imana.",
+        videoId:     "u5TFSRPjUdE",
+        title:       "Amakuru mashya ya Gospel yo ku mugoroba",
+        description: "Amakuru ya Gospel yo mu Rwanda, Uganda no mu karere kuri Urugero Gospel News TV.",
     },
     {
-        videoId:     "9DRBNLfOlYY",
-        title:       "Way Maker — Sinach (Live Worship)",
-        description: "Indirimbo y'impanda izimanye isi yose igaragaza ubushobozi bw'Imana mu buzima bwacu.",
+        videoId:     "a1IfX2-RIrk",
+        title:       "Ibaruwa ifunguye: ubutumwa bwa Murokore",
+        description: "Ikiganiro cya Urugero TV ku bahanzi, ubuzima bwa Gospel n'ibivugwa mu bakunzi b'umuziki.",
     },
     {
-        videoId:     "6Arbdu1BWKU",
-        title:       "Amazing Grace (My Chains Are Gone) — Chris Tomlin",
-        description: "Indirimbo yo gutuza imitima igaragaza ubuntu bw'Imana no gukizwa kwacu.",
+        videoId:     "j2mcUosjKKc",
+        title:       "Ibyahishwe: Vestine na Dorcas",
+        description: "Ikiganiro gisesengura amakuru ya Gospel n'ibitekerezo by'abakunzi ba Urugero TV & Radio.",
     },
 ];
 
