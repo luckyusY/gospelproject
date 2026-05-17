@@ -372,6 +372,31 @@
 .newsletterForm input:focus { border-color: #B80000; }
 .newsletterForm button { width: 100%; }
 
+.sidebar .newsletterWidget {
+    display: none;
+}
+
+.afterHeroGrid {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.55fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: stretch;
+    margin-top: -2.5rem;
+    margin-bottom: 3rem;
+}
+
+.newsletterBandWidget {
+    display: grid;
+    align-content: center;
+}
+
+@media (max-width: 900px) {
+    .afterHeroGrid {
+        grid-template-columns: 1fr;
+        margin-top: -1.25rem;
+    }
+}
+
 /* ═══════════════════════════════════════════════════════
    VERSE OF THE DAY  (full-width solid navy)
 ═══════════════════════════════════════════════════════ */

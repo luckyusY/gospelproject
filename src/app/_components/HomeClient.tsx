@@ -291,18 +291,6 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                             compact
                         />
 
-                        <AdSlot
-                            imageUrl={adImage(settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png")}
-                            href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
-                            title="Kwamamaza kuri Urugero Media"
-                            variant="square"
-                            badge="Kwamamaza"
-                            headline="Urugero Gospel News"
-                            description="Amakuru, radio, sport n'ibiganiro bya Gospel."
-                            cta="Menya byinshi"
-                            slides={SQUARE_AD_SLIDES}
-                        />
-
                         <div className={styles.newsletterWidget}>
                             <div className={styles.newsletterIcon} aria-hidden>📖</div>
                             <h2>Inyigisho za buri Cyumweru</h2>
@@ -324,6 +312,37 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
             </section>
 
             {/* ── Verse of the Day ──────────────────────── */}
+            <div className={`container ${styles.afterHeroGrid}`}>
+                <AdSlot
+                    imageUrl={adImage(settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png")}
+                    href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
+                    title="Kwamamaza kuri Urugero Media"
+                    variant="square"
+                    badge="Kwamamaza"
+                    headline="Urugero Gospel News"
+                    description="Amakuru, radio, sport n'ibiganiro bya Gospel."
+                    cta="Menya byinshi"
+                    slides={SQUARE_AD_SLIDES}
+                />
+
+                <div className={`${styles.newsletterWidget} ${styles.newsletterBandWidget}`}>
+                    <div className={styles.newsletterIcon} aria-hidden>ðŸ“–</div>
+                    <h2>Inyigisho za buri Cyumweru</h2>
+                    <p>Yandikisha kuri Urugero kugira ngo ubone inyigisho n&apos;amakuru y&apos;Imana buri cyumweru.</p>
+                    <form className={styles.newsletterForm} onSubmit={(e) => e.preventDefault()}>
+                        <input
+                            type="email"
+                            placeholder="Emeyili yawe"
+                            required
+                            aria-label="Emeyili yawe yo kwiyandikisha"
+                        />
+                        <button type="submit" className="btn btn-accent">
+                            Iyandikishe â€” Kubuntu
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             <FadeIn direction="scale">
                 <QuoteBlock
                     badge="IJAMBO RY'UMUNSI"
