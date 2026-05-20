@@ -12,12 +12,18 @@ type Props = {
 
 export default function LiveRadioPlayer({ streamUrl, stationName = "Urugero Live Radio", compact = false }: Props) {
     const radio = useSharedRadio(streamUrl);
-    const statusText = radio.status === "playing"
-        ? "Radio irimo gucuranga"
+    const statusText = radio.isFallback && radio.status === "playing"
+        ? `Fallback music: ${radio.fallbackTitle || "playlist"}`
+        : radio.status === "playing"
+            ? "Radio irimo gucuranga"
         : radio.status === "loading"
-            ? "Radio irimo gufunguka"
+            ? radio.isFallback
+                ? "Live iri offline, turimo gufungura indirimbo"
+                : "Radio irimo gufunguka"
             : radio.status === "error"
-                ? "Radio yananiwe gufunguka"
+                ? radio.fallbackAvailable
+                    ? "Live yanze, gerageza fallback music"
+                    : "Radio yananiwe gufunguka"
                 : "Kanda play wumve radio";
 
     return (
@@ -29,7 +35,11 @@ export default function LiveRadioPlayer({ streamUrl, stationName = "Urugero Live
                 </span>
                 <div>
                     <h2>{stationName}</h2>
-                    <p>Umva radio ya Gospel live hano ku rubuga.</p>
+                    <p>
+                        {radio.isFallback
+                            ? "Live stream iri offline; urimo kumva indirimbo za fallback."
+                            : "Umva radio ya Gospel live hano ku rubuga."}
+                    </p>
                 </div>
             </div>
 

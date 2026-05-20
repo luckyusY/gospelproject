@@ -104,12 +104,40 @@ create trigger testimonies_updated_at
     before update on public.testimonies
     for each row execute function public.set_updated_at();
 
+-- Radio listener comments
+create table if not exists public.radio_comments (
+    id            bigint generated always as identity primary key,
+    listener_name text not null,
+    message       text not null,
+    is_approved   boolean not null default true,
+    created_at    timestamptz not null default now()
+);
+
+create index if not exists radio_comments_created_at_idx
+    on public.radio_comments (created_at desc);
+
+-- Radio fallback tracks
+create table if not exists public.radio_tracks (
+    id           bigint generated always as identity primary key,
+    title        text not null,
+    file_url     text not null,
+    storage_path text,
+    is_active    boolean not null default true,
+    sort_order   integer not null default 0,
+    created_at   timestamptz not null default now()
+);
+
+create index if not exists radio_tracks_sort_idx
+    on public.radio_tracks (sort_order asc, created_at desc);
+
 -- ── Row Level Security ────────────────────────────────────────
 -- Public can read published content; writes require service role key.
 alter table public.categories  enable row level security;
 alter table public.articles     enable row level security;
 alter table public.events       enable row level security;
 alter table public.testimonies  enable row level security;
+alter table public.radio_comments enable row level security;
+alter table public.radio_tracks enable row level security;
 
 -- Anyone can read published articles
 create policy "read published articles"
@@ -130,6 +158,16 @@ create policy "read published testimonies"
 create policy "read categories"
     on public.categories for select
     using (true);
+
+-- Anyone can read approved radio comments
+create policy "read approved radio comments"
+    on public.radio_comments for select
+    using (is_approved = true);
+
+-- Anyone can read active fallback radio tracks
+create policy "read active radio tracks"
+    on public.radio_tracks for select
+    using (is_active = true);
 
 -- ── Storage bucket for media uploads ─────────────────────────
 insert into storage.buckets (id, name, public)

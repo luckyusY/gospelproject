@@ -314,7 +314,11 @@ export default function Header({
                             LIVE
                         </span>
                         <span className={styles.liveText}>
-                            {radio.status === "error" ? "Radio iri kugerageza" : radioStationName}
+                            {radio.isFallback
+                                ? "Fallback music"
+                                : radio.status === "error"
+                                    ? "Radio iri kugerageza"
+                                    : radioStationName}
                         </span>
                     </div>
                 </div>

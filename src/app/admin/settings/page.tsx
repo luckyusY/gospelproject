@@ -14,6 +14,7 @@ import settStyles from "./settings.module.css";
 import { SETTING_DEFINITIONS, type SettingGroup } from "@/lib/siteSettings";
 
 type Setting = { key: string; value: string; label: string; description?: string | null };
+type SettingsResponse = Setting[] | { error?: string; warning?: string; settings?: Setting[] };
 
 const ICONS: Record<string, React.ElementType> = {
     social_youtube: YoutubeLogo,
@@ -55,15 +56,38 @@ export default function SettingsPage() {
 
     useEffect(() => {
         fetch("/api/admin/settings")
-            .then(r => r.json())
-            .then((data: Setting[]) => {
-                setSettings(data);
+            .then(async r => {
+                const data = await r.json().catch(() => null) as SettingsResponse | null;
+                if (!r.ok) {
+                    const error = data && !Array.isArray(data) ? data.error : null;
+                    throw new Error(error ?? "Igenamiterere ntiryabashije gufunguka.");
+                }
+                return data;
+            })
+            .then((data) => {
+                const rows = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data?.settings)
+                        ? data.settings
+                        : [];
+
+                setSettings(rows);
                 const map: Record<string, string> = {};
-                data.forEach(s => { map[s.key] = s.value; });
+                rows.forEach(s => { map[s.key] = s.value; });
                 SETTING_DEFINITIONS.forEach(s => {
                     if (map[s.key] === undefined) map[s.key] = s.value;
                 });
                 setValues(map);
+                if (!Array.isArray(data) && data?.warning) {
+                    setMessage({ type: "err", text: data.warning });
+                }
+            })
+            .catch(error => {
+                setValues(Object.fromEntries(SETTING_DEFINITIONS.map(s => [s.key, s.value])));
+                setMessage({
+                    type: "err",
+                    text: error instanceof Error ? error.message : "Igenamiterere ntiryabashije gufunguka.",
+                });
             })
             .finally(() => setLoading(false));
     }, []);

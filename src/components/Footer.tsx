@@ -14,6 +14,7 @@ import {
 import NewsletterForm from "./NewsletterForm";
 import styles from "./Footer.module.css";
 import { staggerContainer, fadeUp, fadeLeft } from "@/lib/animations";
+import type { SiteSettingsMap } from "@/lib/siteSettings";
 
 const stats = [
     { value: "15K+",  label: "Abiyandikishije" },
@@ -22,14 +23,23 @@ const stats = [
     { value: "100+",  label: "Ibitaramo Byakozwe" },
 ];
 
-const socialLinks = [
-    { icon: YoutubeLogo,   label: "YouTube",    href: "https://youtube.com" },
-    { icon: FacebookLogo,  label: "Facebook",   href: "https://facebook.com" },
-    { icon: InstagramLogo, label: "Instagram",  href: "https://www.instagram.com/rwandagospelnews/" },
-    { icon: TwitterLogo,   label: "Twitter / X", href: "https://twitter.com" },
+const defaultSocialLinks = [
+    { key: "social_youtube",   icon: YoutubeLogo,   label: "YouTube",    href: "https://www.youtube.com/@Urugerotv-r4o" },
+    { key: "social_facebook",  icon: FacebookLogo,  label: "Facebook",   href: "https://www.facebook.com/profile.php?id=61589904326903" },
+    { key: "social_instagram", icon: InstagramLogo, label: "Instagram",  href: "https://www.instagram.com/rwandagospelnews/" },
+    { key: "social_twitter",   icon: TwitterLogo,   label: "Twitter / X", href: "https://x.com/UrugeroR98356" },
 ];
 
-export default function Footer() {
+type FooterProps = {
+    settings?: SiteSettingsMap;
+};
+
+export default function Footer({ settings }: FooterProps) {
+    const socialLinks = defaultSocialLinks.map(link => ({
+        ...link,
+        href: settings?.[link.key] || link.href,
+    }));
+
     return (
         <footer className={styles.footer}>
 

@@ -26,7 +26,7 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
     },
     {
         key: "social_facebook",
-        value: "https://facebook.com",
+        value: "https://www.facebook.com/profile.php?id=61589904326903",
         label: "Facebook",
         description: "Aho Facebook page yawe iherereye",
         group: "social",
@@ -42,7 +42,7 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
     },
     {
         key: "social_twitter",
-        value: "https://twitter.com",
+        value: "https://x.com/UrugeroR98356",
         label: "Twitter / X",
         description: "Aho Twitter/X account yawe iherereye",
         group: "social",

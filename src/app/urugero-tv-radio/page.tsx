@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { buildMeta } from "@/lib/metadata";
 import LiveRadioPlayer from "@/components/LiveRadioPlayer";
+import RadioComments from "@/components/RadioComments";
 import YouTubePlaylistEmbed from "@/components/YouTubePlaylistEmbed";
 import { YoutubeEmbed } from "@/components/ui";
 import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
@@ -149,10 +150,13 @@ export default async function UrgeroTvRadioPage() {
 
             <div className={`container ${styles.content}`} id="radio-live">
                 <section className={styles.mediaIntro} aria-label="Urugero media programs">
-                    <LiveRadioPlayer
-                        streamUrl={streamUrl}
-                        stationName={settings.radio_station_name ?? "Urugero Live Radio"}
-                    />
+                    <div className={styles.radioStack}>
+                        <LiveRadioPlayer
+                            streamUrl={streamUrl}
+                            stationName={settings.radio_station_name ?? "Urugero Live Radio"}
+                        />
+                        <RadioComments />
+                    </div>
                     <div className={styles.programGrid}>
                         {programCards.map((card) => (
                             <a key={card.title} href={card.href} className={styles.programCard}>

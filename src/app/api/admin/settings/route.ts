@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdmin } from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabase";
 import {
-    settingDefinitionFor,
     settingsWithDefaults,
+    settingDefinitionFor,
 } from "@/lib/siteSettings";
 import type { SiteSettingRow } from "@/types/database";
 
@@ -22,7 +22,14 @@ export async function GET() {
         .select("key, value, label, description")
         .order("key");
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error) {
+        console.error("[Admin settings GET]", error);
+        return NextResponse.json({
+            settings: settingsWithDefaults([]),
+            warning: `Supabase settings table issue: ${error.message}`,
+        });
+    }
+
     return NextResponse.json(settingsWithDefaults((data ?? []) as SiteSettingRow[]));
 }
 

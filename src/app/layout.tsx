@@ -27,7 +27,7 @@ export default async function RootLayout({
         <SmoothScrollProvider>
           <Header radioStreamUrl={radioStreamUrl} radioStationName={radioStationName} />
           <main id="main-content">{children}</main>
-          <Footer />
+          <Footer settings={settings} />
         </SmoothScrollProvider>
       </body>
     </html>

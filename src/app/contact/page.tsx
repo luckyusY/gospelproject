@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { buildMeta } from "@/lib/metadata";
+import { getPublicSiteSettings } from "@/lib/siteSettings";
 import ContactForm from "./ContactForm";
 import styles from "./contact.module.css";
 
@@ -16,7 +17,20 @@ const contactInfo = [
     { icon: "🕐", label: "Amasaha", value: "Kuwa mbere — Kuwa gatanu: 8h–17h" },
 ];
 
-export default function ContactPage() {
+const defaultSocialLinks = [
+    { key: "social_youtube", label: "YouTube", href: "https://www.youtube.com/@Urugerotv-r4o" },
+    { key: "social_facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61589904326903" },
+    { key: "social_instagram", label: "Instagram", href: "https://www.instagram.com/rwandagospelnews/" },
+    { key: "social_twitter", label: "Twitter / X", href: "https://x.com/UrugeroR98356" },
+];
+
+export default async function ContactPage() {
+    const settings = await getPublicSiteSettings();
+    const socialLinks = defaultSocialLinks.map(link => ({
+        ...link,
+        href: settings[link.key] || link.href,
+    }));
+
     return (
         <div className={styles.page}>
             {/* Header */}
@@ -55,10 +69,17 @@ export default function ContactPage() {
                         <div className={styles.socialBox}>
                             <h3 className={styles.socialTitle}>Dukurikire ku mbuga</h3>
                             <div className={styles.socialLinks}>
-                                <a href="#" className={styles.socialLink}>YouTube</a>
-                                <a href="#" className={styles.socialLink}>Facebook</a>
-                                <a href="#" className={styles.socialLink}>Instagram</a>
-                                <a href="#" className={styles.socialLink}>Twitter / X</a>
+                                {socialLinks.map(link => (
+                                    <a
+                                        key={link.key}
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={styles.socialLink}
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
                             </div>
                         </div>
                     </div>

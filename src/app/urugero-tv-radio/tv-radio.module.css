@@ -105,6 +105,11 @@
     align-items: stretch;
 }
 
+.radioStack {
+    display: grid;
+    gap: 1rem;
+}
+
 .programGrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

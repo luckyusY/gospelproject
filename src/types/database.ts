@@ -36,6 +36,18 @@ export interface Database {
                 Update: Partial<SiteSettingInsert> & Record<string, unknown>;
                 Relationships: [];
             };
+            radio_comments: {
+                Row:    RadioCommentRow & Record<string, unknown>;
+                Insert: RadioCommentInsert & Record<string, unknown>;
+                Update: Partial<RadioCommentInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
+            radio_tracks: {
+                Row:    RadioTrackRow & Record<string, unknown>;
+                Insert: RadioTrackInsert & Record<string, unknown>;
+                Update: Partial<RadioTrackInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
         };
         Views:     Record<string, never>;
         Functions: Record<string, never>;
@@ -126,3 +138,25 @@ export type SiteSettingInsert = Record<string, unknown> & {
     label?:       string;
     description?: string | null;
 };
+
+// Radio Comments
+export interface RadioCommentRow {
+    id:            number;
+    listener_name: string;
+    message:       string;
+    is_approved:   boolean;
+    created_at:    string;
+}
+export type RadioCommentInsert = Omit<RadioCommentRow, "id" | "created_at">;
+
+// Radio Fallback Tracks
+export interface RadioTrackRow {
+    id:           number;
+    title:        string;
+    file_url:     string;
+    storage_path: string | null;
+    is_active:    boolean;
+    sort_order:   number;
+    created_at:   string;
+}
+export type RadioTrackInsert = Omit<RadioTrackRow, "id" | "created_at">;
