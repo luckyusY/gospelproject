@@ -4,6 +4,11 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import styles from "../form.module.css";
 import mediaStyles from "./media.module.css";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+const AUDIO_FOLDER = "gospel-news/radio";
+const MAX_AUDIO_SIZE = 100 * 1024 * 1024;
+
 type RadioTrack = {
     id: number;
     title: string;
@@ -28,6 +33,7 @@ export default function RadioTrackManager() {
     const [sortOrder, setSortOrder] = useState("0");
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const [message, setMessage] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
     async function loadTracks() {
@@ -40,7 +46,6 @@ export default function RadioTrackManager() {
     }
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         void loadTracks();
     }, []);
 
@@ -52,32 +57,84 @@ export default function RadioTrackManager() {
             return;
         }
 
-        const form = new FormData();
-        form.append("file", file);
-        form.append("title", title);
-        form.append("sort_order", sortOrder);
-
-        setUploading(true);
-        setMessage(null);
-
-        const response = await fetch("/api/admin/radio-tracks", {
-            method: "POST",
-            body: form,
-        });
-        const data = await response.json().catch(() => ({})) as TracksResponse;
-
-        if (!response.ok || !data.track) {
-            setMessage({ type: "err", text: data.error ?? "Upload yanze." });
-            setUploading(false);
+        if (!isAudioFile(file)) {
+            setMessage({ type: "err", text: "File igomba kuba audio." });
             return;
         }
 
-        setTracks(current => [data.track as RadioTrack, ...current]);
-        setTitle("");
-        setSortOrder("0");
-        if (fileRef.current) fileRef.current.value = "";
-        setMessage({ type: "ok", text: "Indirimbo yashyizwe kuri fallback playlist." });
-        setUploading(false);
+        if (file.size > MAX_AUDIO_SIZE) {
+            setMessage({ type: "err", text: "Audio ntigomba kurenza 100 MB." });
+            return;
+        }
+
+        if (!CLOUD_NAME || !API_KEY) {
+            setMessage({ type: "err", text: "Cloudinary settings ntizuzuye." });
+            return;
+        }
+
+        setUploading(true);
+        setUploadProgress(0);
+        setMessage(null);
+
+        try {
+            const timestamp = Math.round(Date.now() / 1000).toString();
+            const filename = safeFileName(file.name).replace(/\.[^.]+$/, "") || "radio-track";
+            const publicId = `${Date.now()}-${filename}`;
+            const signResponse = await fetch("/api/cloudinary/sign", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    paramsToSign: {
+                        folder: AUDIO_FOLDER,
+                        public_id: publicId,
+                        timestamp,
+                    },
+                }),
+            });
+            const signData = await signResponse.json().catch(() => ({})) as { signature?: string; error?: string };
+
+            if (!signResponse.ok || !signData.signature) {
+                throw new Error(signData.error ?? "Signature yananitse.");
+            }
+
+            const uploadForm = new FormData();
+            uploadForm.append("file", file);
+            uploadForm.append("api_key", API_KEY);
+            uploadForm.append("timestamp", timestamp);
+            uploadForm.append("signature", signData.signature);
+            uploadForm.append("folder", AUDIO_FOLDER);
+            uploadForm.append("public_id", publicId);
+
+            const uploadData = await uploadAudio(CLOUD_NAME, uploadForm, setUploadProgress);
+            setUploadProgress(100);
+
+            const response = await fetch("/api/admin/radio-tracks", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: title || file.name.replace(/\.[^.]+$/, ""),
+                    sort_order: sortOrder,
+                    file_url: uploadData.secure_url,
+                    storage_path: uploadData.public_id,
+                }),
+            });
+            const data = await response.json().catch(() => ({})) as TracksResponse;
+
+            if (!response.ok || !data.track) {
+                throw new Error(data.error ?? "Upload yanze.");
+            }
+
+            setTracks(current => [data.track as RadioTrack, ...current]);
+            setTitle("");
+            setSortOrder("0");
+            if (fileRef.current) fileRef.current.value = "";
+            setMessage({ type: "ok", text: "Indirimbo yashyizwe kuri fallback playlist." });
+        } catch (error) {
+            setMessage({ type: "err", text: error instanceof Error ? error.message : "Upload yanze." });
+        } finally {
+            setUploading(false);
+            setUploadProgress(0);
+        }
     }
 
     async function updateTrack(track: RadioTrack, updates: Partial<Pick<RadioTrack, "is_active" | "sort_order" | "title">>) {
@@ -156,9 +213,22 @@ export default function RadioTrackManager() {
                     />
                 </label>
                 <button type="submit" className={styles.submitBtn} disabled={uploading}>
-                    {uploading ? "Irimo gushyirwa..." : "Upload music"}
+                    {uploading ? `Irimo gushyirwa... ${uploadProgress}%` : "Upload music"}
                 </button>
             </form>
+
+            {uploading && (
+                <div
+                    className={mediaStyles.progressBar}
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={uploadProgress}
+                >
+                    <div className={mediaStyles.progressFill} style={{ width: `${uploadProgress}%` }} />
+                    <span className={mediaStyles.progressLabel}>{uploadProgress}%</span>
+                </div>
+            )}
 
             <div className={mediaStyles.trackList}>
                 {loading ? (
@@ -208,4 +278,52 @@ export default function RadioTrackManager() {
             </div>
         </section>
     );
+}
+
+function safeFileName(name: string) {
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9.]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
+function isAudioFile(file: File) {
+    if (file.type.startsWith("audio/")) return true;
+    return /\.(aac|aif|aiff|flac|m4a|mp3|mp4|oga|ogg|opus|wav|weba)$/i.test(file.name);
+}
+
+function uploadAudio(cloudName: string, form: FormData, onProgress: (progress: number) => void) {
+    return new Promise<{ secure_url: string; public_id?: string }>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`);
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                onProgress(Math.round((event.loaded / event.total) * 100));
+            }
+        };
+
+        xhr.onload = () => {
+            try {
+                const data = JSON.parse(xhr.responseText) as {
+                    secure_url?: string;
+                    public_id?: string;
+                    error?: { message?: string };
+                };
+
+                if (xhr.status >= 200 && xhr.status < 300 && data.secure_url) {
+                    resolve({ secure_url: data.secure_url, public_id: data.public_id });
+                    return;
+                }
+
+                reject(new Error(data.error?.message ?? "Cloudinary upload yanze."));
+            } catch {
+                reject(new Error("Server yatanze inyishu mbi."));
+            }
+        };
+
+        xhr.onerror = () => reject(new Error("Ikibazo cya network."));
+        xhr.send(form);
+    });
 }

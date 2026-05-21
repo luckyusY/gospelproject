@@ -6,6 +6,13 @@ import type { RadioTrackRow } from "@/types/database";
 
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024;
 
+type CloudinaryTrackPayload = {
+    file_url?: string;
+    storage_path?: string | null;
+    title?: string;
+    sort_order?: number | string;
+};
+
 function safeFileName(name: string) {
     return name
         .toLowerCase()
@@ -55,6 +62,37 @@ export async function GET() {
 export async function POST(req: NextRequest) {
     if (!await requireAuth()) {
         return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+    }
+
+    const contentType = req.headers.get("content-type") ?? "";
+    if (contentType.includes("application/json")) {
+        const body = await req.json().catch(() => ({})) as CloudinaryTrackPayload;
+        const fileUrl = String(body.file_url ?? "").trim();
+        const title = String(body.title ?? "").trim();
+        const sortOrder = Number(body.sort_order ?? 0);
+
+        if (!fileUrl) {
+            return NextResponse.json({ error: "URL ya audio irasabwa." }, { status: 400 });
+        }
+
+        const { data, error } = await supabaseAdmin()
+            .from("radio_tracks")
+            .insert({
+                title: title || "Radio track",
+                file_url: fileUrl,
+                storage_path: body.storage_path ?? null,
+                sort_order: Number.isFinite(sortOrder) ? sortOrder : 0,
+                is_active: true,
+            })
+            .select("*")
+            .single();
+
+        if (error) {
+            console.error("[Admin radio track insert]", error);
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({ track: data as RadioTrackRow }, { status: 201 });
     }
 
     const form = await req.formData();
