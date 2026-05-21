@@ -25,6 +25,12 @@ type ScheduledFallbackTrack = {
     track: RadioTrack;
 };
 
+type RadioTracksResponse = {
+    tracks?: RadioTrack[];
+    serverTimeMs?: number;
+    clockEpochMs?: number;
+};
+
 const FALLBACK_CLOCK_EPOCH = Date.UTC(2026, 0, 1, 0, 0, 0);
 const DEFAULT_TRACK_DURATION = 180;
 const listeners = new Set<() => void>();
@@ -34,6 +40,8 @@ const fallbackDurations = new Map<number, number>();
 let fallbackSchedulePromise: Promise<void> | null = null;
 let fallbackIndex = 0;
 let fallbackLoaded = false;
+let fallbackClockEpochMs = FALLBACK_CLOCK_EPOCH;
+let serverClockOffsetMs = 0;
 let wantsPlayback = false;
 let snapshot: RadioSnapshot = {
     status: "idle",
@@ -58,7 +66,13 @@ async function loadFallbackTracks() {
 
     try {
         const response = await fetch("/api/radio/tracks", { cache: "no-store" });
-        const data = await response.json() as { tracks?: RadioTrack[] };
+        const data = await response.json() as RadioTracksResponse;
+        if (typeof data.serverTimeMs === "number" && Number.isFinite(data.serverTimeMs)) {
+            serverClockOffsetMs = data.serverTimeMs - Date.now();
+        }
+        if (typeof data.clockEpochMs === "number" && Number.isFinite(data.clockEpochMs)) {
+            fallbackClockEpochMs = data.clockEpochMs;
+        }
         fallbackTracks = (data.tracks ?? []).filter(track => Boolean(track.file_url));
         setSnapshot({ fallbackAvailable: fallbackTracks.length > 0 });
     } catch {
@@ -125,7 +139,8 @@ function getScheduledFallbackTrack(tracks: RadioTrack[]): ScheduledFallbackTrack
         return { index: fallbackIndex, offset: 0, track };
     }
 
-    let elapsed = ((Date.now() - FALLBACK_CLOCK_EPOCH) / 1000) % totalDuration;
+    const synchronizedNow = Date.now() + serverClockOffsetMs;
+    let elapsed = ((synchronizedNow - fallbackClockEpochMs) / 1000) % totalDuration;
     if (elapsed < 0) elapsed += totalDuration;
 
     for (let index = 0; index < tracks.length; index += 1) {
