@@ -99,7 +99,9 @@
 .featuredOverlay {
     position: absolute;
     inset: 0;
-    background: rgba(31, 31, 31, 0.82);
+    background:
+        linear-gradient(180deg, rgba(31, 31, 31, 0.1), rgba(31, 31, 31, 0.86)),
+        rgba(31, 31, 31, 0.28);
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -128,6 +130,7 @@
 
 .featuredMeta {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
     font-size: 0.77rem;
@@ -216,6 +219,7 @@
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
     border: 1px solid #D8D8D8;
     border-top: 4px solid #B80000;
+    min-width: 0;
 }
 
 .widgetHead {
@@ -784,7 +788,7 @@
 
 @media (max-width: 640px) {
     .page {
-        padding-bottom: 3rem;
+        padding-bottom: 2.5rem;
     }
 
     .categoriesStrip {
@@ -802,8 +806,8 @@
     }
 
     .heroSection {
-        margin-top: 1.5rem;
-        margin-bottom: 2.75rem;
+        margin-top: 1.1rem;
+        margin-bottom: 2.2rem;
     }
 
     .heroGrid,
@@ -817,12 +821,12 @@
     }
 
     .featuredStory {
-        height: clamp(380px, 118vw, 450px);
-        border-radius: 14px;
+        height: clamp(310px, 88vw, 380px);
+        border-radius: 10px;
     }
 
     .featuredOverlay {
-        padding: 1.5rem;
+        padding: 1.1rem;
     }
 
     .featuredTitle,
@@ -831,15 +835,27 @@
     }
 
     .featuredTitle {
-        font-size: clamp(1.45rem, 8vw, 2rem);
+        font-size: clamp(1.32rem, 6.5vw, 1.78rem);
+        margin: 0.55rem 0 0.55rem;
     }
 
     .featuredExcerpt {
-        font-size: 0.9rem;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        font-size: 0.86rem;
+        line-height: 1.45;
+        margin-bottom: 0.6rem;
+    }
+
+    .featuredMeta {
+        font-size: 0.72rem;
     }
 
     .subStory {
-        height: 205px;
+        height: 180px;
+        border-radius: 10px;
     }
 
     .subOverlay {
@@ -850,12 +866,23 @@
     .newsletterWidget,
     .storyCardBody,
     .testimonyBody {
-        padding: 1.15rem;
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .widgetHead {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .viewAll {
+        margin-left: 1.4rem;
     }
 
     .verseSection {
-        padding: 3.25rem 1rem;
-        margin: 3rem 0;
+        padding: 2.75rem 1rem;
+        margin: 2.5rem 0;
     }
 
     .verseQuoteMark {
@@ -889,6 +916,10 @@
         margin-bottom: 1.4rem;
     }
 
+    .sectionTitleWrap {
+        align-items: flex-start;
+    }
+
     .seeAllLink {
         width: 100%;
         justify-content: center;
@@ -899,7 +930,7 @@
     }
 
     .storyCardImg {
-        height: 180px;
+        height: 172px;
     }
 
     .videoThumb {
@@ -908,6 +939,16 @@
 
     .videoSection,
     .latestSection {
-        margin-bottom: 3rem;
+        margin-bottom: 2.5rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .featuredStory {
+        height: 300px;
+    }
+
+    .featuredExcerpt {
+        -webkit-line-clamp: 2;
     }
 }

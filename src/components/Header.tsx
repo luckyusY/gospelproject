@@ -327,14 +327,21 @@ export default function Header({
             {/* ── Mobile Overlay ────────────────────────── */}
             {isMobileMenuOpen && (
                 <div className={styles.mobileOverlay}>
-                    <div className={styles.mobileSearch}>
+                    <form
+                        action="/search"
+                        method="GET"
+                        className={styles.mobileSearch}
+                        role="search"
+                    >
                         <MagnifyingGlass size={16} weight="bold" className={styles.searchIcon} />
                         <input
-                            type="text"
+                            name="q"
+                            type="search"
                             placeholder="Shakisha..."
                             className={styles.searchInput}
+                            aria-label="Shakisha urubuga"
                         />
-                    </div>
+                    </form>
                     <nav className={styles.mobileNav}>
                         {navLinks.map(({ href, label, children }) => {
                             const isActive = href === "/"

@@ -149,10 +149,21 @@
 }
 
 @media (max-width: 640px) {
+    .banner {
+        aspect-ratio: 16 / 9;
+    }
+
     .copy {
-        inset: 0.9rem auto 0.9rem 0.9rem;
-        width: min(68%, 420px);
+        inset: auto 0.9rem 0.9rem 0.9rem;
+        width: auto;
         gap: 0.32rem;
+        justify-content: flex-end;
+    }
+
+    .scrim {
+        background:
+            linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.86)),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.34), transparent 72%);
     }
 
     .badge {
@@ -165,10 +176,20 @@
         display: none;
     }
 
+    .headline {
+        max-width: 95%;
+        font-size: clamp(1.05rem, 7vw, 1.55rem);
+        line-height: 1.08;
+    }
+
     .cta {
         min-height: 28px;
         padding: 0 0.72rem;
         font-size: 0.68rem;
+    }
+
+    .dots {
+        bottom: 0.45rem;
     }
 }
 
