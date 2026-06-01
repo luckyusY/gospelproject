@@ -10,12 +10,11 @@ import { EventMini } from "@/components/ui/EventCard";
 import AdSlot from "@/components/AdSlot";
 import FadeIn from "@/components/ui/FadeIn";
 import LiveRadioPlayer from "@/components/LiveRadioPlayer";
+import RadioEmbed from "@/components/RadioEmbed";
+import StoriesSlider from "@/components/StoriesSlider";
 import {
     staggerContainer,
     fadeUp,
-    fadeLeft,
-    scaleIn,
-    heroTitle,
 } from "@/lib/animations";
 import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
 import {
@@ -24,9 +23,6 @@ import {
     type SiteSettingsMap,
 } from "@/lib/siteSettings";
 
-const FALLBACK_HERO   = "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?q=80&w=1400&auto=format&fit=crop";
-const FALLBACK_SUB1   = "https://images.unsplash.com/photo-1445375011782-2384686778a0?q=80&w=800&auto=format&fit=crop";
-const FALLBACK_SUB2   = "https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=800&auto=format&fit=crop";
 const FALLBACK_CARD   = "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop";
 const MONTH_LABELS: string[] = ["JAN","FEV","MAR","APR","MEI","JUN","JUL","AGO","SEP","OKT","NOV","DES"];
 
@@ -109,15 +105,14 @@ function adImage(imageUrl: string | undefined, fallback: string) {
 type CatMeta = Pick<CategoryRow, "slug" | "name" | "color">;
 
 type Props = {
-    featured:     ArticleRow | null;
-    subStories:   ArticleRow[];      // first two non-featured articles (for hero sub-panels)
+    heroStories:  ArticleRow[];      // top stories for the hero slideshow
     gridStories:  ArticleRow[];      // all non-featured articles for the grid
     events:       EventRow[];
     categories:   CatMeta[];         // from the categories table (proper display names)
     settings:     SiteSettingsMap;
 };
 
-export default function HomeClient({ featured, subStories, gridStories, events, categories, settings }: Props) {
+export default function HomeClient({ heroStories, gridStories, events, categories, settings }: Props) {
 
     // Only show category pills for categories that actually have articles in the grid
     const activeSlugs = new Set(gridStories.map(a => a.category));
@@ -134,11 +129,10 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
         ? gridStories
         : gridStories.filter(s => s.category === activeCategory);
 
-    const sub1 = subStories[0] ?? null;
-    const sub2 = subStories[1] ?? null;
     const defaultSettings = defaultsAsSettingsMap();
     const radioStreamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
     const radioStationName = settings.radio_station_name ?? defaultSettings.radio_station_name ?? "Urugero Live Radio";
+    const radioEmbedUrl = (settings.radio_embed_url ?? "").trim();
 
     return (
         <div className={styles.page}>
@@ -165,76 +159,9 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
             <section className={`container ${styles.heroSection}`} aria-label="Inkuru Nkuru">
                 <div className={styles.heroGrid}>
 
-                    <motion.div
-                        className={styles.mainStories}
-                        variants={staggerContainer}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {/* ── Main featured story */}
-                        <Link href={featured ? `/amakuru/${featured.slug}` : "/amakuru"}>
-                            <motion.div
-                                className={styles.featuredStory}
-                                style={{
-                                    backgroundImage: `url(${featured?.image_url ?? FALLBACK_HERO})`,
-                                }}
-                                role="img"
-                                aria-label={`Inkuru Nkuru: ${featured?.title ?? "Urugero Media"}`}
-                                variants={scaleIn}
-                            >
-                                <motion.div
-                                    className={styles.featuredOverlay}
-                                    variants={staggerContainer}
-                                >
-                                    <span className="tag">Inkuru Nkuru</span>
-                                    <motion.h1 className={styles.featuredTitle} variants={heroTitle}>
-                                        {featured?.title ?? "Urugero Media Group: Ijwi ry'Imana mu Rwanda no ku Isi Yose"}
-                                    </motion.h1>
-                                    <motion.p className={styles.featuredExcerpt} variants={fadeUp}>
-                                        {featured?.excerpt ?? "Urugero Media Group ikomeza gusakaza ubuhamya, inyigisho n'imyidagaduro y'Imana binyuze mu Music Academy, Films, Records, Online Radio na Podcast."}
-                                    </motion.p>
-                                    <motion.div className={styles.featuredMeta} variants={fadeUp}>
-                                        <span>Na {featured?.author ?? "Urugero Media"}</span>
-                                        <span>•</span>
-                                        <span>{featured?.read_time ?? "5 min"}</span>
-                                    </motion.div>
-                                </motion.div>
-                            </motion.div>
-                        </Link>
-
-                        {/* ── Sub-stories */}
-                        <div className={styles.subStories}>
-                            <Link href={sub1 ? `/amakuru/${sub1.slug}` : "/amakuru"}>
-                                <motion.div
-                                    className={styles.subStory}
-                                    style={{ backgroundImage: `url(${sub1?.image_url ?? FALLBACK_SUB1})` }}
-                                    variants={fadeLeft}
-                                >
-                                    <div className={styles.subOverlay}>
-                                        <span className="tag tag-blue">{sub1?.category ?? "Inyigisho"}</span>
-                                        <h3 className={styles.subTitle}>
-                                            {sub1?.title ?? "Ubuzima bw'Umwuka mu Gihe cya Tekinoloji"}
-                                        </h3>
-                                    </div>
-                                </motion.div>
-                            </Link>
-
-                            <Link href={sub2 ? `/amakuru/${sub2.slug}` : "/amakuru"}>
-                                <motion.div
-                                    className={styles.subStory}
-                                    style={{ backgroundImage: `url(${sub2?.image_url ?? FALLBACK_SUB2})` }}
-                                    variants={fadeUp}
-                                >
-                                    <div className={styles.subOverlay}>
-                                        <span className="tag tag-gold">{sub2?.category ?? "Urubyiruko"}</span>
-                                        <h3 className={styles.subTitle}>
-                                            {sub2?.title ?? "Urubyiruko Rw'u Rwanda mu Bikorwa by'Imana 2025"}
-                                        </h3>
-                                    </div>
-                                </motion.div>
-                            </Link>
-                        </div>
-                    </motion.div>
+                    <div className={styles.mainStories}>
+                        <StoriesSlider stories={heroStories} />
+                    </div>
 
                     {/* ── Sidebar */}
                     <motion.aside
@@ -285,11 +212,18 @@ export default function HomeClient({ featured, subStories, gridStories, events, 
                             </ul>
                         </div>
 
-                        <LiveRadioPlayer
-                            streamUrl={radioStreamUrl}
-                            stationName={radioStationName}
-                            compact
-                        />
+                        {radioEmbedUrl ? (
+                            <RadioEmbed
+                                embedUrl={radioEmbedUrl}
+                                stationName={radioStationName}
+                            />
+                        ) : (
+                            <LiveRadioPlayer
+                                streamUrl={radioStreamUrl}
+                                stationName={radioStationName}
+                                compact
+                            />
+                        )}
 
                         <div className={styles.newsletterWidget}>
                             <div className={styles.newsletterIcon} aria-hidden>📖</div>

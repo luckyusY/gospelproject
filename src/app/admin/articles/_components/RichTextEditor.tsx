@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import styles from "../../form.module.css";
+import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
 
 const TinyMceEditor = dynamic(
     () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
@@ -69,6 +70,17 @@ export default function RichTextEditor({ value, onChange }: Props) {
                     branding: false,
                     promotion: false,
                     image_caption: true,
+                    image_advtab: true,
+                    image_title: true,
+                    // ── Inline image uploads → Cloudinary ────────────
+                    automatic_uploads: true,
+                    paste_data_images: true,           // pasted screenshots upload too
+                    file_picker_types: "image",
+                    images_file_types: "jpeg,jpg,png,webp,gif",
+                    images_upload_handler: (
+                        blobInfo: { blob: () => Blob },
+                        progress: (percent: number) => void,
+                    ) => uploadToCloudinary(blobInfo.blob(), progress),
                     link_assume_external_targets: "https",
                     link_default_target: "_blank",
                     content_style:
@@ -81,7 +93,9 @@ export default function RichTextEditor({ value, onChange }: Props) {
             />
             <input type="hidden" name="content" value={value} />
             <span className={styles.hint}>
-                Andika nk&apos;uko ubibona: imitwe, links, amafoto, bullet lists na quotes bizabikwa nk&apos;inyandiko ya HTML isukuye.
+                Andika nk&apos;uko ubibona: imitwe, links, bullet lists na quotes. Amafoto menshi
+                ushobora kuyashyiramo ukanda buto y&apos;ifoto, ukayikurura (drag &amp; drop) cyangwa
+                ukayomeka (paste) — izabikwa muri Cloudinary mu nyandiko.
             </span>
             {editorTimedOut && (
                 <div className={styles.editorWarning} role="status">

@@ -65,6 +65,14 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
         input: "text",
     },
     {
+        key: "radio_embed_url",
+        value: "https://urugerogospelradio.radio12345.com/",
+        label: "Radio embed URL (webpage player)",
+        description: "URL ya webpage ya radio (urugero radio12345 / listen2myradio). Izakoreshwa nka player yuzuye (iframe) ku rupapuro rubanza, ihindure stream nyayo. Siba niba ushaka gukoresha gusa stream itaziguye.",
+        group: "radio",
+        input: "url",
+    },
+    {
         key: "ad_home_top_image",
         value: "/ads/urugero-live-radio-banner.png",
         label: "Homepage banner ad image",

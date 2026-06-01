@@ -182,3 +182,70 @@
 }
 .deleteRowBtn:hover:not(:disabled) { background-color: var(--red); color: #fff; }
 .deleteRowBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ─── Categories manager ────────────────────────────────── */
+.catAddForm {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.catAddRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+.catAddRow .searchInput { flex: 1 1 180px; }
+
+.catColorPicker {
+    width: 48px;
+    height: 40px;
+    padding: 2px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    background: none;
+    cursor: pointer;
+}
+
+.catPresets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+}
+.catSwatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline-offset: 2px;
+}
+
+.catColorCell {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.catColorCell input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.catSlug { color: var(--text-muted); font-size: 0.8rem; font-family: monospace; white-space: nowrap; }
+
+.catHint { margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); }

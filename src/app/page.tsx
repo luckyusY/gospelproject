@@ -19,12 +19,13 @@ export default async function Home() {
 
     // Featured = first is_featured article; fall back to the very latest
     const featured   = articles.find(a => a.is_featured) ?? articles[0] ?? null;
+    const others     = articles.filter(a => a.id !== featured?.id);
 
-    // Sub-stories for the hero side-panels (skip the featured one)
-    const subStories = articles.filter(a => a.id !== featured?.id).slice(0, 2);
+    // Hero slideshow: featured first, then the latest stories (up to 5 slides)
+    const heroStories = (featured ? [featured, ...others] : others).slice(0, 5);
 
     // Grid stories: everything except featured (up to 6)
-    const gridStories = articles.filter(a => a.id !== featured?.id).slice(0, 6);
+    const gridStories = others.slice(0, 6);
 
     // ── Upcoming events
     const { data: eventsData } = await supabase
@@ -48,8 +49,7 @@ export default async function Home() {
 
     return (
         <HomeClient
-            featured={featured}
-            subStories={subStories}
+            heroStories={heroStories}
             gridStories={gridStories}
             events={events}
             categories={categories}
