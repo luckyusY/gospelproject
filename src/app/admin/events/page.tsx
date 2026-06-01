@@ -3,6 +3,7 @@ import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { EventRow } from "@/types/database";
 import styles from "../crud.module.css";
+import DeleteRowButton from "../_components/DeleteRowButton";
 
 export const metadata: Metadata = { title: "Events" };
 
@@ -36,6 +37,7 @@ export default async function AdminEventsPage() {
                         <div className={styles.rowActions}>
                             <Link href={`/admin/events/${ev.id}/edit`} className={styles.editBtn}>Edit</Link>
                             <Link href={`/events/${ev.slug}`} className={styles.viewBtn} target="_blank">View</Link>
+                            <DeleteRowButton endpoint={`/api/admin/events/${ev.id}`} label={ev.title} />
                         </div>
                     </div>
                 ))}

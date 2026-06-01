@@ -3,6 +3,7 @@ import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { TestimonyRow } from "@/types/database";
 import styles from "../crud.module.css";
+import DeleteRowButton from "../_components/DeleteRowButton";
 
 export const metadata: Metadata = { title: "Testimonies" };
 
@@ -36,6 +37,7 @@ export default async function AdminTestimoniesPage() {
                         <div className={styles.rowActions}>
                             <Link href={`/admin/testimonies/${t.id}/edit`} className={styles.editBtn}>Edit</Link>
                             <Link href={`/ubuhamya/${t.slug}`} className={styles.viewBtn} target="_blank">View</Link>
+                            <DeleteRowButton endpoint={`/api/admin/testimonies/${t.id}`} label={t.title} />
                         </div>
                     </div>
                 ))}
