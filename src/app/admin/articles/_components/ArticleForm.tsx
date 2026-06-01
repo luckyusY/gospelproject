@@ -27,7 +27,7 @@ export default function ArticleForm({ article, categories }: Props) {
         const plainContent = content.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").trim();
 
         if (!plainContent) {
-            setError("Andika ibiri mu nyandiko mbere yo kuyibika.");
+            setError("Add some content before saving.");
             return;
         }
 
@@ -59,7 +59,7 @@ export default function ArticleForm({ article, categories }: Props) {
 
         if (!res.ok) {
             const json = await res.json().catch(() => ({}));
-            setError((json as { error?: string }).error ?? "Hari ikibazo. Gerageza nanone.");
+            setError((json as { error?: string }).error ?? "Something went wrong. Please try again.");
             return;
         }
 
@@ -74,9 +74,9 @@ export default function ArticleForm({ article, categories }: Props) {
         <div className={styles.page}>
             <div className={styles.topBar}>
                 <h1 className={styles.heading}>
-                    {isEdit ? "Hindura inyandiko" : "Inyandiko nshya"}
+                    {isEdit ? "Edit article" : "New article"}
                 </h1>
-                <a href="/admin/articles" className={styles.backBtn}>← Subira</a>
+                <a href="/admin/articles" className={styles.backBtn}>← Back</a>
             </div>
 
             {error && <div className={styles.error} role="alert">{error}</div>}
@@ -87,7 +87,7 @@ export default function ArticleForm({ article, categories }: Props) {
                     {/* Left column — main content */}
                     <div className={styles.mainCol}>
                         <label className={styles.label}>
-                            Umutwe <span className={styles.req}>*</span>
+                            Title <span className={styles.req}>*</span>
                             <input
                                 name="title"
                                 defaultValue={article?.title}
@@ -110,12 +110,12 @@ export default function ArticleForm({ article, categories }: Props) {
                                 required
                                 className={styles.input}
                                 pattern="[a-z0-9-]+"
-                                title="Gusa inyuguti nto, imibare, na -"
+                                title="Lowercase letters, numbers and - only"
                             />
                         </label>
 
                         <label className={styles.label}>
-                            Incamake <span className={styles.req}>*</span>
+                            Excerpt <span className={styles.req}>*</span>
                             <textarea
                                 name="excerpt"
                                 defaultValue={article?.excerpt}
@@ -126,7 +126,7 @@ export default function ArticleForm({ article, categories }: Props) {
                         </label>
 
                         <div className={styles.label}>
-                            <span>Ibiri mu nyandiko <span className={styles.req}>*</span></span>
+                            <span>Content <span className={styles.req}>*</span></span>
                             <RichTextEditor value={content} onChange={setContent} />
                         </div>
                     </div>
@@ -134,7 +134,7 @@ export default function ArticleForm({ article, categories }: Props) {
                     {/* Right column — meta */}
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
-                            Icyiciro <span className={styles.req}>*</span>
+                            Category <span className={styles.req}>*</span>
                             <select name="category" defaultValue={article?.category} required className={styles.select}>
                                 {categories.map(c => (
                                     <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -143,7 +143,7 @@ export default function ArticleForm({ article, categories }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Wanditse na <span className={styles.req}>*</span>
+                            Author <span className={styles.req}>*</span>
                             <input
                                 name="author"
                                 defaultValue={article?.author ?? "Urugero Media"}
@@ -153,7 +153,7 @@ export default function ArticleForm({ article, categories }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Igihe cyo gusoma
+                            Read time
                             <input
                                 name="read_time"
                                 defaultValue={article?.read_time ?? "3 min"}
@@ -163,7 +163,7 @@ export default function ArticleForm({ article, categories }: Props) {
                         </label>
 
                         <div className={styles.label}>
-                            Ifoto y&apos;ingenzi
+                            Featured image
                             <CloudinaryUploader
                                 value={imageUrl}
                                 onChange={setImageUrl}
@@ -180,7 +180,7 @@ export default function ArticleForm({ article, categories }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_published" className={styles.checkLabel}>
-                                Shyira ku rubuga
+                                Publish to site
                             </label>
                         </div>
 
@@ -194,12 +194,12 @@ export default function ArticleForm({ article, categories }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_featured" className={styles.checkLabel}>
-                                Inyandiko ikomeye
+                                Featured article
                             </label>
                         </div>
 
                         <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                            {isPending ? "Biga..." : isEdit ? "Bika impinduka" : "Shyiraho inyandiko"}
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Publish article"}
                         </button>
 
                         {isEdit && (
@@ -207,12 +207,12 @@ export default function ArticleForm({ article, categories }: Props) {
                                 type="button"
                                 className={styles.deleteBtn}
                                 onClick={async () => {
-                                    if (!confirm("Wifuza guhanagura iyi nyandiko?")) return;
+                                    if (!confirm("Delete this article? This cannot be undone.")) return;
                                     await fetch(`/api/admin/articles/${article!.id}`, { method: "DELETE" });
                                     router.push("/admin/articles");
                                 }}
                             >
-                                Hanagura
+                                Delete article
                             </button>
                         )}
                     </div>

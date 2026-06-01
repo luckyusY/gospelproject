@@ -14,7 +14,7 @@ async function requireAuth() {
 /** GET /api/admin/settings — return all settings rows */
 export async function GET() {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const { data, error } = await supabaseAdmin()
@@ -36,7 +36,7 @@ export async function GET() {
 /** PUT /api/admin/settings — upsert one or more { key, value } pairs */
 export async function PUT(req: NextRequest) {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const body = await req.json() as Record<string, string>;
@@ -51,7 +51,7 @@ export async function PUT(req: NextRequest) {
         };
     });
     if (rows.length === 0) {
-        return NextResponse.json({ error: "Nta makuru yoherejwe." }, { status: 400 });
+        return NextResponse.json({ error: "No data was sent." }, { status: 400 });
     }
 
     const { error } = await supabaseAdmin()

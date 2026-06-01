@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { TestimonyRow } from "@/types/database";
 import TestimonyForm from "../../_components/TestimonyForm";
 
-export const metadata: Metadata = { title: "Hindura ubuhamya" };
+export const metadata: Metadata = { title: "Edit testimony" };
 
 type Props = { params: Promise<{ id: string }> };
 

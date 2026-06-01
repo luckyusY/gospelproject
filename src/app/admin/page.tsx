@@ -38,21 +38,21 @@ export default async function AdminDashboard() {
 
     const stats = [
         {
-            label: "Inyandiko",
+            label: "Articles",
             count: articlesTotal.count ?? 0,
             published: articlesPublished.count ?? 0,
             href: "/admin/articles",
             color: "#B80000",
         },
         {
-            label: "Ibikorwa",
+            label: "Events",
             count: eventsTotal.count ?? 0,
             published: eventsPublished.count ?? 0,
             href: "/admin/events",
             color: "#1F3A8A",
         },
         {
-            label: "Ubuhamya",
+            label: "Testimonies",
             count: testimoniesTotal.count ?? 0,
             published: testimoniesPublished.count ?? 0,
             href: "/admin/testimonies",
@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
                         </span>
                         <span className={styles.statLabel}>{s.label}</span>
                         <span className={styles.statSub}>
-                            {s.published} zashyizwe · {s.count - s.published} draft
+                            {s.published} published · {s.count - s.published} draft
                         </span>
                     </a>
                 ))}
@@ -83,33 +83,33 @@ export default async function AdminDashboard() {
 
             {/* Quick actions */}
             <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>Ibintu bishya</h2>
+                <h2 className={styles.sectionTitle}>Quick actions</h2>
                 <div className={styles.quickActions}>
                     <a href="/admin/articles/new" className={styles.actionBtn}>
-                        + Inyandiko nshya
+                        + New article
                     </a>
                     <a href="/admin/events/new" className={styles.actionBtn}>
-                        + Igikorwa gishya
+                        + New event
                     </a>
                     <a href="/admin/testimonies/new" className={styles.actionBtn}>
-                        + Ubuhamya bushya
+                        + New testimony
                     </a>
                 </div>
                 {pending > 0 && (
                     <a href="/admin/media" className={styles.alertBanner}>
-                        💬 Hari {pending} {pending === 1 ? "igitekerezo gitegereje" : "ibitekerezo bitegereje"} kwemezwa kuri radiyo.
+                        💬 {pending} radio {pending === 1 ? "comment is" : "comments are"} waiting for approval.
                     </a>
                 )}
             </div>
 
             {/* Recent articles */}
             <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>Inyandiko za vuba</h2>
+                <h2 className={styles.sectionTitle}>Recent articles</h2>
                 <div className={styles.table}>
                     <div className={styles.tableHead}>
-                        <span>Umutwe</span>
-                        <span>Icyiciro</span>
-                        <span>Igenamiterere</span>
+                        <span>Title</span>
+                        <span>Category</span>
+                        <span>Status</span>
                         <span></span>
                     </div>
                     {recentArticles.map(a => (
@@ -117,15 +117,15 @@ export default async function AdminDashboard() {
                             <span className={styles.tableTitle}>{a.title}</span>
                             <span className={styles.tableCategory}>{a.category}</span>
                             <span className={a.is_published ? styles.published : styles.draft}>
-                                {a.is_published ? "Yashyizwe" : "Draft"}
+                                {a.is_published ? "Published" : "Draft"}
                             </span>
                             <a href={`/admin/articles/${a.id}/edit`} className={styles.editLink}>
-                                Hindura
+                                Edit
                             </a>
                         </div>
                     ))}
                     {recentArticles.length === 0 && (
-                        <p className={styles.empty}>Nta nyandiko zibonetse.</p>
+                        <p className={styles.empty}>No articles yet.</p>
                     )}
                 </div>
             </div>
@@ -133,41 +133,41 @@ export default async function AdminDashboard() {
             {/* Recent events + testimonies side by side */}
             <div className={styles.twoCol}>
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Ibikorwa bya vuba</h2>
+                    <h2 className={styles.sectionTitle}>Recent events</h2>
                     <div className={styles.table}>
                         {recentEvents.map(ev => (
                             <div key={ev.id} className={styles.tableRowSimple}>
                                 <span className={styles.tableTitle}>{ev.title}</span>
                                 <span className={ev.is_published ? styles.published : styles.draft}>
-                                    {ev.is_published ? "Yashyizwe" : "Draft"}
+                                    {ev.is_published ? "Published" : "Draft"}
                                 </span>
                                 <a href={`/admin/events/${ev.id}/edit`} className={styles.editLink}>
-                                    Hindura
+                                    Edit
                                 </a>
                             </div>
                         ))}
                         {recentEvents.length === 0 && (
-                            <p className={styles.empty}>Nta bikorwa birabonetse.</p>
+                            <p className={styles.empty}>No events yet.</p>
                         )}
                     </div>
                 </div>
 
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Ubuhamya bwa vuba</h2>
+                    <h2 className={styles.sectionTitle}>Recent testimonies</h2>
                     <div className={styles.table}>
                         {recentTestimonies.map(t => (
                             <div key={t.id} className={styles.tableRowSimple}>
                                 <span className={styles.tableTitle}>{t.title}</span>
                                 <span className={t.is_published ? styles.published : styles.draft}>
-                                    {t.is_published ? "Yashyizwe" : "Draft"}
+                                    {t.is_published ? "Published" : "Draft"}
                                 </span>
                                 <a href={`/admin/testimonies/${t.id}/edit`} className={styles.editLink}>
-                                    Hindura
+                                    Edit
                                 </a>
                             </div>
                         ))}
                         {recentTestimonies.length === 0 && (
-                            <p className={styles.empty}>Nta buhamya buraboneka.</p>
+                            <p className={styles.empty}>No testimonies yet.</p>
                         )}
                     </div>
                 </div>

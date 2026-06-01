@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase";
 import ArticleForm from "../../_components/ArticleForm";
 
-export const metadata: Metadata = { title: "Hindura inyandiko" };
+export const metadata: Metadata = { title: "Edit article" };
 
 type Props = { params: Promise<{ id: string }> };
 

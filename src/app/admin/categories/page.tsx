@@ -3,7 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { CategoryRow } from "@/types/database";
 import CategoryManager from "./_components/CategoryManager";
 
-export const metadata: Metadata = { title: "Ibyiciro" };
+export const metadata: Metadata = { title: "Categories" };
 
 export default async function AdminCategoriesPage() {
     const { data } = await supabaseAdmin()

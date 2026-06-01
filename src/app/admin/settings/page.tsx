@@ -32,18 +32,18 @@ const ICONS: Record<string, React.ElementType> = {
 const GROUPS: Array<{ id: SettingGroup; title: string; description: string }> = [
     {
         id: "social",
-        title: "Imbuga Nkoranyambaga",
-        description: "Hindura aho imbuga nkoranyambaga zawe ziherereye.",
+        title: "Social media",
+        description: "Update the links to your social media pages.",
     },
     {
         id: "radio",
-        title: "Live Radio",
-        description: "Hindura stream ya radio n'izina rya player rigaragara ku rubuga.",
+        title: "Live radio",
+        description: "Set the radio stream and the player name shown on the site.",
     },
     {
         id: "ads",
-        title: "Ads / Kwamamaza",
-        description: "Hindura amafoto ya ads n'aho ajyana. Wakoresha URL yuzuye cyangwa inzira nka /ads/ifoto.svg.",
+        title: "Ads",
+        description: "Set the ad images and where they link. Use a full URL or a path like /ads/image.png.",
     },
 ];
 
@@ -60,7 +60,7 @@ export default function SettingsPage() {
                 const data = await r.json().catch(() => null) as SettingsResponse | null;
                 if (!r.ok) {
                     const error = data && !Array.isArray(data) ? data.error : null;
-                    throw new Error(error ?? "Igenamiterere ntiryabashije gufunguka.");
+                    throw new Error(error ?? "Could not load settings.");
                 }
                 return data;
             })
@@ -86,7 +86,7 @@ export default function SettingsPage() {
                 setValues(Object.fromEntries(SETTING_DEFINITIONS.map(s => [s.key, s.value])));
                 setMessage({
                     type: "err",
-                    text: error instanceof Error ? error.message : "Igenamiterere ntiryabashije gufunguka.",
+                    text: error instanceof Error ? error.message : "Could not load settings.",
                 });
             })
             .finally(() => setLoading(false));
@@ -111,9 +111,9 @@ export default function SettingsPage() {
 
         const json = await res.json().catch(() => ({}));
         if (res.ok) {
-            setMessage({ type: "ok", text: "Ibisobanuro byabitswe neza." });
+            setMessage({ type: "ok", text: "Settings saved." });
         } else {
-            setMessage({ type: "err", text: (json as { error?: string }).error ?? "Hari ikibazo." });
+            setMessage({ type: "err", text: (json as { error?: string }).error ?? "Something went wrong." });
         }
         setSaving(false);
     }
@@ -132,11 +132,11 @@ export default function SettingsPage() {
     return (
         <div className={styles.page}>
             <div className={styles.topBar}>
-                <h1 className={styles.heading}>Igenamiterere - Settings</h1>
-                <a href="/admin" className={styles.backBtn}>Subira</a>
+                <h1 className={styles.heading}>Settings</h1>
+                <a href="/admin" className={styles.backBtn}>Back</a>
             </div>
 
-            {loading && <p style={{ color: "var(--text-muted)", padding: "2rem 0" }}>Gutegura...</p>}
+            {loading && <p style={{ color: "var(--text-muted)", padding: "2rem 0" }}>Loading...</p>}
 
             {!loading && (
                 <form onSubmit={handleSave}>
@@ -165,10 +165,10 @@ export default function SettingsPage() {
                                         <label key={setting.key} className={settStyles.field}>
                                             <span className={settStyles.fieldLabel}>
                                                 {Icon && <Icon size={16} weight="fill" className={settStyles.fieldIcon} />}
-                                                {setting.label}
+                                                {definition?.label ?? setting.label}
                                             </span>
-                                            {setting.description && (
-                                                <span className={styles.hint}>{setting.description}</span>
+                                            {(definition?.description ?? setting.description) && (
+                                                <span className={styles.hint}>{definition?.description ?? setting.description}</span>
                                             )}
                                             <input
                                                 type={inputType}
@@ -194,13 +194,13 @@ export default function SettingsPage() {
                         disabled={saving}
                         style={{ marginTop: "0.25rem", maxWidth: 220 }}
                     >
-                        {saving ? "Biga..." : "Bika impinduka"}
+                        {saving ? "Saving..." : "Save changes"}
                     </button>
 
                     {settings.length === 0 && (
                         <div className={settStyles.noTable}>
-                            <p>Imbonerahamwe <code>site_settings</code> ishobora kuba itarashyizweho muri Supabase.</p>
-                            <p>Kora SQL iri muri <code>supabase/site_settings.sql</code> niba kubika bidakunze.</p>
+                            <p>The <code>site_settings</code> table may not exist in Supabase yet.</p>
+                            <p>Run the SQL in <code>supabase/site_settings.sql</code> if saving doesn&apos;t work.</p>
                         </div>
                     )}
                 </form>

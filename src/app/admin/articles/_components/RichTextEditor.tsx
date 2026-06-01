@@ -9,7 +9,7 @@ const TinyMceEditor = dynamic(
     () => import("@tinymce/tinymce-react").then((mod) => mod.Editor),
     {
         ssr: false,
-        loading: () => <div className={styles.editorLoading}>Editor irimo gufunguka...</div>,
+        loading: () => <div className={styles.editorLoading}>Editor is loading...</div>,
     },
 );
 
@@ -93,24 +93,24 @@ export default function RichTextEditor({ value, onChange }: Props) {
             />
             <input type="hidden" name="content" value={value} />
             <span className={styles.hint}>
-                Andika nk&apos;uko ubibona: imitwe, links, bullet lists na quotes. Amafoto menshi
-                ushobora kuyashyiramo ukanda buto y&apos;ifoto, ukayikurura (drag &amp; drop) cyangwa
-                ukayomeka (paste) — izabikwa muri Cloudinary mu nyandiko.
+                Write as you see it: headings, links, bullet lists and quotes. Add as many
+                images as you like — click the image button, drag &amp; drop, or paste them.
+                They&apos;re uploaded to Cloudinary and embedded in the story.
             </span>
             {editorTimedOut && (
                 <div className={styles.editorWarning} role="status">
-                    TinyMCE itinze gufunguka cyangwa iyi domain ntiyemewe kuri Tiny Cloud. Ushobora gukoresha fallback iri hasi.
+                    The editor took too long to load, or this domain isn&apos;t allowed on Tiny Cloud. You can use the HTML fallback below.
                 </div>
             )}
             <details className={styles.htmlFallback} open={editorTimedOut || undefined}>
-                <summary>HTML fallback niba TinyMCE yanze gukora kuri iyi domain</summary>
+                <summary>HTML fallback (if the editor won&apos;t load on this domain)</summary>
                 <textarea
                     value={value}
                     onChange={(event) => onChange(event.target.value)}
                     rows={10}
                     className={styles.textarea}
                     spellCheck={false}
-                    placeholder="<h2>Umutwe</h2><p>Andika inyandiko hano...</p>"
+                    placeholder="<h2>Heading</h2><p>Write your article here...</p>"
                 />
             </details>
         </div>

@@ -8,7 +8,7 @@ async function requireAuth() {
 }
 
 function unauthorized() {
-    return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
 }
 
 type Params = { params: Promise<{ id: string }> };
@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     const row = Array.isArray(data) ? data[0] : null;
     if (!row) {
         return NextResponse.json(
-            { error: "Ntibishobotse kubika impinduka. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { error: "Couldn't save your changes. Check that SUPABASE_SERVICE_ROLE_KEY is set correctly." },
             { status: 500 },
         );
     }

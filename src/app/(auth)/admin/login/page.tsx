@@ -4,7 +4,7 @@ import { getCurrentAdmin } from "@/lib/adminAuth";
 import styles from "./login.module.css";
 
 export const metadata: Metadata = {
-    title: "Injira - Admin | Urugero Media",
+    title: "Sign in - Admin | Urugero Media",
     robots: { index: false, follow: false },
 };
 
@@ -25,18 +25,18 @@ export default async function LoginPage({
                 <div className={styles.logo}>
                     <span className={styles.cross}>+</span>
                     <h1 className={styles.title}>Urugero Media</h1>
-                    <p className={styles.subtitle}>Admin Panel - Injira</p>
+                    <p className={styles.subtitle}>Admin Panel - Sign in</p>
                 </div>
 
                 {error && (
                     <div className={styles.error} role="alert">
-                        Izina rya admin cyangwa ijambo banga ntibihuye.
+                        Incorrect username or password.
                     </div>
                 )}
 
                 <form action="/api/admin/login" method="POST" className={styles.form}>
                     <label className={styles.label} htmlFor="username">
-                        Izina rya admin
+                        Username
                     </label>
                     <input
                         id="username"
@@ -51,7 +51,7 @@ export default async function LoginPage({
                     />
 
                     <label className={styles.label} htmlFor="password">
-                        Ijambo banga
+                        Password
                     </label>
                     <input
                         id="password"
@@ -63,7 +63,7 @@ export default async function LoginPage({
                         required
                     />
                     <button type="submit" className={styles.btn}>
-                        Injira
+                        Sign in
                     </button>
                 </form>
             </div>

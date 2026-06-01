@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { CategoryInsert } from "@/types/database";
 
 function unauthorized() {
-    return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
 }
 
 async function requireAuth() {
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const color = (raw.color ?? "").trim() || "#1E40AF";
 
     if (!name || !slug) {
-        return NextResponse.json({ error: "Andika izina ry'icyiciro." }, { status: 400 });
+        return NextResponse.json({ error: "Enter a category name." }, { status: 400 });
     }
 
     const { data, error } = await supabaseAdmin()
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     if (error) {
         const message = error.code === "23505"
-            ? "Iki cyiciro gisanzwe gihari (slug isa)."
+            ? "This category already exists (duplicate slug)."
             : error.message;
         return NextResponse.json({ error: message }, { status: 400 });
     }
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     const row = Array.isArray(data) ? data[0] : null;
     if (!row) {
         return NextResponse.json(
-            { error: "Ntibishobotse kubika icyiciro. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { error: "Couldn't save the category. Check that SUPABASE_SERVICE_ROLE_KEY is set correctly." },
             { status: 500 },
         );
     }

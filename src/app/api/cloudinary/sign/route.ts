@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     if (!apiSecret) {
         return NextResponse.json(
-            { error: "CLOUDINARY_API_SECRET ntiyashyizweho." },
+            { error: "CLOUDINARY_API_SECRET is not set." },
             { status: 500 },
         );
     }
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         const body = await request.json() as { paramsToSign?: Record<string, string> };
         paramsToSign = body.paramsToSign ?? {};
     } catch {
-        return NextResponse.json({ error: "Body mbi." }, { status: 400 });
+        return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
     }
 
     // Build the string to sign: sort keys alphabetically, join as key=value&key=value

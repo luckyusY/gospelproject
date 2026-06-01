@@ -51,7 +51,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
     }
 
     async function remove(a: ArticleRow) {
-        if (!confirm(`Wifuza guhanagura "${a.title}"?`)) return;
+        if (!confirm(`Delete "${a.title}"?`)) return;
         setBusyId(a.id);
         await fetch(`/api/admin/articles/${a.id}`, { method: "DELETE" });
         setBusyId(null);
@@ -61,9 +61,9 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
     return (
         <div className={styles.page}>
             <div className={styles.topBar}>
-                <h1 className={styles.heading}>Inyandiko</h1>
+                <h1 className={styles.heading}>Articles</h1>
                 <Link href="/admin/articles/new" className={styles.newBtn}>
-                    + Inyandiko nshya
+                    + New article
                 </Link>
             </div>
 
@@ -73,7 +73,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                     type="search"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Shakisha umutwe, incamake, umwanditsi…"
+                    placeholder="Search title, excerpt, author…"
                     className={styles.searchInput}
                 />
 
@@ -83,7 +83,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                         onChange={e => setCategory(e.target.value)}
                         className={styles.filterSelect}
                     >
-                        <option value="">Ibyiciro byose</option>
+                        <option value="">All categories</option>
                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                 )}
@@ -93,30 +93,30 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                         className={filter === "all" ? styles.segActive : styles.seg}
                         onClick={() => setFilter("all")}
                     >
-                        Byose ({articles.length})
+                        All ({articles.length})
                     </button>
                     <button
                         className={filter === "published" ? styles.segActive : styles.seg}
                         onClick={() => setFilter("published")}
                     >
-                        Zashyizwe ({publishedCount})
+                        Published ({publishedCount})
                     </button>
                     <button
                         className={filter === "draft" ? styles.segActive : styles.seg}
                         onClick={() => setFilter("draft")}
                     >
-                        Draft ({draftCount})
+                        Drafts ({draftCount})
                     </button>
                 </div>
             </div>
 
             <div className={styles.table}>
                 <div className={styles.tableHead}>
-                    <span>Umutwe</span>
-                    <span>Icyiciro</span>
-                    <span>Igenamiterere</span>
-                    <span>Bikomeye</span>
-                    <span>Ibikorwa</span>
+                    <span>Title</span>
+                    <span>Category</span>
+                    <span>Status</span>
+                    <span>Featured</span>
+                    <span>Actions</span>
                 </div>
 
                 {filtered.map(a => (
@@ -133,20 +133,20 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                             onClick={() => togglePublish(a)}
                             disabled={busyId === a.id || isPending}
                             className={a.is_published ? styles.published : styles.draft}
-                            title="Kanda uhindure imiterere"
+                            title="Click to toggle published / draft"
                             style={{ cursor: "pointer", border: "none" }}
                         >
-                            {a.is_published ? "Yashyizwe" : "Draft"}
+                            {a.is_published ? "Published" : "Draft"}
                         </button>
                         <span className={styles.featured}>
                             {a.is_featured ? "⭐" : "—"}
                         </span>
                         <div className={styles.rowActions}>
                             <Link href={`/admin/articles/${a.id}/edit`} className={styles.editBtn}>
-                                Hindura
+                                Edit
                             </Link>
                             <Link href={`/amakuru/${a.slug}`} className={styles.viewBtn} target="_blank">
-                                Reba
+                                View
                             </Link>
                             <button
                                 type="button"
@@ -154,7 +154,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                                 disabled={busyId === a.id || isPending}
                                 className={styles.deleteRowBtn}
                             >
-                                Siba
+                                Delete
                             </button>
                         </div>
                     </div>
@@ -163,8 +163,8 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                 {filtered.length === 0 && (
                     <p className={styles.empty}>
                         {articles.length === 0
-                            ? "Nta nyandiko zibonetse."
-                            : "Nta nyandiko ihuye n'ibyo ushaka."}
+                            ? "No articles yet."
+                            : "No articles match your search."}
                     </p>
                 )}
             </div>

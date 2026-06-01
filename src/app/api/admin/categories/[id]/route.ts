@@ -8,7 +8,7 @@ async function requireAuth() {
 }
 
 function unauthorized() {
-    return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
 }
 
 type Params = { params: Promise<{ id: string }> };
@@ -25,7 +25,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     if (typeof raw.color === "string" && raw.color.trim()) patch.color = raw.color.trim();
 
     if (Object.keys(patch).length === 0) {
-        return NextResponse.json({ error: "Nta mpinduka zatanzwe." }, { status: 400 });
+        return NextResponse.json({ error: "No changes were provided." }, { status: 400 });
     }
 
     const { data, error } = await supabaseAdmin()
@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
     const row = Array.isArray(data) ? data[0] : null;
     if (!row) {
         return NextResponse.json(
-            { error: "Ntibishobotse kubika impinduka. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { error: "Couldn't save your changes. Check that SUPABASE_SERVICE_ROLE_KEY is set correctly." },
             { status: 500 },
         );
     }
@@ -57,7 +57,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
     if (error) {
         const message = error.code === "23503"
-            ? "Iki cyiciro gikoreshwa n'inyandiko, ntigishobora gusibwa."
+            ? "This category is in use by articles and can't be deleted."
             : error.message;
         return NextResponse.json({ error: message }, { status: 400 });
     }

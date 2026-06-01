@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { EventRow } from "@/types/database";
 import EventForm from "../../_components/EventForm";
 
-export const metadata: Metadata = { title: "Hindura igikorwa" };
+export const metadata: Metadata = { title: "Edit event" };
 
 type Props = { params: Promise<{ id: string }> };
 

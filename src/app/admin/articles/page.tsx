@@ -3,7 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { ArticleRow } from "@/types/database";
 import ArticleListClient from "./_components/ArticleListClient";
 
-export const metadata: Metadata = { title: "Inyandiko" };
+export const metadata: Metadata = { title: "Articles" };
 
 export default async function AdminArticlesPage() {
     const result = await supabaseAdmin()

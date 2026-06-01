@@ -25,7 +25,7 @@ export default function TestimonyForm({ testimony }: Props) {
 
         const content = (data.get("content") as string).trim();
         if (!content) {
-            setError("Andika ubuhamya mbere yo kububika.");
+            setError("Add the testimony before saving.");
             return;
         }
 
@@ -55,7 +55,7 @@ export default function TestimonyForm({ testimony }: Props) {
 
         if (!res.ok) {
             const json = await res.json().catch(() => ({}));
-            setError((json as { error?: string }).error ?? "Hari ikibazo. Gerageza nanone.");
+            setError((json as { error?: string }).error ?? "Something went wrong. Please try again.");
             return;
         }
 
@@ -73,9 +73,9 @@ export default function TestimonyForm({ testimony }: Props) {
         <div className={styles.page}>
             <div className={styles.topBar}>
                 <h1 className={styles.heading}>
-                    {isEdit ? "Hindura ubuhamya" : "Ubuhamya bushya"}
+                    {isEdit ? "Edit testimony" : "New testimony"}
                 </h1>
-                <a href="/admin/testimonies" className={styles.backBtn}>← Subira</a>
+                <a href="/admin/testimonies" className={styles.backBtn}>← Back</a>
             </div>
 
             {error && <div className={styles.error} role="alert">{error}</div>}
@@ -86,7 +86,7 @@ export default function TestimonyForm({ testimony }: Props) {
                     {/* Left column — main content */}
                     <div className={styles.mainCol}>
                         <label className={styles.label}>
-                            Umutwe <span className={styles.req}>*</span>
+                            Title <span className={styles.req}>*</span>
                             <input
                                 name="title"
                                 defaultValue={testimony?.title}
@@ -109,12 +109,12 @@ export default function TestimonyForm({ testimony }: Props) {
                                 required
                                 className={styles.input}
                                 pattern="[a-z0-9-]+"
-                                title="Gusa inyuguti nto, imibare, na -"
+                                title="Lowercase letters, numbers and - only"
                             />
                         </label>
 
                         <label className={styles.label}>
-                            Incamake <span className={styles.req}>*</span>
+                            Excerpt <span className={styles.req}>*</span>
                             <textarea
                                 name="excerpt"
                                 defaultValue={testimony?.excerpt}
@@ -125,17 +125,17 @@ export default function TestimonyForm({ testimony }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Ubuhamya <span className={styles.req}>*</span>
+                            Testimony <span className={styles.req}>*</span>
                             <textarea
                                 name="content"
                                 defaultValue={testimony?.content ?? ""}
                                 required
                                 rows={16}
                                 className={styles.textarea}
-                                placeholder={"Andika ubuhamya hano.\n\n## Umutwe w'igice\nIgice cy'ubuhamya...\n\n## Indi ngingo\nIbindi..."}
+                                placeholder={"Write the testimony here.\n\n## Section heading\nSection text...\n\n## Another point\nMore..."}
                             />
                             <span className={styles.hint}>
-                                Koresha <code>## Umutwe</code> mu murongo wihariye kugira ngo utandukanye ibice. Buri paragarafu mu murongo wayo.
+                                Use <code>## Heading</code> on its own line to split into sections. One paragraph per line.
                             </span>
                         </label>
                     </div>
@@ -143,7 +143,7 @@ export default function TestimonyForm({ testimony }: Props) {
                     {/* Right column — meta */}
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
-                            Uwatanze ubuhamya <span className={styles.req}>*</span>
+                            Person&apos;s name <span className={styles.req}>*</span>
                             <input
                                 name="person_name"
                                 defaultValue={testimony?.person_name}
@@ -154,7 +154,7 @@ export default function TestimonyForm({ testimony }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Itorero / Kiliziya
+                            Church
                             <input
                                 name="person_church"
                                 defaultValue={testimony?.person_church ?? ""}
@@ -164,12 +164,12 @@ export default function TestimonyForm({ testimony }: Props) {
                         </label>
 
                         <div className={styles.label}>
-                            Ifoto y&apos;uwatanze ubuhamya
+                            Person&apos;s photo
                             <CloudinaryUploader value={avatarUrl} onChange={setAvatarUrl} />
                         </div>
 
                         <div className={styles.label}>
-                            Ifoto y&apos;ingenzi
+                            Featured image
                             <CloudinaryUploader value={imageUrl} onChange={setImageUrl} />
                         </div>
 
@@ -183,7 +183,7 @@ export default function TestimonyForm({ testimony }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_published" className={styles.checkLabel}>
-                                Shyira ku rubuga
+                                Publish to site
                             </label>
                         </div>
 
@@ -197,12 +197,12 @@ export default function TestimonyForm({ testimony }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_featured" className={styles.checkLabel}>
-                                Ubuhamya bukomeye
+                                Featured testimony
                             </label>
                         </div>
 
                         <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                            {isPending ? "Biga..." : isEdit ? "Bika impinduka" : "Shyiraho ubuhamya"}
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Publish testimony"}
                         </button>
 
                         {isEdit && (
@@ -210,13 +210,13 @@ export default function TestimonyForm({ testimony }: Props) {
                                 type="button"
                                 className={styles.deleteBtn}
                                 onClick={async () => {
-                                    if (!confirm("Wifuza guhanagura ubu buhamya?")) return;
+                                    if (!confirm("Delete this testimony? This cannot be undone.")) return;
                                     await fetch(`/api/admin/testimonies/${testimony!.id}`, { method: "DELETE" });
                                     router.push("/admin/testimonies");
                                     router.refresh();
                                 }}
                             >
-                                Hanagura
+                                Delete testimony
                             </button>
                         )}
                     </div>

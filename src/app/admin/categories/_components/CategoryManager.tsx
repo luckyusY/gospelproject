@@ -34,7 +34,7 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
         setError(null);
         const finalSlug = slug.trim() || slugify(name);
         if (!name.trim() || !finalSlug) {
-            setError("Andika izina ry'icyiciro.");
+            setError("Enter a category name.");
             return;
         }
 
@@ -46,7 +46,7 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
 
         if (!res.ok) {
             const json = await res.json().catch(() => ({}));
-            setError((json as { error?: string }).error ?? "Hari ikibazo. Gerageza nanone.");
+            setError((json as { error?: string }).error ?? "Something went wrong. Please try again.");
             return;
         }
 
@@ -69,13 +69,13 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
     }
 
     async function remove(cat: CategoryRow) {
-        if (!confirm(`Wifuza guhanagura icyiciro "${cat.name}"?`)) return;
+        if (!confirm(`Delete the "${cat.name}" category?`)) return;
         setBusyId(cat.id);
         const res = await fetch(`/api/admin/categories/${cat.id}`, { method: "DELETE" });
         setBusyId(null);
         if (!res.ok) {
             const json = await res.json().catch(() => ({}));
-            alert((json as { error?: string }).error ?? "Ntibishobotse gusiba icyiciro.");
+            alert((json as { error?: string }).error ?? "Could not delete the category.");
             return;
         }
         refresh();
@@ -84,7 +84,7 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
     return (
         <div className={styles.page}>
             <div className={styles.topBar}>
-                <h1 className={styles.heading}>Ibyiciro by&apos;amakuru</h1>
+                <h1 className={styles.heading}>Categories</h1>
             </div>
 
             {/* Add form */}
@@ -96,14 +96,14 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
                             setName(e.target.value);
                             if (!slugTouched) setSlug(slugify(e.target.value));
                         }}
-                        placeholder="Izina (urugero: Sport)"
+                        placeholder="Name (e.g. Sport)"
                         className={styles.searchInput}
-                        aria-label="Izina ry'icyiciro"
+                        aria-label="Category name"
                     />
                     <input
                         value={slug}
                         onChange={e => { setSlug(slugify(e.target.value)); setSlugTouched(true); }}
-                        placeholder="slug (sport)"
+                        placeholder="slug (e.g. sport)"
                         className={styles.searchInput}
                         pattern="[a-z0-9-]+"
                         aria-label="Slug"
@@ -113,10 +113,10 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
                         value={color}
                         onChange={e => setColor(e.target.value)}
                         className={styles.catColorPicker}
-                        aria-label="Ibara"
+                        aria-label="Colour"
                     />
                     <button type="submit" className={styles.newBtn} disabled={isPending}>
-                        + Ongeraho
+                        + Add
                     </button>
                 </div>
                 <div className={styles.catPresets}>
@@ -127,7 +127,7 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
                             className={styles.catSwatch}
                             style={{ backgroundColor: c, outline: color === c ? "2px solid var(--text)" : "none" }}
                             onClick={() => setColor(c)}
-                            aria-label={`Hitamo ibara ${c}`}
+                            aria-label={`Pick colour ${c}`}
                         />
                     ))}
                 </div>
@@ -137,7 +137,7 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
             {/* List */}
             <div className={styles.table}>
                 <div className={styles.tableHead} style={{ gridTemplateColumns: "auto 1fr auto auto" }}>
-                    <span>Ibara</span><span>Izina</span><span>Slug</span><span>Ibikorwa</span>
+                    <span>Colour</span><span>Name</span><span>Slug</span><span>Actions</span>
                 </div>
                 {categories.map(cat => (
                     <div
@@ -150,14 +150,14 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
                                 type="color"
                                 defaultValue={cat.color}
                                 onChange={e => updateColor(cat, e.target.value)}
-                                aria-label={`Hindura ibara rya ${cat.name}`}
+                                aria-label={`Change colour for ${cat.name}`}
                             />
                         </label>
                         <span className={styles.rowTitle}>{cat.name}</span>
                         <span className={styles.catSlug}>/amakuru/{cat.slug}</span>
                         <div className={styles.rowActions}>
                             <a href={`/amakuru/${cat.slug}`} target="_blank" className={styles.viewBtn} rel="noreferrer">
-                                Reba
+                                View
                             </a>
                             <button
                                 type="button"
@@ -165,18 +165,18 @@ export default function CategoryManager({ categories }: { categories: CategoryRo
                                 disabled={busyId === cat.id || isPending}
                                 className={styles.deleteRowBtn}
                             >
-                                Siba
+                                Delete
                             </button>
                         </div>
                     </div>
                 ))}
                 {categories.length === 0 && (
-                    <p className={styles.empty}>Nta byiciro bibonetse.</p>
+                    <p className={styles.empty}>No categories yet.</p>
                 )}
             </div>
 
             <p className={styles.catHint}>
-                Ibyiciro byongerwaho hano bigaragara mu ihitamo ry&apos;inyandiko nshya. Icyiciro gikoreshwa n&apos;inyandiko ntigishobora gusibwa.
+                Categories you add here appear in the dropdown when creating a new article. A category that is in use by articles can&apos;t be deleted.
             </p>
         </div>
     );

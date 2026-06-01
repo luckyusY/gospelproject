@@ -9,7 +9,7 @@ export default function AdminMediaPage() {
         <div className={styles.page}>
             <h1 className={styles.heading}>Media</h1>
             <p style={{ color: "var(--text-muted)" }}>
-                Shyiraho amafoto n&apos;indirimbo zikoreshwa ku rubuga.
+                Upload audio used on the site (radio fallback music).
             </p>
             <div style={{ marginTop: "1.5rem" }}>
                 <RadioTrackManager />

@@ -45,7 +45,7 @@ export default function EventForm({ event }: Props) {
 
         const rawDate = data.get("event_date") as string;
         if (!rawDate) {
-            setError("Hitamo itariki y'igikorwa.");
+            setError("Choose an event date.");
             return;
         }
 
@@ -74,7 +74,7 @@ export default function EventForm({ event }: Props) {
 
         if (!res.ok) {
             const json = await res.json().catch(() => ({}));
-            setError((json as { error?: string }).error ?? "Hari ikibazo. Gerageza nanone.");
+            setError((json as { error?: string }).error ?? "Something went wrong. Please try again.");
             return;
         }
 
@@ -92,9 +92,9 @@ export default function EventForm({ event }: Props) {
         <div className={styles.page}>
             <div className={styles.topBar}>
                 <h1 className={styles.heading}>
-                    {isEdit ? "Hindura igikorwa" : "Igikorwa gishya"}
+                    {isEdit ? "Edit event" : "New event"}
                 </h1>
-                <a href="/admin/events" className={styles.backBtn}>← Subira</a>
+                <a href="/admin/events" className={styles.backBtn}>← Back</a>
             </div>
 
             {error && <div className={styles.error} role="alert">{error}</div>}
@@ -105,7 +105,7 @@ export default function EventForm({ event }: Props) {
                     {/* Left column — main content */}
                     <div className={styles.mainCol}>
                         <label className={styles.label}>
-                            Umutwe <span className={styles.req}>*</span>
+                            Title <span className={styles.req}>*</span>
                             <input
                                 name="title"
                                 defaultValue={event?.title}
@@ -128,12 +128,12 @@ export default function EventForm({ event }: Props) {
                                 required
                                 className={styles.input}
                                 pattern="[a-z0-9-]+"
-                                title="Gusa inyuguti nto, imibare, na -"
+                                title="Lowercase letters, numbers and - only"
                             />
                         </label>
 
                         <label className={styles.label}>
-                            Incamake <span className={styles.req}>*</span>
+                            Short description <span className={styles.req}>*</span>
                             <textarea
                                 name="description"
                                 defaultValue={event?.description}
@@ -144,16 +144,16 @@ export default function EventForm({ event }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Ibisobanuro birambuye
+                            Full details
                             <textarea
                                 name="content"
                                 defaultValue={event?.content ?? ""}
                                 rows={10}
                                 className={styles.textarea}
-                                placeholder="Andika ibisobanuro byuzuye by'igikorwa. Buri paragarafu mu murongo wayo."
+                                placeholder="Write the full event details. One paragraph per line."
                             />
                             <span className={styles.hint}>
-                                Buri paragarafu mu murongo wihariye. Bizagaragara nk&apos;inyandiko ku rubuga.
+                                One paragraph per line. This shows as the body on the site.
                             </span>
                         </label>
                     </div>
@@ -161,7 +161,7 @@ export default function EventForm({ event }: Props) {
                     {/* Right column — meta */}
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
-                            Itariki n&apos;isaha <span className={styles.req}>*</span>
+                            Date &amp; time <span className={styles.req}>*</span>
                             <input
                                 type="datetime-local"
                                 name="event_date"
@@ -172,7 +172,7 @@ export default function EventForm({ event }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Ahantu <span className={styles.req}>*</span>
+                            Location <span className={styles.req}>*</span>
                             <input
                                 name="location"
                                 defaultValue={event?.location}
@@ -183,7 +183,7 @@ export default function EventForm({ event }: Props) {
                         </label>
 
                         <label className={styles.label}>
-                            Ubwoko bw&apos;igikorwa <span className={styles.req}>*</span>
+                            Event type <span className={styles.req}>*</span>
                             <input
                                 name="tag"
                                 defaultValue={event?.tag}
@@ -206,13 +206,13 @@ export default function EventForm({ event }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_free" className={styles.checkLabel}>
-                                Kwinjira ni ubuntu
+                                Free entry
                             </label>
                         </div>
 
                         {!isFree && (
                             <label className={styles.label}>
-                                Igiciro
+                                Price
                                 <input
                                     name="price"
                                     defaultValue={event?.price ?? ""}
@@ -223,7 +223,7 @@ export default function EventForm({ event }: Props) {
                         )}
 
                         <div className={styles.label}>
-                            Ifoto y&apos;igikorwa
+                            Event image
                             <CloudinaryUploader value={imageUrl} onChange={setImageUrl} />
                         </div>
 
@@ -237,12 +237,12 @@ export default function EventForm({ event }: Props) {
                                 className={styles.checkbox}
                             />
                             <label htmlFor="is_published" className={styles.checkLabel}>
-                                Shyira ku rubuga
+                                Publish to site
                             </label>
                         </div>
 
                         <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                            {isPending ? "Biga..." : isEdit ? "Bika impinduka" : "Shyiraho igikorwa"}
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Publish event"}
                         </button>
 
                         {isEdit && (
@@ -250,13 +250,13 @@ export default function EventForm({ event }: Props) {
                                 type="button"
                                 className={styles.deleteBtn}
                                 onClick={async () => {
-                                    if (!confirm("Wifuza guhanagura iki gikorwa?")) return;
+                                    if (!confirm("Delete this event? This cannot be undone.")) return;
                                     await fetch(`/api/admin/events/${event!.id}`, { method: "DELETE" });
                                     router.push("/admin/events");
                                     router.refresh();
                                 }}
                             >
-                                Hanagura
+                                Delete event
                             </button>
                         )}
                     </div>

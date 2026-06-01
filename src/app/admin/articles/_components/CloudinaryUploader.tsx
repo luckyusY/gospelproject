@@ -54,8 +54,8 @@ export default function CloudinaryUploader({ value, onChange }: Props) {
                         type="button"
                         className={styles.imgRemoveBtn}
                         onClick={() => onChange("")}
-                        aria-label="Siba ifoto"
-                        title="Siba ifoto"
+                        aria-label="Remove image"
+                        title="Remove image"
                     >
                         ✕
                     </button>
@@ -63,7 +63,7 @@ export default function CloudinaryUploader({ value, onChange }: Props) {
             ) : (
                 <div className={styles.imgEmpty}>
                     <span className={styles.imgEmptyIcon}>🖼️</span>
-                    <span>Nta foto yashyizweho</span>
+                    <span>No image yet</span>
                 </div>
             )}
 
@@ -98,15 +98,15 @@ export default function CloudinaryUploader({ value, onChange }: Props) {
                 disabled={uploading}
             >
                 {uploading
-                    ? `Irimo gushyirwa… ${progress}%`
+                    ? `Uploading… ${progress}%`
                     : value
-                    ? "🔄  Hindura ifoto"
-                    : "📤  Shyira ifoto"}
+                    ? "🔄  Change image"
+                    : "📤  Upload image"}
             </button>
 
             {/* ── URL fallback input ────────────────────── */}
             <details className={styles.urlFallback}>
-                <summary>Shyiramo URL y&apos;ifoto (optional)</summary>
+                <summary>Or paste an image URL (optional)</summary>
                 <input
                     type="url"
                     name="image_url"
@@ -127,7 +127,7 @@ export default function CloudinaryUploader({ value, onChange }: Props) {
             )}
 
             <span className={styles.hint}>
-                JPEG · PNG · WebP · GIF — 10 MB max. Ifoto izabikwa muri Cloudinary.
+                JPEG · PNG · WebP · GIF — 10 MB max. Stored on Cloudinary.
             </span>
         </div>
     );

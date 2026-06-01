@@ -39,7 +39,7 @@ function signCloudinaryParams(params: Record<string, string>, apiSecret: string)
 
 export async function GET() {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const { data, error } = await supabaseAdmin()
@@ -61,7 +61,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const contentType = req.headers.get("content-type") ?? "";
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
         const sortOrder = Number(body.sort_order ?? 0);
 
         if (!fileUrl) {
-            return NextResponse.json({ error: "URL ya audio irasabwa." }, { status: 400 });
+            return NextResponse.json({ error: "An audio URL is required." }, { status: 400 });
         }
 
         const { data, error } = await supabaseAdmin()
@@ -101,15 +101,15 @@ export async function POST(req: NextRequest) {
     const sortOrder = Number(form.get("sort_order") ?? 0);
 
     if (!(file instanceof File)) {
-        return NextResponse.json({ error: "Hitamo audio file." }, { status: 400 });
+        return NextResponse.json({ error: "Choose an audio file." }, { status: 400 });
     }
 
     if (!file.type.startsWith("audio/")) {
-        return NextResponse.json({ error: "File igomba kuba audio." }, { status: 400 });
+        return NextResponse.json({ error: "The file must be audio." }, { status: 400 });
     }
 
     if (file.size > MAX_AUDIO_SIZE) {
-        return NextResponse.json({ error: "Audio ntigomba kurenza 25 MB." }, { status: 400 });
+        return NextResponse.json({ error: "Audio must be under 25 MB." }, { status: 400 });
     }
 
     const admin = supabaseAdmin();
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if (!cloudName || !apiKey || !apiSecret) {
-        return NextResponse.json({ error: "Cloudinary settings ntizuzuye." }, { status: 500 });
+        return NextResponse.json({ error: "Cloudinary settings are incomplete." }, { status: 500 });
     }
 
     const timestamp = Math.round(Date.now() / 1000).toString();
@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
     };
 
     if (!uploadResponse.ok || !uploadData.secure_url) {
-        const errorMessage = uploadData.error?.message ?? "Cloudinary upload yanze.";
+        const errorMessage = uploadData.error?.message ?? "Cloudinary upload failed.";
         console.error("[Admin radio track Cloudinary upload]", errorMessage);
         return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const body = await req.json().catch(() => ({})) as {
@@ -188,7 +188,7 @@ export async function PATCH(req: NextRequest) {
     };
 
     if (!body.id) {
-        return NextResponse.json({ error: "ID irasabwa." }, { status: 400 });
+        return NextResponse.json({ error: "An ID is required." }, { status: 400 });
     }
 
     const updates: Record<string, string | number | boolean> = {};
@@ -213,12 +213,12 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
     if (!await requireAuth()) {
-        return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 });
     }
 
     const id = Number(new URL(req.url).searchParams.get("id"));
     if (!id) {
-        return NextResponse.json({ error: "ID irasabwa." }, { status: 400 });
+        return NextResponse.json({ error: "An ID is required." }, { status: 400 });
     }
 
     const admin = supabaseAdmin();

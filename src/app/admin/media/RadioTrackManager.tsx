@@ -53,22 +53,22 @@ export default function RadioTrackManager() {
         event.preventDefault();
         const file = fileRef.current?.files?.[0];
         if (!file) {
-            setMessage({ type: "err", text: "Hitamo audio file ubanze." });
+            setMessage({ type: "err", text: "Choose an audio file first." });
             return;
         }
 
         if (!isAudioFile(file)) {
-            setMessage({ type: "err", text: "File igomba kuba audio." });
+            setMessage({ type: "err", text: "The file must be audio." });
             return;
         }
 
         if (file.size > MAX_AUDIO_SIZE) {
-            setMessage({ type: "err", text: "Audio ntigomba kurenza 100 MB." });
+            setMessage({ type: "err", text: "Audio must be under 100 MB." });
             return;
         }
 
         if (!CLOUD_NAME || !API_KEY) {
-            setMessage({ type: "err", text: "Cloudinary settings ntizuzuye." });
+            setMessage({ type: "err", text: "Cloudinary settings are incomplete." });
             return;
         }
 
@@ -94,7 +94,7 @@ export default function RadioTrackManager() {
             const signData = await signResponse.json().catch(() => ({})) as { signature?: string; error?: string };
 
             if (!signResponse.ok || !signData.signature) {
-                throw new Error(signData.error ?? "Signature yananitse.");
+                throw new Error(signData.error ?? "Could not get an upload signature.");
             }
 
             const uploadForm = new FormData();
@@ -121,16 +121,16 @@ export default function RadioTrackManager() {
             const data = await response.json().catch(() => ({})) as TracksResponse;
 
             if (!response.ok || !data.track) {
-                throw new Error(data.error ?? "Upload yanze.");
+                throw new Error(data.error ?? "Upload failed.");
             }
 
             setTracks(current => [data.track as RadioTrack, ...current]);
             setTitle("");
             setSortOrder("0");
             if (fileRef.current) fileRef.current.value = "";
-            setMessage({ type: "ok", text: "Indirimbo yashyizwe kuri fallback playlist." });
+            setMessage({ type: "ok", text: "Track added to the fallback playlist." });
         } catch (error) {
-            setMessage({ type: "err", text: error instanceof Error ? error.message : "Upload yanze." });
+            setMessage({ type: "err", text: error instanceof Error ? error.message : "Upload failed." });
         } finally {
             setUploading(false);
             setUploadProgress(0);
@@ -146,7 +146,7 @@ export default function RadioTrackManager() {
         const data = await response.json().catch(() => ({})) as TracksResponse;
 
         if (!response.ok || !data.track) {
-            setMessage({ type: "err", text: data.error ?? "Guhindura byanze." });
+            setMessage({ type: "err", text: data.error ?? "Update failed." });
             return;
         }
 
@@ -158,21 +158,21 @@ export default function RadioTrackManager() {
         const data = await response.json().catch(() => ({})) as TracksResponse;
 
         if (!response.ok) {
-            setMessage({ type: "err", text: data.error ?? "Gusiba byanze." });
+            setMessage({ type: "err", text: data.error ?? "Delete failed." });
             return;
         }
 
         setTracks(current => current.filter(item => item.id !== track.id));
-        setMessage({ type: "ok", text: "Indirimbo yasibwe." });
+        setMessage({ type: "ok", text: "Track deleted." });
     }
 
     return (
         <section className={mediaStyles.panel}>
             <div className={mediaStyles.panelHeader}>
                 <div>
-                    <h2>Fallback music ya radio</h2>
+                    <h2>Radio fallback music</h2>
                     <p>
-                        Shyiraho indirimbo zizajya zikina ku rubuga igihe live stream idafungutse cyangwa iri offline.
+                        Upload tracks that play on the site when the live stream is closed or offline.
                     </p>
                 </div>
             </div>
@@ -185,7 +185,7 @@ export default function RadioTrackManager() {
 
             <form className={mediaStyles.uploadForm} onSubmit={handleUpload}>
                 <label className={styles.label}>
-                    Umutwe w&apos;indirimbo
+                    Track title
                     <input
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
@@ -194,7 +194,7 @@ export default function RadioTrackManager() {
                     />
                 </label>
                 <label className={styles.label}>
-                    Umwanya
+                    Order
                     <input
                         value={sortOrder}
                         onChange={(event) => setSortOrder(event.target.value)}
@@ -213,7 +213,7 @@ export default function RadioTrackManager() {
                     />
                 </label>
                 <button type="submit" className={styles.submitBtn} disabled={uploading}>
-                    {uploading ? `Irimo gushyirwa... ${uploadProgress}%` : "Upload music"}
+                    {uploading ? `Uploading... ${uploadProgress}%` : "Upload music"}
                 </button>
             </form>
 
@@ -232,14 +232,14 @@ export default function RadioTrackManager() {
 
             <div className={mediaStyles.trackList}>
                 {loading ? (
-                    <p className={mediaStyles.empty}>Indirimbo zirimo gufunguka...</p>
+                    <p className={mediaStyles.empty}>Loading tracks...</p>
                 ) : tracks.length > 0 ? (
                     tracks.map(track => (
                         <article key={track.id} className={mediaStyles.track}>
                             <div className={mediaStyles.trackMain}>
                                 <strong>{track.title}</strong>
                                 <a href={track.file_url} target="_blank" rel="noopener noreferrer">
-                                    Fungura audio
+                                    Open audio
                                 </a>
                             </div>
                             <label className={mediaStyles.toggle}>
@@ -268,12 +268,12 @@ export default function RadioTrackManager() {
                                 className={mediaStyles.deleteButton}
                                 onClick={() => deleteTrack(track)}
                             >
-                                Siba
+                                Delete
                             </button>
                         </article>
                     ))
                 ) : (
-                    <p className={mediaStyles.empty}>Nta ndirimbo za fallback zirashyirwaho.</p>
+                    <p className={mediaStyles.empty}>No fallback tracks yet.</p>
                 )}
             </div>
         </section>
@@ -317,13 +317,13 @@ function uploadAudio(cloudName: string, form: FormData, onProgress: (progress: n
                     return;
                 }
 
-                reject(new Error(data.error?.message ?? "Cloudinary upload yanze."));
+                reject(new Error(data.error?.message ?? "Cloudinary upload failed."));
             } catch {
-                reject(new Error("Server yatanze inyishu mbi."));
+                reject(new Error("The server returned an invalid response."));
             }
         };
 
-        xhr.onerror = () => reject(new Error("Ikibazo cya network."));
+        xhr.onerror = () => reject(new Error("Network error."));
         xhr.send(form);
     });
 }

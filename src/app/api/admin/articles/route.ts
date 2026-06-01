@@ -5,7 +5,7 @@ import { sanitizeArticleContent } from "@/lib/articleContent";
 import type { ArticleInsert } from "@/types/database";
 
 function unauthorized() {
-    return NextResponse.json({ error: "Ntabwo wemerewe." }, { status: 401 });
+    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
 }
 
 async function requireAuth() {
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const row = Array.isArray(data) ? data[0] : null;
     if (!row) {
         return NextResponse.json(
-            { error: "Ntibishobotse kubika inyandiko. Reba niba SUPABASE_SERVICE_ROLE_KEY ishyizweho neza." },
+            { error: "Couldn't save the article. Check that SUPABASE_SERVICE_ROLE_KEY is set correctly." },
             { status: 500 },
         );
     }

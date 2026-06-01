@@ -23,7 +23,7 @@ export async function uploadToCloudinary(
         }),
     });
 
-    if (!signRes.ok) throw new Error("Signature yananitse.");
+    if (!signRes.ok) throw new Error("Could not get an upload signature.");
     const { signature } = (await signRes.json()) as { signature: string };
 
     // 2. Upload directly to Cloudinary with XHR (for progress)
@@ -51,13 +51,13 @@ export async function uploadToCloudinary(
                     error?: { message?: string };
                 };
                 if (data.secure_url) resolve(data.secure_url);
-                else reject(new Error(data.error?.message ?? "Upload yarananiranye."));
+                else reject(new Error(data.error?.message ?? "Upload failed."));
             } catch {
-                reject(new Error("Server yatanze inyishu mbi."));
+                reject(new Error("The server returned an invalid response."));
             }
         };
 
-        xhr.onerror = () => reject(new Error("Ikibazo cya network."));
+        xhr.onerror = () => reject(new Error("Network error."));
         xhr.send(fd);
     });
 }
