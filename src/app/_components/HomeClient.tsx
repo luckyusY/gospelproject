@@ -12,6 +12,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import LiveRadioPlayer from "@/components/LiveRadioPlayer";
 import RadioEmbed from "@/components/RadioEmbed";
 import StoriesSlider from "@/components/StoriesSlider";
+import NewsletterWidget from "./NewsletterWidget";
 import {
     staggerContainer,
     fadeUp,
@@ -225,22 +226,7 @@ export default function HomeClient({ heroStories, gridStories, events, categorie
                             />
                         )}
 
-                        <div className={styles.newsletterWidget}>
-                            <div className={styles.newsletterIcon} aria-hidden>📖</div>
-                            <h2>Inyigisho za buri Cyumweru</h2>
-                            <p>Yandikisha kuri Urugero kugira ngo ubone inyigisho n&apos;amakuru y&apos;Imana buri cyumweru.</p>
-                            <form className={styles.newsletterForm} onSubmit={(e) => e.preventDefault()}>
-                                <input
-                                    type="email"
-                                    placeholder="Emeyili yawe"
-                                    required
-                                    aria-label="Emeyili yawe yo kwiyandikisha"
-                                />
-                                <button type="submit" className="btn btn-accent">
-                                    Iyandikishe — Kubuntu
-                                </button>
-                            </form>
-                        </div>
+                        <NewsletterWidget />
                     </motion.aside>
                 </div>
             </section>
@@ -259,22 +245,7 @@ export default function HomeClient({ heroStories, gridStories, events, categorie
                     slides={SQUARE_AD_SLIDES}
                 />
 
-                <div className={`${styles.newsletterWidget} ${styles.newsletterBandWidget}`}>
-                    <div className={styles.newsletterIcon} aria-hidden>ðŸ“–</div>
-                    <h2>Inyigisho za buri Cyumweru</h2>
-                    <p>Yandikisha kuri Urugero kugira ngo ubone inyigisho n&apos;amakuru y&apos;Imana buri cyumweru.</p>
-                    <form className={styles.newsletterForm} onSubmit={(e) => e.preventDefault()}>
-                        <input
-                            type="email"
-                            placeholder="Emeyili yawe"
-                            required
-                            aria-label="Emeyili yawe yo kwiyandikisha"
-                        />
-                        <button type="submit" className="btn btn-accent">
-                            Iyandikishe â€” Kubuntu
-                        </button>
-                    </form>
-                </div>
+                <NewsletterWidget band />
             </div>
 
             <FadeIn direction="scale">

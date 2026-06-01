@@ -376,6 +376,25 @@
 .newsletterForm input:focus { border-color: #B80000; }
 .newsletterForm button { width: 100%; }
 
+.newsletterSuccess {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    background-color: rgba(22, 163, 74, 0.22);
+    border: 1px solid rgba(22, 163, 74, 0.5);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+.newsletterError {
+    color: #fca5a5;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin: 0;
+}
+
 .sidebar .newsletterWidget {
     display: none;
 }
