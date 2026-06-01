@@ -28,7 +28,8 @@
 .statCard:hover { box-shadow: var(--shadow-md); }
 
 .statCount { font-size: 2.5rem; font-weight: 900; line-height: 1; }
-.statLabel { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+.statLabel { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+.statSub { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
 
 .section { margin-bottom: 2.5rem; }
 
@@ -117,6 +118,45 @@
 .editLink:hover { color: var(--gold); }
 
 .empty { padding: 1.5rem 1.25rem; color: var(--text-muted); font-size: 0.875rem; }
+
+/* Alert banner (e.g. pending radio comments) */
+.alertBanner {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--gold-light, #fff7e6);
+    border: 1px solid var(--gold, #d4a017);
+    border-radius: var(--r-md);
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: box-shadow 0.2s;
+}
+.alertBanner:hover { box-shadow: var(--shadow-sm); }
+
+/* Two-column section grid for events + testimonies */
+.twoCol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Simple 3-column rows (title / status / edit) */
+.tableRowSimple {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+}
+.tableRowSimple:last-child { border-bottom: none; }
+
+@media (max-width: 768px) {
+    .twoCol { grid-template-columns: 1fr; }
+}
 
 @media (max-width: 600px) {
     .statsGrid { grid-template-columns: 1fr; }

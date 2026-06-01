@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildMeta } from "@/lib/metadata";
+import { supabase } from "@/lib/supabase";
+import type { EventRow } from "@/types/database";
 import styles from "./events.module.css";
-import { Search, MapPin, Grid, Video, ChevronDown } from "lucide-react";
+import { Search, MapPin, Grid } from "lucide-react";
 
 export const metadata: Metadata = buildMeta({
     title:       "Ibitaramo",
@@ -9,76 +12,26 @@ export const metadata: Metadata = buildMeta({
     path:        "/events",
 });
 
-const events = [
-    {
-        img:    "https://images.unsplash.com/photo-1540039155732-6114b09ec4d5?q=80&w=800&auto=format&fit=crop",
-        month:  "MEI", day: "10",
-        tag:    "AMAKONFERANSI", tagColor: "#EB0000",
-        icon:   <MapPin size={14} />,
-        venue:  "Kigali Arena, Kigali",
-        title:  "Urugero Worship Night 2025",
-        excerpt:"Ijoro ry'indirimbo z'Imana n'ubuhamya, ryakusanyije abantu bose b'Imana mu Rwanda.",
-        price:  "Kubuntu", priceColor: "#16a34a",
-        btnLabel: "Iyandikishe", btnClass: "btn btn-accent",
-    },
-    {
-        img:    "https://images.unsplash.com/photo-1516280440508-3a1ecf92b76b?q=80&w=800&auto=format&fit=crop",
-        month:  "JUN", day: "07",
-        tag:    "IBITARAMO BY'INDIRIMBO", tagColor: "#1F1F1F",
-        icon:   <Video size={14} />,
-        venue:  "Online — Live kuri Urugero TV",
-        title:  "Iminsi ya Urugero Bible Quiz",
-        excerpt:"Ibibazo bya Bibiliya birimo amashuri n'amatorero yo mu Rwanda yose.",
-        price:  "Kubuntu", priceColor: "#16a34a",
-        btnLabel: "Reba Live", btnClass: "btn btn-outline",
-    },
-    {
-        img:    "https://images.unsplash.com/photo-1470229722913-7c090be5c5a4?q=80&w=800&auto=format&fit=crop",
-        month:  "JUL", day: "20",
-        tag:    "IMIKORERE", tagColor: "#B80000",
-        icon:   <MapPin size={14} />,
-        venue:  "Amahoro Stadium, Kigali",
-        title:  "Urugero Music Academy Annual Show",
-        excerpt:"Ibitaramo by'abanyeshuri ba Urugero Music Academy bisangira ibyo bize n'itorero.",
-        price:  "Kubuntu", priceColor: "#16a34a",
-        btnLabel: "Iyandikishe", btnClass: "btn btn-accent",
-    },
-    {
-        img:    "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=800&auto=format&fit=crop",
-        month:  "AGO", day: "15",
-        tag:    "URUBYIRUKO", tagColor: "#B80000",
-        icon:   <MapPin size={14} />,
-        venue:  "IPRC Kigali",
-        title:  "Urugero Youth Revival Night",
-        excerpt:"Ijoro ry'urubyiruko rw'Imana — indirimbo, ubuhamya n'inyigisho zigenewe urubyiruko.",
-        price:  "Kubuntu", priceColor: "#16a34a",
-        btnLabel: "Iyandikishe", btnClass: "btn btn-outline",
-    },
-    {
-        img:    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
-        month:  "SEP", day: "06",
-        tag:    "ABAGORE", tagColor: "#EB0000",
-        icon:   <MapPin size={14} />,
-        venue:  "Hôtel des Mille Collines, Kigali",
-        title:  "Urugero Women of Faith Summit",
-        excerpt:"Amakonferansi y'abagore b'Imana — inganji, inyigisho n'ubuhamya bw'abagore b'Ubukristu.",
-        price:  "RWF 5,000", priceColor: "var(--navy)",
-        btnLabel: "Gura Tiketi", btnClass: "btn btn-accent",
-    },
-    {
-        img:    "https://images.unsplash.com/photo-1511522851441-2b6d51bbd811?q=80&w=800&auto=format&fit=crop",
-        month:  "DEC", day: "25",
-        tag:    "NOHELI", tagColor: "#EB0000",
-        icon:   <MapPin size={14} />,
-        venue:  "Amatorero yose mu Rwanda",
-        title:  "Urugero Christmas Celebration",
-        excerpt:"Twiyishime hamwe mu Noheli — indirimbo, ibitaramo n'ubuhamya mu mateka y'ivuka rya Yesu.",
-        price:  "Kubuntu", priceColor: "#16a34a",
-        btnLabel: "Reba Amatorero", btnClass: "btn btn-outline",
-    },
-];
+// Revalidate so newly published events show without a full rebuild.
+export const revalidate = 60;
 
-export default function EventsPage() {
+const MONTHS_RW = ["MUT", "GAS", "WER", "MAT", "GIC", "KAM", "NYA", "KAN", "NZE", "UKW", "UGU", "UKB"];
+
+export default async function EventsPage() {
+    const { data } = await supabase
+        .from("events")
+        .select("*")
+        .eq("is_published", true)
+        .order("event_date", { ascending: true });
+    const events = (data ?? []) as EventRow[];
+
+    // Server component renders per-request; current time is stable within a render.
+    // eslint-disable-next-line react-hooks/purity
+    const now = Date.now();
+    const upcoming = events.filter(e => new Date(e.event_date).getTime() >= now);
+    const past = events.filter(e => new Date(e.event_date).getTime() < now).reverse();
+    const ordered = [...upcoming, ...past];
+
     return (
         <div className={styles.page}>
 
@@ -98,7 +51,7 @@ export default function EventsPage() {
                 </div>
             </section>
 
-            {/* ── Search ────────────────────────────────── */}
+            {/* ── Search (decorative quick links) ──────────── */}
             <section className={styles.searchSection}>
                 <div className="container">
                     <div className={styles.searchBox}>
@@ -128,60 +81,62 @@ export default function EventsPage() {
                         </div>
                         <button className={`btn btn-primary ${styles.searchBtn}`}>Shakisha</button>
                     </div>
-
-                    <div className={styles.tagsContainer}>
-                        <button className={`${styles.filterTag} ${styles.tagActive}`}>Byose</button>
-                        <button className={styles.filterTag}>Iki cyumweru</button>
-                        <button className={styles.filterTag}>Kubuntu</button>
-                        <button className={styles.filterTag}>Online</button>
-                        <button className={styles.filterTag}>Umuryango</button>
-                    </div>
                 </div>
             </section>
 
             {/* ── Events Grid ───────────────────────────── */}
             <section className={`container ${styles.eventsContainer}`}>
-                <div className={styles.eventsGrid}>
-                    {events.map((ev) => (
-                        <article key={ev.title} className={styles.eventCard}>
-                            <div
-                                className={styles.eventImage}
-                                style={{ backgroundImage: `url(${ev.img})` }}
-                            >
-                                <div className={styles.dateBadge}>
-                                    <span className={styles.badgeMonth}>{ev.month}</span>
-                                    <span className={styles.badgeDay}>{ev.day}</span>
-                                </div>
-                                <span className="tag" style={{ backgroundColor: ev.tagColor }}>
-                                    {ev.tag}
-                                </span>
-                            </div>
-                            <div className={styles.eventContent}>
-                                <div className={styles.eventMeta}>
-                                    {ev.icon}
-                                    <span>{ev.venue}</span>
-                                </div>
-                                <h2 className={styles.eventTitle}>{ev.title}</h2>
-                                <p className={styles.eventExcerpt}>{ev.excerpt}</p>
-                                <div className={styles.eventFooter}>
-                                    <div className={styles.eventPrice}>
-                                        <span className={styles.priceLabel}>Kwinjira</span>
-                                        <span className={styles.priceValue} style={{ color: ev.priceColor }}>
-                                            {ev.price}
-                                        </span>
+                {ordered.length > 0 ? (
+                    <div className={styles.eventsGrid}>
+                        {ordered.map((ev) => {
+                            const d = new Date(ev.event_date);
+                            const month = MONTHS_RW[d.getMonth()] ?? "";
+                            const day = String(d.getDate()).padStart(2, "0");
+                            return (
+                                <Link key={ev.id} href={`/events/${ev.slug}`} className={styles.eventCard}>
+                                    <div
+                                        className={styles.eventImage}
+                                        style={ev.image_url ? { backgroundImage: `url(${ev.image_url})` } : undefined}
+                                    >
+                                        <div className={styles.dateBadge}>
+                                            <span className={styles.badgeMonth}>{month}</span>
+                                            <span className={styles.badgeDay}>{day}</span>
+                                        </div>
+                                        {ev.tag && (
+                                            <span className="tag" style={{ backgroundColor: "#B80000" }}>
+                                                {ev.tag}
+                                            </span>
+                                        )}
                                     </div>
-                                    <button className={ev.btnClass}>{ev.btnLabel}</button>
-                                </div>
-                            </div>
-                        </article>
-                    ))}
-                </div>
-
-                <div className={styles.loadMoreContainer}>
-                    <button className={`btn btn-outline ${styles.loadMoreBtn}`}>
-                        Reba Ibitaramo Byinshi <ChevronDown size={16} />
-                    </button>
-                </div>
+                                    <div className={styles.eventContent}>
+                                        <div className={styles.eventMeta}>
+                                            <MapPin size={14} />
+                                            <span>{ev.location}</span>
+                                        </div>
+                                        <h2 className={styles.eventTitle}>{ev.title}</h2>
+                                        <p className={styles.eventExcerpt}>{ev.description}</p>
+                                        <div className={styles.eventFooter}>
+                                            <div className={styles.eventPrice}>
+                                                <span className={styles.priceLabel}>Kwinjira</span>
+                                                <span
+                                                    className={styles.priceValue}
+                                                    style={{ color: ev.is_free ? "#16a34a" : "var(--navy)" }}
+                                                >
+                                                    {ev.is_free ? "Kubuntu" : (ev.price ?? "Baza")}
+                                                </span>
+                                            </div>
+                                            <span className="btn btn-outline">Reba byinshi</span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <p className={styles.emptyState}>
+                        Nta bitaramo biteganyijwe ubu. Subira vuba urebe ibishya!
+                    </p>
+                )}
             </section>
 
         </div>

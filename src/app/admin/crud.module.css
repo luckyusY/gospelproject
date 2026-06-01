@@ -105,3 +105,80 @@
 .viewBtn:hover { color: var(--text); }
 
 .empty { padding: 1.5rem 1.25rem; color: var(--text-muted); font-size: 0.875rem; }
+
+/* ─── Toolbar (search / filter) ─────────────────────────── */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.searchInput {
+    flex: 1 1 240px;
+    padding: 0.6rem 0.9rem;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--text);
+    background-color: var(--bg-card);
+    outline: none;
+    transition: border-color 0.2s;
+}
+.searchInput:focus { border-color: var(--gold); }
+
+.filterSelect {
+    padding: 0.6rem 0.9rem;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--text);
+    background-color: var(--bg-card);
+    cursor: pointer;
+    outline: none;
+}
+.filterSelect:focus { border-color: var(--gold); }
+
+.segmented {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    overflow: hidden;
+    background-color: var(--bg-card);
+}
+
+.seg, .segActive {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: background-color 0.15s, color 0.15s;
+}
+.seg:hover { color: var(--text); }
+.segActive {
+    background-color: var(--navy);
+    color: #fff;
+}
+
+.rowBusy { opacity: 0.5; pointer-events: none; }
+
+.deleteRowBtn {
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--r-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background-color: var(--red-light);
+    color: var(--red);
+    transition: background-color 0.15s, color 0.15s;
+}
+.deleteRowBtn:hover:not(:disabled) { background-color: var(--red); color: #fff; }
+.deleteRowBtn:disabled { opacity: 0.5; cursor: not-allowed; }

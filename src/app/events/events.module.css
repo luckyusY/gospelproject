@@ -326,3 +326,18 @@
     border-color: var(--primary-color);
     color: var(--primary-color);
 }
+
+.eventCard {
+    text-decoration: none;
+    color: inherit;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    background-color: var(--bg-card);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+}

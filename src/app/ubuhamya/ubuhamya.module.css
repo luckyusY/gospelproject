@@ -1,0 +1,134 @@
+.page {
+    padding-bottom: 4rem;
+}
+
+/* ── Hero ─────────────────────────────────────────── */
+.hero {
+    background:
+        linear-gradient(135deg, rgba(31, 31, 31, 0.86) 0%, rgba(184, 0, 0, 0.78) 100%),
+        url("https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=1600&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 0 3.5rem;
+    text-align: center;
+    color: #fff;
+    border-bottom: 4px solid #B80000;
+}
+
+.heroIcon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+.heroSubtitle {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    font-weight: 800;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+.heroTitle {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+.heroDescription {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    opacity: 0.92;
+}
+
+/* ── Featured ─────────────────────────────────────── */
+.featured {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    margin: 2.5rem 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg, 16px);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.featured:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.featuredImgWrap { position: relative; min-height: 280px; background-color: var(--bg-subtle); }
+.featuredImg { object-fit: cover; }
+.featuredBody { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+.featuredBadge {
+    align-self: flex-start;
+    background-color: #B80000;
+    color: #fff;
+    padding: 0.2rem 0.7rem;
+    border-radius: var(--r-full, 99px);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+.featuredTitle { font-size: 1.6rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.6rem; color: var(--text); }
+.featuredExcerpt { color: var(--text-muted); line-height: 1.65; margin-bottom: 1.25rem; }
+
+/* ── Grid ─────────────────────────────────────────── */
+.gridHeading {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--text);
+    margin: 2.5rem 0 1.25rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg, 16px);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.cardImgWrap { position: relative; aspect-ratio: 16 / 9; background-color: var(--bg-subtle); }
+.cardImg { object-fit: cover; }
+.cardImgPlaceholder { display: grid; place-items: center; height: 100%; font-size: 2.5rem; opacity: 0.4; }
+.cardBody { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
+.cardTitle { font-size: 1.1rem; font-weight: 800; line-height: 1.3; margin-bottom: 0.5rem; color: var(--text); }
+.cardExcerpt { color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; margin-bottom: 1rem; flex: 1; }
+
+.person { display: flex; align-items: center; gap: 0.6rem; margin-top: auto; }
+.avatar { border-radius: 50%; object-fit: cover; }
+.avatarFallback {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #B80000;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+.personName { font-weight: 700; font-size: 0.85rem; color: var(--text); }
+.personChurch { font-size: 0.75rem; color: var(--text-muted); }
+
+.empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+    background-color: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: var(--r-lg, 16px);
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .featured { grid-template-columns: 1fr; }
+    .featuredImgWrap { min-height: 200px; }
+    .featuredBody { padding: 1.5rem; }
+}
