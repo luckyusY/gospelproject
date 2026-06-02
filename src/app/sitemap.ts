@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://urugero.rw";
+const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.urugerogospelnews.com";
 
 // All static routes — update frequencies reflect content volatility
 export default function sitemap(): MetadataRoute.Sitemap {
