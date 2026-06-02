@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -7,6 +7,15 @@ import { rootMetadata } from "@/lib/metadata";
 import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
 
 export const metadata: Metadata = rootMetadata;
+
+// Without this, mobile browsers fall back to a 980px desktop layout
+// (content looks zoomed-out / overflowing). This makes the site responsive.
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    themeColor: "#B80000",
+};
+
 export const revalidate = 60;
 
 export default async function RootLayout({

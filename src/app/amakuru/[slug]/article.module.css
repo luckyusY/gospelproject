@@ -103,7 +103,32 @@
     font-size: 1.07rem;
     line-height: 1.78;
     color: var(--text);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
+
+/* Keep embedded media/tables/code inside the column on mobile */
+.body :global(img),
+.body :global(video),
+.body :global(iframe) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+.body :global(figure) { max-width: 100%; margin: 1.5rem 0; }
+.body :global(figure img) { width: 100%; }
+.body :global(table) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+}
+.body :global(pre) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.body :global(a) { word-break: break-word; }
 
 .body :global(h2) {
     font-size: 1.45rem;
