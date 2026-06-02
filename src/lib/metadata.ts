@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 
 const SITE_NAME = "Urugero Media";
-const SITE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://urugero.rw";
+export const SITE_URL  = process.env.NEXT_PUBLIC_SITE_URL ?? "https://urugero.rw";
 const SITE_DESC = "Urugero Media Group — Ubuhamya, Inyigisho n'Imyidagaduro y'Imana mu Rwanda no ku isi yose.";
+
+/** Build an absolute URL on the canonical site domain. */
+export function absoluteUrl(path: string) {
+    return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 /**
  * Build consistent page metadata.

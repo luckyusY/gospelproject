@@ -3,7 +3,8 @@ import Image           from "next/image";
 import Link            from "next/link";
 import type { Metadata } from "next";
 import { supabase }    from "@/lib/supabase";
-import { buildMeta }   from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
+import ShareButtons    from "@/components/ShareButtons";
 import type { ArticleRow } from "@/types/database";
 import styles          from "./article.module.css";
 
@@ -136,6 +137,9 @@ export default async function ArticlePage({ params }: Props) {
                     className={styles.body}
                     dangerouslySetInnerHTML={{ __html: a.content }}
                 />
+
+                {/* ── Share ──────────────────────────────── */}
+                <ShareButtons url={absoluteUrl(`/amakuru/${a.slug}`)} title={a.title} />
 
                 {/* ── Footer ─────────────────────────────── */}
                 <div className={styles.footer}>

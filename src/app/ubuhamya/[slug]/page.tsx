@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { buildMeta } from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
+import ShareButtons from "@/components/ShareButtons";
 import type { TestimonyRow } from "@/types/database";
 import type { Metadata } from "next";
 import styles from "./testimony.module.css";
@@ -115,6 +116,8 @@ export default async function TestimonyPage({ params }: Props) {
                     );
                 })}
             </div>
+
+            <ShareButtons url={absoluteUrl(`/ubuhamya/${testimony.slug}`)} title={testimony.title} />
 
             <div className={styles.footer}>
                 <Link href="/ubuhamya" className={styles.backLink}>

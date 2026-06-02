@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { buildMeta } from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
+import ShareButtons from "@/components/ShareButtons";
 import type { EventRow } from "@/types/database";
 import type { Metadata } from "next";
 import styles from "./event-detail.module.css";
@@ -105,6 +106,8 @@ export default async function EventDetailPage({ params }: Props) {
                     ))}
                 </div>
             )}
+
+            <ShareButtons url={absoluteUrl(`/events/${event.slug}`)} title={event.title} />
 
             <div className={styles.footer}>
                 <Link href="/events" className={styles.backLink}>

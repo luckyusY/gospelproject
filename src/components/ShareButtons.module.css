@@ -1,0 +1,61 @@
+.share {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 2rem 0;
+}
+
+.label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.12s ease, filter 0.12s ease;
+    white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.btn:active { transform: translateY(0); }
+
+.native   { background-color: #1f1f1f; }
+.whatsapp { background-color: #25D366; }
+.facebook { background-color: #1877F2; }
+.x        { background-color: #000000; }
+.telegram { background-color: #229ED9; }
+
+.copy {
+    background-color: var(--bg-subtle);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+}
+.copy:hover { filter: none; border-color: var(--text-muted); }
+
+@media (max-width: 600px) {
+    .btn { flex: 1 1 calc(50% - 0.3rem); justify-content: center; }
+}
