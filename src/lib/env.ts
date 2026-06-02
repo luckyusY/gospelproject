@@ -14,7 +14,7 @@ const envSchema = z.object({
 
     // Email (optional until Phase 4)
     RESEND_API_KEY: z.string().optional(),
-    EMAIL_FROM:     z.string().email().default("noreply@urugero.rw"),
+    EMAIL_FROM:     z.string().email().default("noreply@urugerogospelnews.com"),
 
     // Analytics (optional until Phase 7)
     NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),

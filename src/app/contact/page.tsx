@@ -12,7 +12,7 @@ export const metadata: Metadata = buildMeta({
 
 const contactInfo = [
     { icon: "📍", label: "Aderesi", value: "Kigali, Rwanda" },
-    { icon: "📧", label: "Imeyili", value: "info@urugero.rw" },
+    { icon: "📧", label: "Imeyili", value: "info@urugerogospelnews.com" },
     { icon: "📱", label: "Telefoni", value: "+250 788 000 000" },
     { icon: "🕐", label: "Amasaha", value: "Kuwa mbere — Kuwa gatanu: 8h–17h" },
 ];

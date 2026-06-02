@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            from: `Urugero Media <${process.env.EMAIL_FROM ?? "noreply@urugero.rw"}>`,
-            to:   ["info@urugero.rw"],
+            from: `Urugero Media <${process.env.EMAIL_FROM ?? "noreply@urugerogospelnews.com"}>`,
+            to:   ["info@urugerogospelnews.com"],
             reply_to: email,
             subject: `[Urugero Contact] ${subject} — ${name}`,
             text: `Izina: ${name}\nImeyili: ${email}\nInsanganyamatsiko: ${subject}\n\n${message}`,

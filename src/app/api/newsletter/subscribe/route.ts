@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                from: `Urugero Media <${process.env.EMAIL_FROM ?? "noreply@urugero.rw"}>`,
+                from: `Urugero Media <${process.env.EMAIL_FROM ?? "noreply@urugerogospelnews.com"}>`,
                 to: [email],
                 subject: "Wakiriye — Urugero Media Newsletter",
                 text: `Murakoze ${name ?? ""} kwiyandikisha kuri Urugero Media Newsletter!\n\nTuzakubwira amakuru mashya buri cyumweru.\n\n— Urugero Media Team`,
