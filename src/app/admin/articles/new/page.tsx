@@ -5,8 +5,11 @@ import ArticleForm from "../_components/ArticleForm";
 
 export const metadata: Metadata = { title: "New article" };
 
-export default async function NewArticlePage() {
+type Props = { searchParams: Promise<{ category?: string }> };
+
+export default async function NewArticlePage({ searchParams }: Props) {
+    const { category = "" } = await searchParams;
     const categories = await getArticleCategoryOptions(supabaseAdmin());
 
-    return <ArticleForm categories={categories} />;
+    return <ArticleForm categories={categories} initialCategory={category} />;
 }

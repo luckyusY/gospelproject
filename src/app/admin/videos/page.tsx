@@ -5,7 +5,10 @@ import VideoManager from "./_components/VideoManager";
 
 export const metadata: Metadata = { title: "Videos" };
 
-export default async function AdminVideosPage() {
+type Props = { searchParams: Promise<{ section?: string }> };
+
+export default async function AdminVideosPage({ searchParams }: Props) {
+    const { section = "" } = await searchParams;
     const { data } = await supabaseAdmin()
         .from("videos")
         .select("*")
@@ -13,5 +16,5 @@ export default async function AdminVideosPage() {
         .order("sort_order", { ascending: true });
 
     const videos = (data ?? []) as VideoRow[];
-    return <VideoManager videos={videos} />;
+    return <VideoManager videos={videos} initialSection={section} />;
 }

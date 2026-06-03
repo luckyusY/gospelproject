@@ -5,12 +5,15 @@ import ArticleListClient from "./_components/ArticleListClient";
 
 export const metadata: Metadata = { title: "Articles" };
 
-export default async function AdminArticlesPage() {
+type Props = { searchParams: Promise<{ category?: string }> };
+
+export default async function AdminArticlesPage({ searchParams }: Props) {
+    const { category = "" } = await searchParams;
     const result = await supabaseAdmin()
         .from("articles")
         .select("*")
         .order("created_at", { ascending: false });
     const articles = (result.data ?? []) as ArticleRow[];
 
-    return <ArticleListClient articles={articles} />;
+    return <ArticleListClient articles={articles} initialCategory={category} />;
 }

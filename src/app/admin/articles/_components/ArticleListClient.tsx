@@ -8,7 +8,41 @@ import styles from "../../crud.module.css";
 
 type Filter = "all" | "published" | "draft";
 
-export default function ArticleListClient({ articles }: { articles: ArticleRow[] }) {
+const MEDIA_GROUP_CATEGORIES = new Set([
+    "music-academy",
+    "films",
+    "records",
+    "music-talent",
+    "online-radio",
+    "bible-quiz",
+    "practice-room",
+    "podcast",
+]);
+
+const INYIGISHO_CATEGORIES = new Set([
+    "umuryango",
+    "abana",
+    "urubyiruko",
+    "abashakanye",
+    "abasore-n-inkumi",
+    "abakozi-b-imana",
+]);
+
+function articleHref(article: ArticleRow) {
+    if (article.category === "ibigwi") return `/ibigwi/${article.slug}`;
+    if (article.category === "tumenye-bibiliya") return `/tumenye-bibiliya/${article.slug}`;
+    if (MEDIA_GROUP_CATEGORIES.has(article.category)) return `/urugero-media-group/${article.slug}`;
+    if (INYIGISHO_CATEGORIES.has(article.category)) return `/inyigisho/${article.slug}`;
+    return `/amakuru/${article.slug}`;
+}
+
+export default function ArticleListClient({
+    articles,
+    initialCategory = "",
+}: {
+    articles: ArticleRow[];
+    initialCategory?: string;
+}) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [query, setQuery]   = useState("");
@@ -19,7 +53,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
         () => Array.from(new Set(articles.map(a => a.category))).sort(),
         [articles],
     );
-    const [category, setCategory] = useState<string>("");
+    const [category, setCategory] = useState<string>(initialCategory);
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -145,7 +179,7 @@ export default function ArticleListClient({ articles }: { articles: ArticleRow[]
                             <Link href={`/admin/articles/${a.id}/edit`} className={styles.editBtn}>
                                 Edit
                             </Link>
-                            <Link href={`/amakuru/${a.slug}`} className={styles.viewBtn} target="_blank">
+                            <Link href={articleHref(a)} className={styles.viewBtn} target="_blank">
                                 View
                             </Link>
                             <button

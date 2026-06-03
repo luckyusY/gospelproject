@@ -22,8 +22,164 @@ const LAYOUTS = [
 
 type Props = { page?: PageRow };
 
+type RelatedLink = {
+    title: string;
+    description: string;
+    href: string;
+};
+
 function slugify(val: string) {
     return val.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+}
+
+function publicHref(page: PageRow) {
+    if (page.slug === "urugero-media-group") return "/urugero-media-group";
+    return page.nav_group === "media-group"
+        ? `/urugero-media-group/${page.slug}`
+        : `/${page.slug}`;
+}
+
+function articleCategoryForPage(page: PageRow) {
+    if (page.nav_group === "media-group") return page.slug;
+    if (page.slug === "tumenye-bibiliya") return "tumenye-bibiliya";
+    if (page.slug === "ibigwi") return "ibigwi";
+    return null;
+}
+
+function relatedLinksForPage(page?: PageRow): RelatedLink[] {
+    if (!page) {
+        return [
+            {
+                title: "Create page first",
+                description: "After saving, this editor will show links for related articles, videos, settings, and categories.",
+                href: "/admin/pages",
+            },
+        ];
+    }
+
+    const links: RelatedLink[] = [
+        {
+            title: "View public page",
+            description: `Open ${publicHref(page)} in a new tab.`,
+            href: publicHref(page),
+        },
+        {
+            title: "Menu item",
+            description: "Edit the navigation label, order, visibility, or dropdown placement.",
+            href: "/admin/menu",
+        },
+    ];
+
+    const category = articleCategoryForPage(page);
+    if (category) {
+        links.push(
+            {
+                title: "Articles on this page",
+                description: "Edit stories that appear on this page.",
+                href: `/admin/articles?category=${encodeURIComponent(category)}`,
+            },
+            {
+                title: "Add article here",
+                description: "Create a new article already pointed at this page category.",
+                href: `/admin/articles/new?category=${encodeURIComponent(category)}`,
+            },
+            {
+                title: "Category settings",
+                description: "Edit category name, color, description, order, and menu visibility.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "amakuru") {
+        links.push(
+            {
+                title: "All Amakuru articles",
+                description: "Edit news articles that feed the Amakuru section and homepage.",
+                href: "/admin/articles",
+            },
+            {
+                title: "Amakuru categories",
+                description: "Edit the categories under Amakuru, including menu visibility.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "inyigisho") {
+        links.push(
+            {
+                title: "Inyigisho categories",
+                description: "Edit teaching categories like Umuryango, Abana, and Urubyiruko.",
+                href: "/admin/categories",
+            },
+            {
+                title: "Inyigisho articles",
+                description: "Filter or edit teaching articles from the article manager.",
+                href: "/admin/articles",
+            },
+        );
+    }
+
+    if (page.slug === "urugero-media-group") {
+        links.push(
+            {
+                title: "Media Group child pages",
+                description: "Edit Music Academy, Films, Records, Podcast, and other cards.",
+                href: "/admin/pages",
+            },
+            {
+                title: "Media Group categories",
+                description: "Edit article categories connected to Media Group pages.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "urugero-tv-radio") {
+        links.push(
+            {
+                title: "TV & video settings",
+                description: "Edit YouTube channel URL, playlist ID, hero copy, and program cards.",
+                href: "/admin/settings",
+            },
+            {
+                title: "Featured videos",
+                description: "Edit the hero and featured videos on this page.",
+                href: "/admin/videos?section=tv-radio-featured",
+            },
+            {
+                title: "Latest videos",
+                description: "Edit the Amakuru & Ibiganiro video grid.",
+                href: "/admin/videos?section=tv-radio-latest",
+            },
+            {
+                title: "Sports videos",
+                description: "Edit the Inshundura Sports News section.",
+                href: "/admin/videos?section=tv-radio-sports",
+            },
+            {
+                title: "Video library",
+                description: "Edit the small YouTube thumbnail library.",
+                href: "/admin/videos?section=tv-radio-library",
+            },
+            {
+                title: "Radio settings",
+                description: "Edit live stream URL and station name.",
+                href: "/admin/settings",
+            },
+        );
+    }
+
+    if (page.slug === "ubuhamya") {
+        links.push({
+            title: "Testimonies",
+            description: "Add or edit testimonies shown on the Ubuhamya page.",
+            href: "/admin/testimonies",
+        });
+    }
+
+    return links;
 }
 
 export default function PageForm({ page }: Props) {
@@ -38,6 +194,7 @@ export default function PageForm({ page }: Props) {
     const defaultPageType = page?.slug === "urugero-media-group"
         ? "media-group-home"
         : page?.nav_group ?? "";
+    const relatedLinks = relatedLinksForPage(page);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -206,6 +363,29 @@ export default function PageForm({ page }: Props) {
                             Hero image
                             <CloudinaryUploader value={heroImage} onChange={setHeroImage} />
                         </div>
+
+                        <section className={styles.relatedPanel} aria-labelledby="related-content-title">
+                            <div>
+                                <h2 id="related-content-title" className={styles.relatedTitle}>Related content</h2>
+                                <p className={styles.relatedIntro}>
+                                    Save page text here, then use these links for connected articles, videos, settings, and menu data.
+                                </p>
+                            </div>
+                            <div className={styles.relatedList}>
+                                {relatedLinks.map(link => (
+                                    <a
+                                        key={`${link.title}-${link.href}`}
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className={styles.relatedLink}
+                                    >
+                                        <span className={styles.relatedLinkTitle}>{link.title}</span>
+                                        <span className={styles.relatedLinkDesc}>{link.description}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
 
                         <div className={styles.checkRow}>
                             <input

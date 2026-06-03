@@ -8,9 +8,9 @@ import styles from "../../form.module.css";
 import RichTextEditor from "./RichTextEditor";
 import CloudinaryUploader from "./CloudinaryUploader";
 
-type Props = { article?: ArticleRow; categories: ArticleCategoryOption[] };
+type Props = { article?: ArticleRow; categories: ArticleCategoryOption[]; initialCategory?: string };
 
-export default function ArticleForm({ article, categories }: Props) {
+export default function ArticleForm({ article, categories, initialCategory = "" }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError]     = useState<string | null>(null);
@@ -18,6 +18,7 @@ export default function ArticleForm({ article, categories }: Props) {
     const [imageUrl, setImageUrl] = useState(article?.image_url ?? "");
 
     const isEdit = Boolean(article);
+    const defaultCategory = (article?.category ?? initialCategory) || undefined;
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -144,7 +145,7 @@ export default function ArticleForm({ article, categories }: Props) {
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
                             Category <span className={styles.req}>*</span>
-                            <select name="category" defaultValue={article?.category} required className={styles.select}>
+                            <select name="category" defaultValue={defaultCategory} required className={styles.select}>
                                 {categories.map(c => (
                                     <option key={c.slug} value={c.slug}>
                                         {groupLabel(c.nav_group)} - {c.name}

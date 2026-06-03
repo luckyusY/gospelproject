@@ -15,7 +15,13 @@ const SECTIONS = [
     { value: "tv-radio", label: "TV & Radio - Legacy featured" },
 ];
 
-export default function VideoManager({ videos }: { videos: VideoRow[] }) {
+export default function VideoManager({
+    videos,
+    initialSection = "",
+}: {
+    videos: VideoRow[];
+    initialSection?: string;
+}) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const refresh = () => startTransition(() => router.refresh());
@@ -23,10 +29,12 @@ export default function VideoManager({ videos }: { videos: VideoRow[] }) {
     const [title, setTitle] = useState("");
     const [youtube, setYoutube] = useState("");
     const [description, setDescription] = useState("");
-    const [section, setSection] = useState("homepage");
+    const [section, setSection] = useState(initialSection || "homepage");
+    const [sectionFilter, setSectionFilter] = useState(initialSection);
     const [error, setError] = useState<string | null>(null);
     const [busyId, setBusyId] = useState<number | null>(null);
     const [adding, setAdding] = useState(false);
+    const filteredVideos = videos.filter(v => !sectionFilter || v.section === sectionFilter);
 
     async function addVideo(e: React.FormEvent) {
         e.preventDefault();
@@ -133,12 +141,24 @@ export default function VideoManager({ videos }: { videos: VideoRow[] }) {
                 {error && <div className={form.error} role="alert">{error}</div>}
             </form>
 
+            <div className={styles.toolbar}>
+                <select
+                    value={sectionFilter}
+                    onChange={e => setSectionFilter(e.target.value)}
+                    className={styles.filterSelect}
+                    aria-label="Filter videos by section"
+                >
+                    <option value="">All video sections</option>
+                    {SECTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                </select>
+            </div>
+
             {/* List */}
             <div className={styles.table}>
                 <div className={styles.tableHead} style={{ gridTemplateColumns: "1.1fr 1fr 1fr 90px 90px 120px" }}>
                     <span>Title</span><span>YouTube</span><span>Section</span><span>Order</span><span>Status</span><span>Actions</span>
                 </div>
-                {videos.map(v => (
+                {filteredVideos.map(v => (
                     <div
                         key={v.id}
                         className={`${styles.tableRow} ${busyId === v.id ? styles.rowBusy : ""}`}
@@ -216,7 +236,9 @@ export default function VideoManager({ videos }: { videos: VideoRow[] }) {
                         </div>
                     </div>
                 ))}
-                {videos.length === 0 && <p className={styles.empty}>No videos yet.</p>}
+                {filteredVideos.length === 0 && (
+                    <p className={styles.empty}>No videos yet.</p>
+                )}
             </div>
 
             <p className={styles.catHint}>

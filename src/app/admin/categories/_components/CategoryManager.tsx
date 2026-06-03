@@ -15,6 +15,8 @@ const GROUPS = [
     { value: "",          label: "— None (top-level)" },
     { value: "amakuru",   label: "Amakuru" },
     { value: "inyigisho", label: "Inyigisho" },
+    { value: "ibigwi", label: "Ibigwi" },
+    { value: "tumenye-bibiliya", label: "Tumenye Bibiliya" },
     { value: "media-group", label: "Urugero Media Group" },
 ];
 
@@ -25,7 +27,9 @@ function slugify(val: string) {
 function basePathFor(navGroup: string | null) {
     if (navGroup === "media-group") return "/urugero-media-group";
     if (navGroup === "ibigwi") return "/ibigwi";
-    return navGroup === "inyigisho" ? "/inyigisho" : "/amakuru";
+    if (navGroup === "inyigisho") return "/inyigisho";
+    if (navGroup === "tumenye-bibiliya") return "/tumenye-bibiliya";
+    return "/amakuru";
 }
 
 export default function CategoryManager({ categories }: { categories: CategoryRow[] }) {
