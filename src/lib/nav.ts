@@ -9,6 +9,11 @@ export type NavNode = {
     children: NavChild[];
 };
 
+const REQUIRED_AMAKURU_CHILDREN: NavChild[] = [
+    { href: "/amakuru/inkuru-yanjye", label: "Inkuru yanjye" },
+    { href: "/amakuru/ibaruwa", label: "Ibaruwa" },
+];
+
 /**
  * Hardcoded fallback used when the `nav_items` table is empty or unavailable,
  * so the site menu never disappears. Mirrors the original Header menu.
@@ -76,8 +81,19 @@ export async function getNavTree(): Promise<NavNode[]> {
         href: t.href,
         label: t.label,
         isMega: t.is_mega,
-        children: rows
+        children: mergeRequiredChildren(t.href, rows
             .filter(c => c.parent_id === t.id)
-            .map(c => ({ href: c.href, label: c.label })),
+            .map(c => ({ href: c.href, label: c.label }))),
     }));
+}
+
+function mergeRequiredChildren(parentHref: string, children: NavChild[]) {
+    if (parentHref !== "/amakuru") return children;
+
+    const merged = new Map(children.map(child => [child.href, child]));
+    for (const child of REQUIRED_AMAKURU_CHILDREN) {
+        if (!merged.has(child.href)) merged.set(child.href, child);
+    }
+
+    return Array.from(merged.values());
 }
