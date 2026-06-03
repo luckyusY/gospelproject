@@ -9,6 +9,7 @@ import CloudinaryUploader from "../../articles/_components/CloudinaryUploader";
 
 const GROUPS = [
     { value: "", label: "Standalone page" },
+    { value: "media-group-home", label: "Urugero Media Group landing" },
     { value: "media-group", label: "Urugero Media Group child" },
 ];
 
@@ -26,21 +27,27 @@ export default function PageForm({ page }: Props) {
     const [heroImage, setHeroImage] = useState(page?.hero_image ?? "");
 
     const isEdit = Boolean(page);
+    const defaultPageType = page?.slug === "urugero-media-group"
+        ? "media-group-home"
+        : page?.nav_group ?? "";
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError(null);
         const data = new FormData(e.currentTarget);
 
+        const pageType = data.get("nav_group") as string;
+        const isMediaGroupHome = pageType === "media-group-home";
+
         const payload = {
             title:        data.get("title") as string,
-            slug:         data.get("slug") as string,
+            slug:         isMediaGroupHome ? "urugero-media-group" : data.get("slug") as string,
             subtitle:     data.get("subtitle") as string,
             content,
             icon:         data.get("icon") as string,
             color:        data.get("color") as string,
             hero_image:   heroImage || null,
-            nav_group:    data.get("nav_group") as string,
+            nav_group:    pageType === "media-group" ? "media-group" : "",
             is_published: data.get("is_published") === "1",
             sort_order:   Number(data.get("sort_order")) || 0,
         };
@@ -101,6 +108,11 @@ export default function PageForm({ page }: Props) {
                                 pattern="[a-z0-9-]+"
                                 title="Lowercase letters, numbers and - only"
                             />
+                            {page?.slug === "urugero-media-group" && (
+                                <span className={styles.hint}>
+                                    Keep this slug for the main Urugero Media Group page.
+                                </span>
+                            )}
                         </label>
 
                         <label className={styles.label}>
@@ -122,9 +134,12 @@ export default function PageForm({ page }: Props) {
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
                             Type
-                            <select name="nav_group" defaultValue={page?.nav_group ?? ""} className={styles.select}>
+                            <select name="nav_group" defaultValue={defaultPageType} className={styles.select}>
                                 {GROUPS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                             </select>
+                            <span className={styles.hint}>
+                                Landing edits <strong>/urugero-media-group</strong>; child pages appear as cards and open under that page.
+                            </span>
                         </label>
 
                         <label className={styles.label}>

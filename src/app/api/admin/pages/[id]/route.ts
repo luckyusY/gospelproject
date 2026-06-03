@@ -12,6 +12,10 @@ function unauthorized() {
     return NextResponse.json({ error: "Not authorized." }, { status: 401 });
 }
 
+function slugify(val: string) {
+    return val.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+}
+
 type Params = { params: Promise<{ id: string }> };
 
 export async function PUT(req: NextRequest, { params }: Params) {
@@ -22,6 +26,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
 
     const patch: Record<string, unknown> = {};
     if (typeof raw.title === "string" && raw.title.trim()) patch.title = raw.title.trim();
+    if (typeof raw.slug === "string" && raw.slug.trim()) patch.slug = slugify(raw.slug);
     if (typeof raw.subtitle === "string") patch.subtitle = raw.subtitle.trim();
     if (typeof raw.hero_image === "string") patch.hero_image = raw.hero_image.trim() || null;
     if (typeof raw.icon === "string") patch.icon = raw.icon.trim() || null;

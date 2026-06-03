@@ -8,9 +8,17 @@ import DeleteRowButton from "../_components/DeleteRowButton";
 export const metadata: Metadata = { title: "Pages" };
 
 function publicHref(page: PageRow) {
+    if (page.slug === "urugero-media-group") return "/urugero-media-group";
+
     return page.nav_group === "media-group"
         ? `/urugero-media-group/${page.slug}`
         : `/${page.slug}`;
+}
+
+function pageType(page: PageRow) {
+    if (page.slug === "urugero-media-group") return "Media Group landing";
+    if (page.nav_group === "media-group") return "Media Group child";
+    return "Standalone";
 }
 
 export default async function AdminPagesPage() {
@@ -38,7 +46,7 @@ export default async function AdminPagesPage() {
                             <span className={styles.rowTitle}>{page.icon ? `${page.icon} ` : ""}{page.title}</span>
                             <div className={styles.catSlug}>{publicHref(page)}</div>
                         </div>
-                        <span className={styles.catChip}>{page.nav_group === "media-group" ? "Media Group" : "Standalone"}</span>
+                        <span className={styles.catChip}>{pageType(page)}</span>
                         <span className={page.is_published ? styles.published : styles.draft}>
                             {page.is_published ? "Published" : "Draft"}
                         </span>
@@ -57,8 +65,8 @@ export default async function AdminPagesPage() {
             </div>
 
             <p className={styles.catHint}>
-                <strong>Standalone</strong> pages (e.g. Abo Turibo, Ibigwi) use their own URL like <code>/abo-turibo</code>.
-                <strong> Media Group</strong> pages appear under <code>/urugero-media-group/&lt;slug&gt;</code>.
+                Edit <strong>Urugero Media Group landing</strong> to change <code>/urugero-media-group</code>.
+                Edit <strong> Media Group child</strong> pages to change the cards and pages under <code>/urugero-media-group/&lt;slug&gt;</code>.
             </p>
         </div>
     );

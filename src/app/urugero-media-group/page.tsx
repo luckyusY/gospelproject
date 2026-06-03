@@ -12,6 +12,21 @@ const FALLBACK = {
     hero: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1400&auto=format&fit=crop",
 };
 
+function textFromHtml(html: string) {
+    return html
+        .replace(/<[^>]*>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function pageDescription(page: Awaited<ReturnType<typeof getPage>>) {
+    if (!page) return FALLBACK.description;
+
+    const contentText = textFromHtml(page.content);
+    return page.subtitle || contentText || FALLBACK.description;
+}
+
 const FALLBACK_CHILDREN = [
     { label: "🎵 Urugero Music Academy", href: "/urugero-media-group/music-academy", desc: "Worship training, Vocal & instruments" },
     { label: "🎬 Urugero Films", href: "/urugero-media-group/films", desc: "Video Production, Editing, Documentary" },
@@ -29,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const page = await getPage("urugero-media-group");
     return buildMeta({
         title: page?.title ?? FALLBACK.title,
-        description: page?.subtitle || FALLBACK.description,
+        description: pageDescription(page),
         path: "/urugero-media-group",
     });
 }
@@ -52,7 +67,7 @@ export default async function UrugeroMediaGroupPage() {
         <SectionPage
             title={page?.title ?? FALLBACK.title}
             subtitle={page?.subtitle || FALLBACK.subtitle}
-            description={FALLBACK.description}
+            description={pageDescription(page)}
             icon={page?.icon ?? FALLBACK.icon}
             color={page?.color ?? FALLBACK.color}
             heroImage={page?.hero_image ?? FALLBACK.hero}
