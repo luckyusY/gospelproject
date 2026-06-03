@@ -73,6 +73,7 @@ export default function ArticleForm({ article, categories }: Props) {
     function groupLabel(group: string | null) {
         if (group === "amakuru") return "Amakuru";
         if (group === "inyigisho") return "Inyigisho";
+        if (group === "ibigwi") return "Ibigwi";
         if (group === "tumenye-bibiliya") return "Tumenye Bibiliya";
         if (group === "media-group") return "Urugero Media Group";
         return "Ibindi";

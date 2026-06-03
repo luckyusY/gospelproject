@@ -24,6 +24,7 @@ function slugify(val: string) {
 
 function basePathFor(navGroup: string | null) {
     if (navGroup === "media-group") return "/urugero-media-group";
+    if (navGroup === "ibigwi") return "/ibigwi";
     return navGroup === "inyigisho" ? "/inyigisho" : "/amakuru";
 }
 

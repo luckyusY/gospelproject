@@ -40,6 +40,13 @@ on conflict (slug) do update set
     sort_order = excluded.sort_order,
     description = coalesce(public.categories.description, excluded.description);
 
+insert into public.categories (name, slug, color, nav_group, icon, description, sort_order) values
+    ('Ibigwi', 'ibigwi', '#1F1F1F', 'ibigwi', null, 'Inkuru z''ibigwi n''ibikorwa by''abakristu batanze urugero rwiza.', 0)
+on conflict (slug) do update set
+    nav_group = excluded.nav_group,
+    sort_order = excluded.sort_order,
+    description = coalesce(public.categories.description, excluded.description);
+
 -- Inyigisho (teaching) sub-categories
 insert into public.categories (name, slug, color, nav_group, icon, description, sort_order) values
     ('Umuryango',          'umuryango',       '#1E40AF', 'inyigisho', '👨‍👩‍👧', 'Inyigisho z''umuryango',            0),

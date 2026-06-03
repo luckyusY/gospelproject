@@ -1,0 +1,89 @@
+.articleSection {
+    margin-top: 2.25rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.kicker {
+    margin: 0 0 0.25rem;
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.sectionHeader h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.countBadge {
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    color: var(--text-muted);
+    background: var(--bg-card);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.emptyState {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    padding: 2rem;
+    border: 1px dashed var(--border-dark);
+    border-radius: var(--r-lg);
+    background: var(--bg-subtle);
+    text-align: center;
+}
+
+.emptyState h3 {
+    margin: 0 0 0.45rem;
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.emptyState p {
+    max-width: 520px;
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+@media (max-width: 980px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .sectionHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -32,6 +32,7 @@ export default function PageForm({ page }: Props) {
     const [error, setError] = useState<string | null>(null);
     const [content, setContent] = useState(page?.content ?? "");
     const [heroImage, setHeroImage] = useState(page?.hero_image ?? "");
+    const [layoutVariant, setLayoutVariant] = useState(page?.layout_variant ?? "standard");
 
     const isEdit = Boolean(page);
     const defaultPageType = page?.slug === "urugero-media-group"
@@ -150,11 +151,12 @@ export default function PageForm({ page }: Props) {
                             </span>
                         </label>
 
-                        <label className={styles.label}>
-                            Layout template
+                        <div className={styles.label}>
+                            <span>Layout template</span>
                             <select
                                 name="layout_variant"
-                                defaultValue={page?.layout_variant ?? "standard"}
+                                value={layoutVariant}
+                                onChange={e => setLayoutVariant(e.target.value)}
                                 className={styles.select}
                             >
                                 {LAYOUTS.map(layout => (
@@ -164,7 +166,26 @@ export default function PageForm({ page }: Props) {
                             <span className={styles.hint}>
                                 Choose how page cards and stories are arranged.
                             </span>
-                        </label>
+                            <div className={styles.layoutPreviewGrid} aria-label="Layout previews">
+                                {LAYOUTS.map(layout => (
+                                    <button
+                                        key={layout.value}
+                                        type="button"
+                                        className={`${styles.layoutPreviewCard} ${layoutVariant === layout.value ? styles.layoutPreviewActive : ""}`}
+                                        onClick={() => setLayoutVariant(layout.value)}
+                                        aria-pressed={layoutVariant === layout.value}
+                                    >
+                                        <span className={styles.layoutPreviewTitle}>{layout.label}</span>
+                                        <span className={`${styles.layoutPreviewMock} ${styles[`layoutPreview_${layout.value}`]}`}>
+                                            <span />
+                                            <span />
+                                            <span />
+                                            <span />
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
                         <label className={styles.label}>
                             Icon (emoji)
