@@ -15,6 +15,7 @@ const GROUPS = [
     { value: "",          label: "— None (top-level)" },
     { value: "amakuru",   label: "Amakuru" },
     { value: "inyigisho", label: "Inyigisho" },
+    { value: "media-group", label: "Urugero Media Group" },
 ];
 
 function slugify(val: string) {
@@ -22,6 +23,7 @@ function slugify(val: string) {
 }
 
 function basePathFor(navGroup: string | null) {
+    if (navGroup === "media-group") return "/urugero-media-group";
     return navGroup === "inyigisho" ? "/inyigisho" : "/amakuru";
 }
 

@@ -88,7 +88,7 @@ function personInitial(name: string) {
     return name.trim().charAt(0).toUpperCase() || "U";
 }
 
-type CatMeta = Pick<CategoryRow, "slug" | "name" | "color">;
+type CatMeta = Pick<CategoryRow, "slug" | "name" | "color" | "nav_group">;
 
 type Props = {
     heroStories:  ArticleRow[];      // top stories for the hero slideshow
@@ -131,6 +131,23 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
     const verseRef  = settings.verse_reference ?? defaultSettings.verse_reference ?? "";
 
     const videoList = videos.length > 0 ? videos : FALLBACK_VIDEOS;
+    const categoryBasePaths = Object.fromEntries(
+        categories.map((category) => {
+            const basePath = category.nav_group === "inyigisho"
+                ? "/inyigisho"
+                : category.nav_group === "tumenye-bibiliya"
+                    ? "/tumenye-bibiliya"
+                    : category.nav_group === "media-group"
+                        ? "/urugero-media-group"
+                        : "/amakuru";
+
+            return [category.slug, basePath];
+        })
+    );
+
+    function articleHref(article: ArticleRow) {
+        return `${categoryBasePaths[article.category] ?? "/amakuru"}/${article.slug}`;
+    }
 
     // ── Section visibility + order ──────────────────────────
     const sectionMap = new Map(sections.map(s => [s.key, s]));
@@ -193,7 +210,7 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                     {filtered.map((story, i) => (
                         <motion.div key={story.id} variants={fadeUp} custom={i}>
                             <ArticleCard
-                                href={`/amakuru/${story.slug}`}
+                                href={articleHref(story)}
                                 category={story.category}
                                 categoryColor={story.category_color}
                                 title={story.title}
@@ -331,7 +348,7 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                         <div className={styles.heroGrid}>
 
                             <div className={styles.mainStories}>
-                                <StoriesSlider stories={heroStories} />
+                                <StoriesSlider stories={heroStories} categoryBasePaths={categoryBasePaths} />
                             </div>
 
                             {/* ── Sidebar */}

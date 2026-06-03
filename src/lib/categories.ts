@@ -22,6 +22,14 @@ const DEFAULT_ARTICLE_CATEGORY_SEEDS: CategorySeed[] = [
     { name: "Inkuru yanjye", slug: "inkuru-yanjye", color: "#B80000", nav_group: "amakuru", sort_order: 7 },
     { name: "Ibaruwa", slug: "ibaruwa", color: "#7C2D12", nav_group: "amakuru", sort_order: 8 },
     { name: "Tumenye Bibiliya", slug: "tumenye-bibiliya", color: "#1E40AF", nav_group: "tumenye-bibiliya", sort_order: 0 },
+    { name: "Urugero Music Academy", slug: "music-academy", color: "#7C3AED", nav_group: "media-group", sort_order: 0 },
+    { name: "Urugero Films", slug: "films", color: "#B80000", nav_group: "media-group", sort_order: 1 },
+    { name: "Urugero Records", slug: "records", color: "#1E40AF", nav_group: "media-group", sort_order: 2 },
+    { name: "Urugero Music Talent", slug: "music-talent", color: "#F59E0B", nav_group: "media-group", sort_order: 3 },
+    { name: "Urugero Online Radio", slug: "online-radio", color: "#059669", nav_group: "media-group", sort_order: 4 },
+    { name: "Urugero Bible Quiz", slug: "bible-quiz", color: "#1E40AF", nav_group: "media-group", sort_order: 5 },
+    { name: "Urugero Practice Room", slug: "practice-room", color: "#0891B2", nav_group: "media-group", sort_order: 6 },
+    { name: "Urugero Podcast", slug: "podcast", color: "#7C3AED", nav_group: "media-group", sort_order: 7 },
 ];
 
 const DEFAULT_CATEGORY_DESCRIPTIONS: Record<string, string> = {
@@ -29,6 +37,14 @@ const DEFAULT_CATEGORY_DESCRIPTIONS: Record<string, string> = {
     "inkuru-yanjye": "Inkuru n'ubuhamya bwihariye bw'abasomyi.",
     ibaruwa: "Amabaruwa, ibitekerezo n'ubutumwa bwubaka.",
     "tumenye-bibiliya": "Inkuru, inyigisho n'ibisobanuro bifasha gusobanukirwa Bibiliya neza.",
+    "music-academy": "Inkuru n'amasomo ya Urugero Music Academy.",
+    films: "Inkuru za Urugero Films, amashusho na documentaries.",
+    records: "Inkuru za studio, recording n'ikorwa ry'umuziki.",
+    "music-talent": "Inkuru zijyanye no gushaka no guteza imbere impano.",
+    "online-radio": "Inkuru na gahunda za Urugero Online Radio.",
+    "bible-quiz": "Inkuru n'amarushanwa ya Urugero Bible Quiz.",
+    "practice-room": "Inkuru za rehearsals, training na practice sessions.",
+    podcast: "Inkuru, ibiganiro na podcasts za Urugero Media.",
 };
 
 const DEFAULT_ARTICLE_CATEGORIES: CategoryInsert[] = DEFAULT_ARTICLE_CATEGORY_SEEDS.map((category) => ({

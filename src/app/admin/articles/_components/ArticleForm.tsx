@@ -74,6 +74,7 @@ export default function ArticleForm({ article, categories }: Props) {
         if (group === "amakuru") return "Amakuru";
         if (group === "inyigisho") return "Inyigisho";
         if (group === "tumenye-bibiliya") return "Tumenye Bibiliya";
+        if (group === "media-group") return "Urugero Media Group";
         return "Ibindi";
     }
 

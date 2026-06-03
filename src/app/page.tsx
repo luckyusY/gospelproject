@@ -90,10 +90,10 @@ export default async function Home() {
     // ── Categories (for labelled filter pills)
     const { data: catsData } = await supabase
         .from("categories")
-        .select("slug, name, color")
+        .select("slug, name, color, nav_group")
         .order("name", { ascending: true });
 
-    const categories = (catsData ?? []) as Pick<CategoryRow, "slug" | "name" | "color">[];
+    const categories = (catsData ?? []) as Pick<CategoryRow, "slug" | "name" | "color" | "nav_group">[];
     const settings = await getPublicSiteSettings();
 
     return (

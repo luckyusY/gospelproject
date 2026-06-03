@@ -26,7 +26,15 @@ insert into public.categories (name, slug, color, nav_group, icon, description, 
     ('Sport',            'sport',             '#047857', 'amakuru', null, 'Amakuru ya sport n''ibivugwa mu mikino.', 5),
     ('Inkuru yanjye',    'inkuru-yanjye',     '#B80000', 'amakuru', null, 'Inkuru n''ubuhamya bwihariye bw''abasomyi.', 7),
     ('Ibaruwa',          'ibaruwa',           '#7C2D12', 'amakuru', null, 'Amabaruwa, ibitekerezo n''ubutumwa bwubaka.', 8),
-    ('Tumenye Bibiliya', 'tumenye-bibiliya',  '#1E40AF', 'tumenye-bibiliya', '📖', 'Inkuru, inyigisho n''ibisobanuro bifasha gusobanukirwa Bibiliya neza.', 0)
+    ('Tumenye Bibiliya', 'tumenye-bibiliya',  '#1E40AF', 'tumenye-bibiliya', '📖', 'Inkuru, inyigisho n''ibisobanuro bifasha gusobanukirwa Bibiliya neza.', 0),
+    ('Urugero Music Academy', 'music-academy', '#7C3AED', 'media-group', '🎵', 'Inkuru n''amasomo ya Urugero Music Academy.', 0),
+    ('Urugero Films', 'films', '#B80000', 'media-group', '🎬', 'Inkuru za Urugero Films, amashusho na documentaries.', 1),
+    ('Urugero Records', 'records', '#1E40AF', 'media-group', '🎙️', 'Inkuru za studio, recording n''ikorwa ry''umuziki.', 2),
+    ('Urugero Music Talent', 'music-talent', '#F59E0B', 'media-group', '🌟', 'Inkuru zijyanye no gushaka no guteza imbere impano.', 3),
+    ('Urugero Online Radio', 'online-radio', '#059669', 'media-group', '📻', 'Inkuru na gahunda za Urugero Online Radio.', 4),
+    ('Urugero Bible Quiz', 'bible-quiz', '#1E40AF', 'media-group', '📖', 'Inkuru n''amarushanwa ya Urugero Bible Quiz.', 5),
+    ('Urugero Practice Room', 'practice-room', '#0891B2', 'media-group', '🎹', 'Inkuru za rehearsals, training na practice sessions.', 6),
+    ('Urugero Podcast', 'podcast', '#7C3AED', 'media-group', '🎧', 'Inkuru, ibiganiro na podcasts za Urugero Media.', 7)
 on conflict (slug) do update set
     nav_group = excluded.nav_group,
     sort_order = excluded.sort_order,
