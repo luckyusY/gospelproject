@@ -19,86 +19,31 @@ import {
 import styles from "./Header.module.css";
 import ThemeToggle from "./ThemeToggle";
 import { useSharedRadio } from "@/hooks/useSharedRadio";
+import { FALLBACK_NAV, type NavNode } from "@/lib/nav";
 
 const HEADER_RADIO_STREAM_URL = "https://s11.citrus3.com:8604/stream";
 
-const breakingNews = [
+const DEFAULT_TICKER = [
     "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
     "Urugero Online Radio ikomeza guturika n'amajwi y'Imana buri munsi",
     "Urugero Bible Quiz ifungura amashuri n'amatorero mu Rwanda hose",
 ];
 
-type NavChild = {
-    href: string;
-    label: string;
-    sub?: string[];
-};
-
-type NavItem = {
-    href: string;
-    label: string;
-    children?: NavChild[];
-};
-
-const navLinks: NavItem[] = [
-    { href: "/", label: "Ahabanza" },
-    {
-        href: "/amakuru",
-        label: "Amakuru",
-        children: [
-            { href: "/amakuru/abahanzi",       label: "Abahanzi" },
-            { href: "/amakuru/amakorali",       label: "Amakorali" },
-            { href: "/amakuru/amatorero",       label: "Amatorero" },
-            { href: "/amakuru/abanyempano",     label: "Abanyempano" },
-            { href: "/amakuru/ibitaramo",       label: "Ibitaramo" },
-            { href: "/amakuru/sport",           label: "Sport" },
-            { href: "/amakuru/hanze-yu-rwanda", label: "Hanze y'u Rwanda" },
-        ],
-    },
-    { href: "/ubuhamya", label: "Ubuhamya" },
-    { href: "/ibigwi",   label: "Ibigwi" },
-    {
-        href: "/inyigisho",
-        label: "Inyigisho",
-        children: [
-            { href: "/inyigisho/umuryango",        label: "Umuryango" },
-            { href: "/inyigisho/abana",             label: "Abana" },
-            { href: "/inyigisho/urubyiruko",        label: "Urubyiruko" },
-            { href: "/inyigisho/abagabo",           label: "Abagabo" },
-            { href: "/inyigisho/abagore",           label: "Abagore" },
-            { href: "/inyigisho/ubuzima-bwumwuka", label: "Ubuzima bw'Umwuka" },
-            { href: "/inyigisho/bible-quiz",        label: "Bible Quiz" },
-        ],
-    },
-    { href: "/tumenye-bibiliya",  label: "Tumenye Bibiliya" },
-    { href: "/urugero-tv-radio",  label: "Urugero TV & Radio" },
-    {
-        href: "/urugero-media-group",
-        label: "Urugero Media Group",
-        children: [
-            { href: "/urugero-media-group/music-academy",  label: "🎵 Urugero Music Academy",  sub: ["Worship training", "Vocal & instruments"] },
-            { href: "/urugero-media-group/films",          label: "🎬 Urugero Films",           sub: ["Video Production", "Editing", "Event Coverage", "Documentary"] },
-            { href: "/urugero-media-group/records",        label: "🎙️ Urugero Records",         sub: ["Recording", "Music production"] },
-            { href: "/urugero-media-group/music-talent",   label: "🌟 Urugero Music Talent",    sub: ["Talent search", "Competitions"] },
-            { href: "/urugero-media-group/online-radio",   label: "📻 Urugero Online Radio",    sub: ["Shows", "Music", "Teaching"] },
-            { href: "/urugero-media-group/bible-quiz",     label: "📖 Urugero Bible Quiz",      sub: ["Schools", "Churches", "YouTube program"] },
-            { href: "/urugero-media-group/practice-room",  label: "🎹 Urugero Practice Room",   sub: ["Rehearsals", "Training", "YouTube sessions"] },
-            { href: "/urugero-media-group/podcast",        label: "🎧 Urugero Podcast",         sub: ["Discussions", "Interviews", "Debates"] },
-        ],
-    },
-    { href: "/abo-turibo", label: "Abo Turibo" },
-    { href: "/contact",    label: "Contact" },
-];
-
 type HeaderProps = {
     radioStreamUrl?: string;
     radioStationName?: string;
+    nav?: NavNode[];
+    tickerLines?: string[];
 };
 
 export default function Header({
     radioStreamUrl = HEADER_RADIO_STREAM_URL,
     radioStationName = "Urugero Online Radio",
+    nav,
+    tickerLines,
 }: HeaderProps) {
+    const navLinks = nav && nav.length > 0 ? nav : FALLBACK_NAV;
+    const breakingNews = tickerLines && tickerLines.length > 0 ? tickerLines : DEFAULT_TICKER;
     const [isMobileMenuOpen, setIsMobileMenuOpen]       = useState(false);
     const [openMobileSection, setOpenMobileSection]     = useState<string | null>(null);
     const [tickerIndex, setTickerIndex]                 = useState(0);
@@ -118,7 +63,10 @@ export default function Header({
     useEffect(() => {
         const t = setInterval(() => setTickerIndex(i => (i + 1) % breakingNews.length), 4500);
         return () => clearInterval(t);
-    }, []);
+    }, [breakingNews.length]);
+
+    // Keep the active ticker index in range if the number of lines changes.
+    const safeTickerIndex = breakingNews.length ? tickerIndex % breakingNews.length : 0;
 
     const openDrop  = (href: string) => { if (dropTimer.current) clearTimeout(dropTimer.current); setActiveDropdown(href); };
     const closeDrop = ()             => { dropTimer.current = setTimeout(() => setActiveDropdown(null), 150); };
@@ -138,8 +86,8 @@ export default function Header({
                             <Lightning size={10} weight="fill" />
                             AMAKURU
                         </span>
-                        <span className={styles.tickerText} key={tickerIndex}>
-                            {breakingNews[tickerIndex]}
+                        <span className={styles.tickerText} key={safeTickerIndex}>
+                            {breakingNews[safeTickerIndex]}
                         </span>
                         <CaretRight size={13} weight="bold" className={styles.tickerArrow} />
                     </div>
@@ -228,26 +176,26 @@ export default function Header({
             <nav className={styles.navBar} aria-label="Main navigation">
                 <div className={`container ${styles.navInner}`}>
                     <ul className={styles.navLinks}>
-                        {navLinks.map(({ href, label, children }) => {
+                        {navLinks.map(({ href, label, children, isMega }) => {
                             const isActive = href === "/"
                                 ? pathname === "/"
                                 : pathname?.startsWith(href);
                             const isOpen  = activeDropdown === href;
-                            const isMega  = href === "/urugero-media-group";
+                            const hasChildren = children.length > 0;
 
                             return (
                                 <li
                                     key={href}
                                     className={styles.navItem}
-                                    onMouseEnter={() => children && openDrop(href)}
-                                    onMouseLeave={() => children && closeDrop()}
+                                    onMouseEnter={() => hasChildren && openDrop(href)}
+                                    onMouseLeave={() => hasChildren && closeDrop()}
                                 >
                                     <Link
                                         href={href}
                                         className={isActive ? styles.navLinkActive : styles.navLink}
                                     >
                                         {label}
-                                        {children && (
+                                        {hasChildren && (
                                             <CaretDown
                                                 size={11}
                                                 weight="bold"
@@ -256,7 +204,7 @@ export default function Header({
                                         )}
                                     </Link>
 
-                                    {children && isOpen && (
+                                    {hasChildren && isOpen && (
                                         <div
                                             className={`${styles.dropdown} ${isMega ? styles.megaDropdown : ""}`}
                                             onMouseEnter={() => openDrop(href)}
@@ -269,11 +217,6 @@ export default function Header({
                                                             <Link href={child.href} className={styles.megaItemTitle}>
                                                                 {child.label}
                                                             </Link>
-                                                            {child.sub && (
-                                                                <ul className={styles.megaSubList}>
-                                                                    {child.sub.map(s => <li key={s}>{s}</li>)}
-                                                                </ul>
-                                                            )}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -348,6 +291,7 @@ export default function Header({
                                 ? pathname === "/"
                                 : pathname?.startsWith(href);
                             const isOpen = openMobileSection === href;
+                            const hasChildren = children.length > 0;
 
                             return (
                                 <div key={href} className={styles.mobileNavSection}>
@@ -358,7 +302,7 @@ export default function Header({
                                         >
                                             {label}
                                         </Link>
-                                        {children && (
+                                        {hasChildren && (
                                             <button
                                                 className={styles.mobileExpandBtn}
                                                 onClick={() => setOpenMobileSection(isOpen ? null : href)}
@@ -375,7 +319,7 @@ export default function Header({
                                             </button>
                                         )}
                                     </div>
-                                    {children && isOpen && (
+                                    {hasChildren && isOpen && (
                                         <div className={styles.mobileSubMenu}>
                                             {children.map((child) => (
                                                 <Link

@@ -7,11 +7,15 @@ import styles from "../admin.module.css";
 
 const NAV_LINKS = [
     { href: "/admin",             label: "Dashboard",    icon: "📊" },
+    { href: "/admin/homepage",    label: "Homepage",     icon: "🏠" },
     { href: "/admin/articles",    label: "Articles",     icon: "📰" },
     { href: "/admin/categories",  label: "Categories",   icon: "🏷️" },
+    { href: "/admin/pages",       label: "Pages",        icon: "📄" },
     { href: "/admin/events",      label: "Events",       icon: "📅" },
     { href: "/admin/testimonies", label: "Testimonies",  icon: "🙌" },
+    { href: "/admin/videos",      label: "Videos",       icon: "🎬" },
     { href: "/admin/media",       label: "Media",        icon: "🎵" },
+    { href: "/admin/menu",        label: "Menu",         icon: "🧭" },
     { href: "/admin/settings",    label: "Settings",     icon: "⚙️" },
 ];
 

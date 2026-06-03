@@ -5,20 +5,41 @@ import type { Metadata } from "next";
 import { supabase }    from "@/lib/supabase";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons    from "@/components/ShareButtons";
-import type { ArticleRow } from "@/types/database";
+import CategoryListing from "@/components/CategoryListing";
+import type { ArticleRow, CategoryRow } from "@/types/database";
 import styles          from "./article.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
 
+/** A slug at /amakuru/<slug> is either a category listing or a single article. */
+async function getCategory(slug: string): Promise<CategoryRow | null> {
+    const { data } = await supabase
+        .from("categories")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+    return (data as CategoryRow | null) ?? null;
+}
+
 /* ── SEO metadata ─────────────────────────────────────────── */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
+
+    const category = await getCategory(slug);
+    if (category) {
+        return buildMeta({
+            title:       category.name,
+            description: category.description ?? `Amakuru ya ${category.name} kuri Urugero Gospel News.`,
+            path:        `/amakuru/${slug}`,
+        });
+    }
+
     const result = await supabase
         .from("articles")
         .select("*")
         .eq("slug", slug)
         .eq("is_published", true)
-        .single();
+        .maybeSingle();
     const data = result.data as ArticleRow | null;
 
     if (!data) return {};
@@ -32,25 +53,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 /* ── Static params for build-time generation ─────────────── */
 export async function generateStaticParams() {
-    const { data } = await supabase
-        .from("articles")
-        .select("*")
-        .eq("is_published", true);
-    const rows = (data ?? []) as ArticleRow[];
-    return rows.map((a) => ({ slug: a.slug }));
+    const [{ data: articleData }, { data: catData }] = await Promise.all([
+        supabase.from("articles").select("slug").eq("is_published", true),
+        supabase.from("categories").select("slug"),
+    ]);
+    const slugs = [
+        ...((articleData ?? []) as { slug: string }[]),
+        ...((catData ?? []) as { slug: string }[]),
+    ];
+    return slugs.map((row) => ({ slug: row.slug }));
 }
 
 /* ── Page ──────────────────────────────────────────────────── */
-export default async function ArticlePage({ params }: Props) {
+export default async function ArticleOrCategoryPage({ params }: Props) {
     const { slug } = await params;
 
-    /* Fetch the article */
+    /* If the slug is a category, render the shared listing page. */
+    const category = await getCategory(slug);
+    if (category) {
+        return <CategoryListing category={category} basePath="/amakuru" sectionLabel="Amakuru" />;
+    }
+
+    /* Otherwise it's a single article. */
     const { data: article } = await supabase
         .from("articles")
         .select("*")
         .eq("slug", slug)
         .eq("is_published", true)
-        .single();
+        .maybeSingle();
 
     if (!article) notFound();
 

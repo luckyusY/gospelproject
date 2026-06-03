@@ -25,6 +25,7 @@ type SectionPageProps = {
     icon?:       string;
     heroImage?:  string;   // optional Unsplash/open-source background image URL
     subSections?: SubSection[];
+    children?:   React.ReactNode;  // rich content rendered below the hero
 };
 
 export default function SectionPage({
@@ -36,6 +37,7 @@ export default function SectionPage({
     icon  = "📰",
     heroImage,
     subSections = [],
+    children,
 }: SectionPageProps) {
     return (
         <div className={styles.page}>
@@ -150,23 +152,34 @@ export default function SectionPage({
                 </div>
             )}
 
-            {/* ── Coming Soon ──────────────────────────── */}
-            <div className="container">
-                <motion.div
-                    className={styles.comingSoon}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                >
-                    <span className={styles.comingSoonIcon}>🚧</span>
-                    <h3 className={styles.comingSoonTitle}>Ibikurikira biraza vuba</h3>
-                    <p className={styles.comingSoonText}>
-                        Iri ciro ryuzuzwa. Garuka vuba kugira ngo ubone ibirimo byuzuye kuri{" "}
-                        <strong>{title}</strong>.
-                    </p>
-                </motion.div>
-            </div>
+            {/* ── Rich content (editable page body) ────── */}
+            {children && (
+                <div className="container">
+                    <div className={styles.richContent}>
+                        {children}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Coming Soon (only when the section is empty) ── */}
+            {subSections.length === 0 && !children && (
+                <div className="container">
+                    <motion.div
+                        className={styles.comingSoon}
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        <span className={styles.comingSoonIcon}>🚧</span>
+                        <h3 className={styles.comingSoonTitle}>Ibikurikira biraza vuba</h3>
+                        <p className={styles.comingSoonText}>
+                            Iri ciro ryuzuzwa. Garuka vuba kugira ngo ubone ibirimo byuzuye kuri{" "}
+                            <strong>{title}</strong>.
+                        </p>
+                    </motion.div>
+                </div>
+            )}
 
         </div>
     );

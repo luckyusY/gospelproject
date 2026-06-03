@@ -1,56 +1,62 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { buildMeta } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
 import type { ArticleRow, CategoryRow } from "@/types/database";
-import styles from "./amakuru.module.css";
+import styles from "@/app/amakuru/amakuru.module.css";
 
-export const metadata: Metadata = buildMeta({
-    title: "Amakuru",
-    description: "Amakuru mashya y'Ubukristu mu Rwanda no ku isi yose.",
-    path: "/amakuru",
-});
+type Props = {
+    category:     CategoryRow;
+    basePath:     string;   // e.g. "/amakuru" or "/inyigisho"
+    sectionLabel: string;   // e.g. "Amakuru" or "Inyigisho"
+};
 
-export const revalidate = 60;
-
-export default async function AmakuruPage() {
-    const [articlesResult, catsResult] = await Promise.all([
+/**
+ * Shared, database-driven listing page for a single category.
+ * Renders the category hero, a sibling-category nav strip, a featured
+ * article and a grid of the rest. Articles always link to /amakuru/[slug].
+ */
+export default async function CategoryListing({ category, basePath, sectionLabel }: Props) {
+    const [{ data: articlesData }, { data: siblingsData }] = await Promise.all([
         supabase
             .from("articles")
             .select("*")
             .eq("is_published", true)
+            .eq("category", category.slug)
             .order("published_at", { ascending: false })
-            .limit(18),
+            .limit(24),
         supabase
             .from("categories")
             .select("slug, name, nav_group, sort_order, show_in_nav")
-            .eq("nav_group", "amakuru")
+            .eq("nav_group", category.nav_group ?? "")
             .order("sort_order", { ascending: true }),
     ]);
 
-    const articles = (articlesResult.data ?? []) as ArticleRow[];
-    const categories = ((catsResult.data ?? []) as Pick<CategoryRow, "slug" | "name" | "show_in_nav">[])
+    const articles = (articlesData ?? []) as ArticleRow[];
+    const siblings = ((siblingsData ?? []) as Pick<CategoryRow, "slug" | "name" | "show_in_nav">[])
         .filter(c => c.show_in_nav !== false);
 
-    const featured  = articles.find(a => a.is_featured);
-    const rest       = articles.filter(a => !a.is_featured);
+    const featured = articles.find(a => a.is_featured);
+    const rest = articles.filter(a => a.id !== featured?.id);
 
     return (
         <div className={styles.page}>
-            {/* Header */}
             <div className={styles.pageHeader}>
                 <div className="container">
-                    <h1 className={styles.pageTitle}>Amakuru</h1>
-                    <p className={styles.pageDesc}>
-                        Amakuru mashya y&apos;Ubukristu mu Rwanda no ku isi yose
-                    </p>
-                    {/* Category nav (database-driven) */}
-                    <nav className={styles.catNav} aria-label="Ibyiciro by'amakuru">
-                        <Link href="/amakuru" className={`${styles.catLink} ${styles.catLinkActive}`}>Byose</Link>
-                        {categories.map(cat => (
-                            <Link key={cat.slug} href={`/amakuru/${cat.slug}`} className={styles.catLink}>
-                                {cat.name}
+                    <h1 className={styles.pageTitle}>
+                        {category.icon ? `${category.icon} ` : ""}{category.name}
+                    </h1>
+                    {category.description && (
+                        <p className={styles.pageDesc}>{category.description}</p>
+                    )}
+                    <nav className={styles.catNav} aria-label={`Ibyiciro bya ${sectionLabel}`}>
+                        <Link href={basePath} className={styles.catLink}>Byose</Link>
+                        {siblings.map(c => (
+                            <Link
+                                key={c.slug}
+                                href={`${basePath}/${c.slug}`}
+                                className={`${styles.catLink} ${c.slug === category.slug ? styles.catLinkActive : ""}`}
+                            >
+                                {c.name}
                             </Link>
                         ))}
                     </nav>
@@ -58,27 +64,17 @@ export default async function AmakuruPage() {
             </div>
 
             <div className="container">
-                {/* Featured article */}
                 {featured && (
                     <Link href={`/amakuru/${featured.slug}`} className={styles.featured}>
                         <div className={styles.featuredImgWrap}>
                             {featured.image_url ? (
-                                <Image
-                                    src={featured.image_url}
-                                    alt={featured.title}
-                                    fill
-                                    className={styles.featuredImg}
-                                    priority
-                                />
+                                <Image src={featured.image_url} alt={featured.title} fill className={styles.featuredImg} priority />
                             ) : (
                                 <div className={styles.imgPlaceholder}>📰</div>
                             )}
                         </div>
                         <div className={styles.featuredBody}>
-                            <span
-                                className={styles.catBadge}
-                                style={{ backgroundColor: featured.category_color }}
-                            >
+                            <span className={styles.catBadge} style={{ backgroundColor: featured.category_color }}>
                                 {featured.category}
                             </span>
                             <h2 className={styles.featuredTitle}>{featured.title}</h2>
@@ -92,28 +88,19 @@ export default async function AmakuruPage() {
                     </Link>
                 )}
 
-                {/* Grid */}
                 {rest.length > 0 ? (
                     <div className={styles.grid}>
                         {rest.map(article => (
                             <Link key={article.id} href={`/amakuru/${article.slug}`} className={styles.card}>
                                 <div className={styles.cardImgWrap}>
                                     {article.image_url ? (
-                                        <Image
-                                            src={article.image_url}
-                                            alt={article.title}
-                                            fill
-                                            className={styles.cardImg}
-                                        />
+                                        <Image src={article.image_url} alt={article.title} fill className={styles.cardImg} />
                                     ) : (
                                         <div className={styles.imgPlaceholder}>📰</div>
                                     )}
                                 </div>
                                 <div className={styles.cardBody}>
-                                    <span
-                                        className={styles.catBadge}
-                                        style={{ backgroundColor: article.category_color }}
-                                    >
+                                    <span className={styles.catBadge} style={{ backgroundColor: article.category_color }}>
                                         {article.category}
                                     </span>
                                     <h3 className={styles.cardTitle}>{article.title}</h3>
@@ -126,7 +113,7 @@ export default async function AmakuruPage() {
                 ) : (
                     !featured && (
                         <p className={styles.empty}>
-                            Nta makuru abonetse ubu. Subira vuba!
+                            Nta nkuru ziboneka muri iki ciro ubu. Subira vuba!
                         </p>
                     )
                 )}

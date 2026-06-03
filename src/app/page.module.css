@@ -782,6 +782,35 @@
     line-height: 1.5;
 }
 
+.testimonyPerson {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    font-size: 0.76rem;
+    color: #8A8A8A;
+}
+
+.testimonyAvatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #B80000;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.testimonyPersonName {
+    font-weight: 700;
+    color: #1F1F1F;
+}
+
 /* ═══════════════════════════════════════════════════════
    VIDEO SECTION (YouTube embeds)
 ═══════════════════════════════════════════════════════ */

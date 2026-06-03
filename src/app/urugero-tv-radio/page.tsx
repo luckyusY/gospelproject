@@ -6,7 +6,12 @@ import RadioComments from "@/components/RadioComments";
 import YouTubePlaylistEmbed from "@/components/YouTubePlaylistEmbed";
 import { YoutubeEmbed } from "@/components/ui";
 import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
+import { getPage } from "@/lib/pages";
+import { supabase } from "@/lib/supabase";
+import type { VideoRow } from "@/types/database";
 import styles from "./tv-radio.module.css";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = buildMeta({
     title: "Urugero TV & Radio",
@@ -122,13 +127,31 @@ export default async function UrgeroTvRadioPage() {
     const settings = await getPublicSiteSettings();
     const streamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
 
+    // Editable hero copy + admin-managed featured videos (fall back to defaults).
+    const page = await getPage("urugero-tv-radio");
+    const { data: tvVideosData } = await supabase
+        .from("videos")
+        .select("*")
+        .eq("section", "tv-radio")
+        .eq("is_published", true)
+        .order("sort_order", { ascending: true });
+    const tvVideos = (tvVideosData ?? []) as VideoRow[];
+
+    const featured = tvVideos.length > 0
+        ? tvVideos.map(v => ({ videoId: v.youtube_id, title: v.title, description: v.description, category: "Urugero TV" }))
+        : featuredVideos;
+    const hero = featured[0] ?? heroVideo;
+
+    const heroEyebrow = page?.subtitle || "URUGERO MEDIA GROUP";
+    const heroTitle = page?.title || "Urugero TV & Radio";
+
     return (
         <div className={styles.page}>
             <section className={styles.hero}>
                 <div className={`container ${styles.heroInner}`}>
                     <div className={styles.heroCopy}>
-                        <p className={styles.eyebrow}>URUGERO MEDIA GROUP</p>
-                        <h1 className={styles.title}>Urugero TV &amp; Radio</h1>
+                        <p className={styles.eyebrow}>{heroEyebrow}</p>
+                        <h1 className={styles.title}>{heroTitle}</h1>
                         <p className={styles.description}>
                             Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel,
                             sport, ubuhamya n&apos;amashusho mashya ava kuri YouTube.
@@ -140,9 +163,9 @@ export default async function UrgeroTvRadioPage() {
                     </div>
                     <div className={styles.heroPlayer}>
                         <YoutubeEmbed
-                            videoId={heroVideo.videoId}
-                            title={heroVideo.title}
-                            description={heroVideo.description}
+                            videoId={hero.videoId}
+                            title={hero.title}
+                            description={hero.description}
                         />
                     </div>
                 </div>
@@ -178,7 +201,7 @@ export default async function UrgeroTvRadioPage() {
                         </a>
                     </div>
                     <div className={styles.featuredGrid}>
-                        {featuredVideos.map((video) => (
+                        {featured.map((video) => (
                             <article key={video.videoId} className={styles.videoFeature}>
                                 <span className={styles.videoCategory}>{video.category}</span>
                                 <YoutubeEmbed

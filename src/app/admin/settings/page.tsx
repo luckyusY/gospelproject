@@ -45,6 +45,11 @@ const GROUPS: Array<{ id: SettingGroup; title: string; description: string }> = 
         title: "Ads",
         description: "Set the ad images and where they link. Use a full URL or a path like /ads/image.png.",
     },
+    {
+        id: "homepage",
+        title: "Homepage content",
+        description: "Edit the verse of the day and the scrolling breaking-news ticker shown on the site.",
+    },
 ];
 
 export default function SettingsPage() {
@@ -159,7 +164,13 @@ export default function SettingsPage() {
                                     const definition = SETTING_DEFINITIONS.find(item => item.key === setting.key);
                                     const Icon = ICONS[setting.key];
                                     const inputType = definition?.input === "url" ? "url" : "text";
-                                    const placeholder = definition?.group === "ads" ? "/ads/..." : "https://...";
+                                    const isTextarea = definition?.input === "textarea";
+                                    const placeholder = definition?.group === "ads"
+                                        ? "/ads/..."
+                                        : definition?.group === "homepage"
+                                            ? ""
+                                            : "https://...";
+                                    const required = definition?.group !== "ads";
 
                                     return (
                                         <label key={setting.key} className={settStyles.field}>
@@ -170,17 +181,31 @@ export default function SettingsPage() {
                                             {(definition?.description ?? setting.description) && (
                                                 <span className={styles.hint}>{definition?.description ?? setting.description}</span>
                                             )}
-                                            <input
-                                                type={inputType}
-                                                value={values[setting.key] ?? setting.value ?? ""}
-                                                onChange={event => setValues(v => ({
-                                                    ...v,
-                                                    [setting.key]: event.target.value,
-                                                }))}
-                                                className={styles.input}
-                                                placeholder={placeholder}
-                                                required={definition?.group !== "ads"}
-                                            />
+                                            {isTextarea ? (
+                                                <textarea
+                                                    value={values[setting.key] ?? setting.value ?? ""}
+                                                    onChange={event => setValues(v => ({
+                                                        ...v,
+                                                        [setting.key]: event.target.value,
+                                                    }))}
+                                                    className={styles.input}
+                                                    rows={4}
+                                                    placeholder={placeholder}
+                                                    required={required}
+                                                />
+                                            ) : (
+                                                <input
+                                                    type={inputType}
+                                                    value={values[setting.key] ?? setting.value ?? ""}
+                                                    onChange={event => setValues(v => ({
+                                                        ...v,
+                                                        [setting.key]: event.target.value,
+                                                    }))}
+                                                    className={styles.input}
+                                                    placeholder={placeholder}
+                                                    required={required}
+                                                />
+                                            )}
                                         </label>
                                     );
                                 })}

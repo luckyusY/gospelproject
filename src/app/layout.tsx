@@ -4,7 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import { rootMetadata } from "@/lib/metadata";
-import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings } from "@/lib/siteSettings";
+import { DEFAULT_RADIO_STREAM_URL, getPublicSiteSettings, settingLines } from "@/lib/siteSettings";
+import { getNavTree } from "@/lib/nav";
 
 export const metadata: Metadata = rootMetadata;
 
@@ -26,6 +27,8 @@ export default async function RootLayout({
   const settings = await getPublicSiteSettings();
   const radioStreamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
   const radioStationName = settings.radio_station_name ?? "Urugero Online Radio";
+  const nav = await getNavTree();
+  const tickerLines = settingLines(settings.ticker_lines);
 
   return (
     <html lang="rw">
@@ -34,7 +37,12 @@ export default async function RootLayout({
           Jya ku birimo nyamukuru
         </a>
         <SmoothScrollProvider>
-          <Header radioStreamUrl={radioStreamUrl} radioStationName={radioStationName} />
+          <Header
+            radioStreamUrl={radioStreamUrl}
+            radioStationName={radioStationName}
+            nav={nav}
+            tickerLines={tickerLines}
+          />
           <main id="main-content">{children}</main>
           <Footer settings={settings} />
         </SmoothScrollProvider>

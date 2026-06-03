@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import type { SiteSettingRow } from "@/types/database";
 
-export type SettingGroup = "social" | "radio" | "ads" | "videos";
-export type SettingInput = "url" | "text";
+export type SettingGroup = "social" | "radio" | "ads" | "videos" | "homepage";
+export type SettingInput = "url" | "text" | "textarea";
 
 export type SettingDefinition = {
     key: string;
@@ -104,7 +104,43 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
         group: "ads",
         input: "text",
     },
+    {
+        key: "verse_text",
+        value: "Kuko nzi imigambi ndimo ndibanza kuri wewe, ni Uhoraho uvuga, imigambi y'amahoro si iy'ibibazo, kugira ngo nkuhe amaherezo n'icyiringiro.",
+        label: "Verse of the day — text",
+        description: "The Bible verse shown in the 'Ijambo ry'umunsi' block on the homepage",
+        group: "homepage",
+        input: "textarea",
+    },
+    {
+        key: "verse_reference",
+        value: "— Yeremiya 29:11",
+        label: "Verse of the day — reference",
+        description: "Where the verse is found (e.g. — Yeremiya 29:11)",
+        group: "homepage",
+        input: "text",
+    },
+    {
+        key: "ticker_lines",
+        value: [
+            "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
+            "Urugero Online Radio ikomeza guturika n'amajwi y'Imana buri munsi",
+            "Urugero Bible Quiz ifungura amashuri n'amatorero mu Rwanda hose",
+        ].join("\n"),
+        label: "Breaking-news ticker",
+        description: "Lines shown in the scrolling breaking-news bar. One line per news item.",
+        group: "homepage",
+        input: "textarea",
+    },
 ];
+
+/** Split a newline-separated setting (e.g. ticker_lines) into trimmed, non-empty lines. */
+export function settingLines(value: string | undefined): string[] {
+    return (value ?? "")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+}
 
 export type SiteSettingsMap = Record<string, string>;
 

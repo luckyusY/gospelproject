@@ -1,5 +1,12 @@
 import { supabase } from "@/lib/supabase";
-import type { ArticleRow, EventRow, CategoryRow } from "@/types/database";
+import type {
+    ArticleRow,
+    EventRow,
+    CategoryRow,
+    TestimonyRow,
+    VideoRow,
+    HomepageSectionRow,
+} from "@/types/database";
 import HomeClient from "./_components/HomeClient";
 import { getPublicSiteSettings } from "@/lib/siteSettings";
 
@@ -38,6 +45,36 @@ export default async function Home() {
 
     const events = (eventsData ?? []) as EventRow[];
 
+    // ── Featured / latest testimonies (featured first)
+    const { data: testimoniesData } = await supabase
+        .from("testimonies")
+        .select("*")
+        .eq("is_published", true)
+        .order("is_featured", { ascending: false })
+        .order("published_at", { ascending: false })
+        .limit(3);
+
+    const testimonies = (testimoniesData ?? []) as TestimonyRow[];
+
+    // ── Homepage featured videos
+    const { data: videosData } = await supabase
+        .from("videos")
+        .select("*")
+        .eq("section", "homepage")
+        .eq("is_published", true)
+        .order("sort_order", { ascending: true })
+        .limit(6);
+
+    const videos = (videosData ?? []) as VideoRow[];
+
+    // ── Homepage section toggles / order
+    const { data: sectionsData } = await supabase
+        .from("homepage_sections")
+        .select("*")
+        .order("sort_order", { ascending: true });
+
+    const sections = (sectionsData ?? []) as HomepageSectionRow[];
+
     // ── Categories (for labelled filter pills)
     const { data: catsData } = await supabase
         .from("categories")
@@ -52,6 +89,9 @@ export default async function Home() {
             heroStories={heroStories}
             gridStories={gridStories}
             events={events}
+            testimonies={testimonies}
+            videos={videos}
+            sections={sections}
             categories={categories}
             settings={settings}
         />

@@ -94,6 +94,15 @@ export default async function AdminDashboard() {
                     <a href="/admin/testimonies/new" className={styles.actionBtn}>
                         + New testimony
                     </a>
+                    <a href="/admin/pages/new" className={styles.actionBtn}>
+                        + New page
+                    </a>
+                    <a href="/admin/videos" className={styles.actionBtn}>
+                        + Add video
+                    </a>
+                    <a href="/admin/homepage" className={styles.actionBtn}>
+                        ⚙ Manage homepage
+                    </a>
                 </div>
                 {pending > 0 && (
                     <a href="/admin/media" className={styles.alertBanner}>

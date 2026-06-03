@@ -27,9 +27,17 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Enter a category name." }, { status: 400 });
     }
 
+    const insert: Record<string, unknown> = { name, slug, color };
+    if (typeof raw.nav_group === "string" && raw.nav_group.trim()) insert.nav_group = raw.nav_group.trim();
+    if (typeof raw.icon === "string" && raw.icon.trim()) insert.icon = raw.icon.trim();
+    if (typeof raw.description === "string" && raw.description.trim()) insert.description = raw.description.trim();
+    if (typeof raw.hero_image === "string" && raw.hero_image.trim()) insert.hero_image = raw.hero_image.trim();
+    if (raw.sort_order !== undefined) insert.sort_order = Number(raw.sort_order) || 0;
+    if (typeof raw.show_in_nav === "boolean") insert.show_in_nav = raw.show_in_nav;
+
     const { data, error } = await supabaseAdmin()
         .from("categories")
-        .insert({ name, slug, color } as never)
+        .insert(insert as never)
         .select();
 
     if (error) {
