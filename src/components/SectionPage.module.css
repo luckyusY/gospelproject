@@ -143,6 +143,11 @@
     line-height: 1.75;
     color: var(--text);
 }
+
+.richContentWide {
+    max-width: none;
+    margin: 2.25rem 0 1rem;
+}
 .richContent h2 {
     font-size: 1.5rem;
     font-weight: 800;

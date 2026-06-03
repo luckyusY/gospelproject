@@ -26,6 +26,7 @@ type SectionPageProps = {
     heroImage?:  string;   // optional Unsplash/open-source background image URL
     subSections?: SubSection[];
     children?:   React.ReactNode;  // rich content rendered below the hero
+    wideContent?: boolean;
 };
 
 export default function SectionPage({
@@ -38,6 +39,7 @@ export default function SectionPage({
     heroImage,
     subSections = [],
     children,
+    wideContent = false,
 }: SectionPageProps) {
     return (
         <div className={styles.page}>
@@ -155,7 +157,7 @@ export default function SectionPage({
             {/* ── Rich content (editable page body) ────── */}
             {children && (
                 <div className="container">
-                    <div className={styles.richContent}>
+                    <div className={wideContent ? `${styles.richContent} ${styles.richContentWide}` : styles.richContent}>
                         {children}
                     </div>
                 </div>

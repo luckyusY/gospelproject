@@ -105,6 +105,8 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
 
     if (page?.nav_group === "media-group") {
         const articles = await getMediaGroupPageArticles(page.slug);
+        const leadArticle = articles[0] ?? null;
+        const restArticles = articles.slice(1);
 
         return (
             <SectionPage
@@ -115,31 +117,81 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
                 color={page.color ?? "#B80000"}
                 heroImage={page.hero_image ?? undefined}
                 breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
+                wideContent
             >
-                {page.content && <div dangerouslySetInnerHTML={{ __html: page.content }} />}
+                {page.content && (
+                    <div
+                        className={styles.pageIntro}
+                        dangerouslySetInnerHTML={{ __html: page.content }}
+                    />
+                )}
 
-                {articles.length > 0 && (
-                    <section className={styles.articleSection} aria-label={`Inkuru za ${page.title}`}>
-                        <div className={styles.articleHeader}>
+                <section className={styles.articleSection} aria-label={`Inkuru za ${page.title}`}>
+                    <div className={styles.articleHeader}>
+                        <div>
+                            <p className={styles.kicker}>Inkuru n&apos;amakuru</p>
                             <h2>Inkuru za {page.title}</h2>
                         </div>
-                        <div className={styles.articleGrid}>
-                            {articles.map((article) => (
-                                <ArticleCard
-                                    key={article.id}
-                                    href={`/urugero-media-group/${article.slug}`}
-                                    category={article.category}
-                                    categoryColor={article.category_color}
-                                    title={article.title}
-                                    excerpt={article.excerpt}
-                                    image={article.image_url ?? FALLBACK_CARD}
-                                    author={article.author}
-                                    readTime={article.read_time}
-                                />
-                            ))}
+                        <span className={styles.countBadge}>{articles.length} inkuru</span>
+                    </div>
+
+                    {leadArticle ? (
+                        <>
+                            <Link href={`/urugero-media-group/${leadArticle.slug}`} className={styles.leadStory}>
+                                <div className={styles.leadImageWrap}>
+                                    <Image
+                                        src={leadArticle.image_url ?? FALLBACK_CARD}
+                                        alt={leadArticle.title}
+                                        fill
+                                        className={styles.leadImage}
+                                        sizes="(max-width: 900px) 100vw, 50vw"
+                                    />
+                                </div>
+                                <div className={styles.leadBody}>
+                                    <span
+                                        className={styles.categoryBadge}
+                                        style={{ backgroundColor: leadArticle.category_color }}
+                                    >
+                                        {leadArticle.category}
+                                    </span>
+                                    <h3>{leadArticle.title}</h3>
+                                    <p>{leadArticle.excerpt}</p>
+                                    <div className={styles.leadMeta}>
+                                        <span>{leadArticle.author}</span>
+                                        <span aria-hidden>·</span>
+                                        <span>{leadArticle.read_time} gusoma</span>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {restArticles.length > 0 && (
+                                <div className={styles.articleGrid}>
+                                    {restArticles.map((article) => (
+                                        <ArticleCard
+                                            key={article.id}
+                                            href={`/urugero-media-group/${article.slug}`}
+                                            category={article.category}
+                                            categoryColor={article.category_color}
+                                            title={article.title}
+                                            excerpt={article.excerpt}
+                                            image={article.image_url ?? FALLBACK_CARD}
+                                            author={article.author}
+                                            readTime={article.read_time}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className={styles.emptyState}>
+                            <span className={styles.emptyIcon} aria-hidden>+</span>
+                            <h3>Inkuru ziraza vuba</h3>
+                            <p>
+                                Iyi page iriteguye kwakira inkuru, amafoto n&apos;amakuru mashya ya {page.title}.
+                            </p>
                         </div>
-                    </section>
-                )}
+                    )}
+                </section>
             </SectionPage>
         );
     }

@@ -1,35 +1,207 @@
+.pageIntro {
+    max-width: 820px;
+    margin: 0 auto 2rem;
+    padding: 1.35rem 1.5rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--r-md);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+}
+
+.pageIntro > :last-child {
+    margin-bottom: 0;
+}
+
 .articleSection {
-    margin-top: 2.5rem;
+    margin-top: 2.25rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
 }
 
 .articleHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.kicker {
+    margin: 0 0 0.25rem;
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .articleHeader h2 {
-    font-size: 1.35rem;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
     font-weight: 900;
     color: var(--text);
     margin: 0;
+    line-height: 1.15;
+}
+
+.countBadge {
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    color: var(--text-muted);
+    background: var(--bg-card);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.leadStory {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-md);
+    color: inherit;
+}
+
+.leadStory:hover .leadImage {
+    transform: scale(1.04);
+}
+
+.leadImageWrap {
+    position: relative;
+    min-height: 340px;
+    background: var(--bg-subtle);
+    overflow: hidden;
+}
+
+.leadImage {
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.leadBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 2rem;
+}
+
+.categoryBadge {
+    width: fit-content;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--r-sm);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.leadBody h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+    font-weight: 900;
+    line-height: 1.18;
+}
+
+.leadBody p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+.leadMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.35rem;
+    color: var(--text-faint);
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 .articleGrid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.25rem;
 }
 
+.emptyState {
+    display: grid;
+    place-items: center;
+    min-height: 260px;
+    padding: 2rem;
+    border: 1px dashed var(--border-dark);
+    border-radius: var(--r-lg);
+    background: var(--bg-subtle);
+    text-align: center;
+}
+
+.emptyIcon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 0.8rem;
+    border-radius: var(--r-full);
+    background: var(--bg-card);
+    color: var(--gold);
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.emptyState h3 {
+    margin: 0 0 0.4rem;
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.emptyState p {
+    max-width: 460px;
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+@media (max-width: 980px) {
+    .leadStory,
+    .articleGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .leadBody {
+        padding: 1.5rem;
+    }
+}
+
 @media (max-width: 720px) {
+    .pageIntro {
+        padding: 1rem;
+    }
+
     .articleHeader {
         align-items: flex-start;
         flex-direction: column;
     }
 
+    .leadStory,
     .articleGrid {
         grid-template-columns: 1fr;
+    }
+
+    .leadImageWrap {
+        min-height: 220px;
+    }
+
+    .leadBody {
+        padding: 1.1rem;
     }
 }
