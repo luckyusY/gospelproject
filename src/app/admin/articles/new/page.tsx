@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
+import { getArticleCategoryOptions } from "@/lib/categories";
 import ArticleForm from "../_components/ArticleForm";
 
 export const metadata: Metadata = { title: "New article" };
 
 export default async function NewArticlePage() {
-    const { data: categories } = await supabaseAdmin()
-        .from("categories")
-        .select("slug, name, color")
-        .order("name");
+    const categories = await getArticleCategoryOptions(supabaseAdmin());
 
-    return <ArticleForm categories={categories ?? []} />;
+    return <ArticleForm categories={categories} />;
 }

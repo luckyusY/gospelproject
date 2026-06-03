@@ -2,7 +2,8 @@ import { notFound }    from "next/navigation";
 import Image           from "next/image";
 import Link            from "next/link";
 import type { Metadata } from "next";
-import { supabase }    from "@/lib/supabase";
+import { supabase, supabaseAdmin }    from "@/lib/supabase";
+import { ensureDefaultArticleCategories, getDefaultCategoryBySlug } from "@/lib/categories";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons    from "@/components/ShareButtons";
 import CategoryListing from "@/components/CategoryListing";
@@ -13,12 +14,17 @@ type Props = { params: Promise<{ slug: string }> };
 
 /** A slug at /amakuru/<slug> is either a category listing or a single article. */
 async function getCategory(slug: string): Promise<CategoryRow | null> {
-    const { data } = await supabase
+    const admin = supabaseAdmin();
+    await ensureDefaultArticleCategories(admin);
+
+    const { data } = await admin
         .from("categories")
         .select("*")
         .eq("slug", slug)
         .maybeSingle();
-    return (data as CategoryRow | null) ?? null;
+
+    const category = (data as CategoryRow | null) ?? getDefaultCategoryBySlug(slug);
+    return category?.nav_group === "amakuru" ? category : null;
 }
 
 /* ── SEO metadata ─────────────────────────────────────────── */

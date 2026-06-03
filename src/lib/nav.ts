@@ -24,6 +24,8 @@ export const FALLBACK_NAV: NavNode[] = [
             { href: "/amakuru/ibitaramo", label: "Ibitaramo" },
             { href: "/amakuru/sport", label: "Sport" },
             { href: "/amakuru/hanze-yu-rwanda", label: "Hanze y'u Rwanda" },
+            { href: "/amakuru/inkuru-yanjye", label: "Inkuru yanjye" },
+            { href: "/amakuru/ibaruwa", label: "Ibaruwa" },
         ],
     },
     { href: "/ubuhamya", label: "Ubuhamya", isMega: false, children: [] },

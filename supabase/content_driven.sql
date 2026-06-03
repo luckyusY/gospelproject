@@ -19,8 +19,18 @@ alter table public.categories
 
 -- Existing Amakuru sub-categories
 update public.categories set nav_group = 'amakuru'
- where slug in ('abahanzi','amakorali','amatorero','abanyempano','ibitaramo','sport','hanze-yu-rwanda')
+ where slug in ('abahanzi','amakorali','amatorero','abanyempano','ibitaramo','sport','hanze-yu-rwanda','inkuru-yanjye','ibaruwa')
    and nav_group is null;
+
+insert into public.categories (name, slug, color, nav_group, icon, description, sort_order) values
+    ('Sport',            'sport',             '#047857', 'amakuru', null, 'Amakuru ya sport n''ibivugwa mu mikino.', 5),
+    ('Inkuru yanjye',    'inkuru-yanjye',     '#B80000', 'amakuru', null, 'Inkuru n''ubuhamya bwihariye bw''abasomyi.', 7),
+    ('Ibaruwa',          'ibaruwa',           '#7C2D12', 'amakuru', null, 'Amabaruwa, ibitekerezo n''ubutumwa bwubaka.', 8),
+    ('Tumenye Bibiliya', 'tumenye-bibiliya',  '#1E40AF', 'tumenye-bibiliya', '📖', 'Inkuru, inyigisho n''ibisobanuro bifasha gusobanukirwa Bibiliya neza.', 0)
+on conflict (slug) do update set
+    nav_group = excluded.nav_group,
+    sort_order = excluded.sort_order,
+    description = coalesce(public.categories.description, excluded.description);
 
 -- Inyigisho (teaching) sub-categories
 insert into public.categories (name, slug, color, nav_group, icon, description, sort_order) values
@@ -44,6 +54,8 @@ update public.categories set sort_order = 3 where slug = 'abanyempano';
 update public.categories set sort_order = 4 where slug = 'ibitaramo';
 update public.categories set sort_order = 5 where slug = 'sport';
 update public.categories set sort_order = 6 where slug = 'hanze-yu-rwanda';
+update public.categories set sort_order = 7 where slug = 'inkuru-yanjye';
+update public.categories set sort_order = 8 where slug = 'ibaruwa';
 
 -- ── 2. Pages (rich editable content pages) ───────────────────
 create table if not exists public.pages (
@@ -166,7 +178,9 @@ begin
             ('Abanyempano',      '/amakuru/abanyempano',     amakuru_id, 3),
             ('Ibitaramo',        '/amakuru/ibitaramo',       amakuru_id, 4),
             ('Sport',            '/amakuru/sport',           amakuru_id, 5),
-            ('Hanze y''u Rwanda', '/amakuru/hanze-yu-rwanda', amakuru_id, 6);
+            ('Hanze y''u Rwanda', '/amakuru/hanze-yu-rwanda', amakuru_id, 6),
+            ('Inkuru yanjye',     '/amakuru/inkuru-yanjye',   amakuru_id, 7),
+            ('Ibaruwa',           '/amakuru/ibaruwa',         amakuru_id, 8);
 
         insert into public.nav_items (label, href, sort_order) values ('Ubuhamya', '/ubuhamya', 2);
         insert into public.nav_items (label, href, sort_order) values ('Ibigwi', '/ibigwi', 3);
@@ -203,6 +217,27 @@ begin
 end $$;
 
 -- ── 5. Homepage sections (toggle + order) ────────────────────
+do $$
+declare
+    amakuru_id bigint;
+begin
+    select id into amakuru_id
+      from public.nav_items
+     where parent_id is null and href = '/amakuru'
+     order by id
+     limit 1;
+
+    if amakuru_id is not null then
+        insert into public.nav_items (label, href, parent_id, sort_order)
+        select 'Inkuru yanjye', '/amakuru/inkuru-yanjye', amakuru_id, 7
+        where not exists (select 1 from public.nav_items where href = '/amakuru/inkuru-yanjye');
+
+        insert into public.nav_items (label, href, parent_id, sort_order)
+        select 'Ibaruwa', '/amakuru/ibaruwa', amakuru_id, 8
+        where not exists (select 1 from public.nav_items where href = '/amakuru/ibaruwa');
+    end if;
+end $$;
+
 create table if not exists public.homepage_sections (
     id         bigint generated always as identity primary key,
     key        text not null unique,

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { buildMeta } from "@/lib/metadata";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { ensureDefaultArticleCategories, getDefaultArticleCategoryOptions } from "@/lib/categories";
 import type { ArticleRow, CategoryRow } from "@/types/database";
 import styles from "./amakuru.module.css";
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = buildMeta({
 export const revalidate = 60;
 
 export default async function AmakuruPage() {
+    await ensureDefaultArticleCategories(supabaseAdmin());
+
     const [articlesResult, catsResult] = await Promise.all([
         supabase
             .from("articles")
@@ -30,7 +33,17 @@ export default async function AmakuruPage() {
     ]);
 
     const articles = (articlesResult.data ?? []) as ArticleRow[];
-    const categories = ((catsResult.data ?? []) as Pick<CategoryRow, "slug" | "name" | "show_in_nav">[])
+    const defaultAmakuruCategories = getDefaultArticleCategoryOptions()
+        .filter(c => c.nav_group === "amakuru")
+        .map(c => ({ ...c, show_in_nav: true }));
+    const categoryMap = new Map<string, Pick<CategoryRow, "slug" | "name" | "show_in_nav">>();
+
+    for (const category of defaultAmakuruCategories) categoryMap.set(category.slug, category);
+    for (const category of ((catsResult.data ?? []) as Pick<CategoryRow, "slug" | "name" | "show_in_nav">[])) {
+        categoryMap.set(category.slug, category);
+    }
+
+    const categories = Array.from(categoryMap.values())
         .filter(c => c.show_in_nav !== false);
 
     const featured  = articles.find(a => a.is_featured);

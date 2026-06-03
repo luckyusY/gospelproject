@@ -23,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { url: `${BASE}/amakuru/ibitaramo`,             lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
         { url: `${BASE}/amakuru/sport`,                 lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
         { url: `${BASE}/amakuru/hanze-yu-rwanda`,       lastModified: now, changeFrequency: "daily",   priority: 0.7 },
+        { url: `${BASE}/amakuru/inkuru-yanjye`,         lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+        { url: `${BASE}/amakuru/ibaruwa`,               lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
 
         // ── Ubuhamya & Ibigwi ─────────────────────────────
         { url: `${BASE}/ubuhamya`,                      lastModified: now, changeFrequency: "weekly",  priority: 0.8 },

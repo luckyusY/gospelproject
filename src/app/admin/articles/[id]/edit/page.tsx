@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase";
+import { getArticleCategoryOptions } from "@/lib/categories";
 import ArticleForm from "../../_components/ArticleForm";
 
 export const metadata: Metadata = { title: "Edit article" };
@@ -11,12 +12,12 @@ export default async function EditArticlePage({ params }: Props) {
     const { id } = await params;
     const admin = supabaseAdmin();
 
-    const [{ data: article }, { data: categories }] = await Promise.all([
+    const [{ data: article }, categories] = await Promise.all([
         admin.from("articles").select("*").eq("id", Number(id)).single(),
-        admin.from("categories").select("slug, name, color").order("name"),
+        getArticleCategoryOptions(admin),
     ]);
 
     if (!article) notFound();
 
-    return <ArticleForm article={article} categories={categories ?? []} />;
+    return <ArticleForm article={article} categories={categories} />;
 }

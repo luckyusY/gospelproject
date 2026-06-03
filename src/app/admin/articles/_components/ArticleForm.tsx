@@ -3,12 +3,12 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ArticleRow } from "@/types/database";
+import type { ArticleCategoryOption } from "@/lib/categories";
 import styles from "../../form.module.css";
 import RichTextEditor from "./RichTextEditor";
 import CloudinaryUploader from "./CloudinaryUploader";
 
-type Category = { slug: string; name: string; color: string };
-type Props = { article?: ArticleRow; categories: Category[] };
+type Props = { article?: ArticleRow; categories: ArticleCategoryOption[] };
 
 export default function ArticleForm({ article, categories }: Props) {
     const router = useRouter();
@@ -68,6 +68,13 @@ export default function ArticleForm({ article, categories }: Props) {
 
     function slugify(val: string) {
         return val.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    }
+
+    function groupLabel(group: string | null) {
+        if (group === "amakuru") return "Amakuru";
+        if (group === "inyigisho") return "Inyigisho";
+        if (group === "tumenye-bibiliya") return "Tumenye Bibiliya";
+        return "Ibindi";
     }
 
     return (
@@ -137,7 +144,9 @@ export default function ArticleForm({ article, categories }: Props) {
                             Category <span className={styles.req}>*</span>
                             <select name="category" defaultValue={article?.category} required className={styles.select}>
                                 {categories.map(c => (
-                                    <option key={c.slug} value={c.slug}>{c.name}</option>
+                                    <option key={c.slug} value={c.slug}>
+                                        {groupLabel(c.nav_group)} - {c.name}
+                                    </option>
                                 ))}
                             </select>
                         </label>
