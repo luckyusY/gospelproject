@@ -15,24 +15,36 @@ export const revalidate = 60; // ISR: re-fetch every 60 s in production
 export default async function Home() {
 
     // ── Latest published articles (newest first, up to 9)
-    const { data: articlesData } = await supabase
-        .from("articles")
-        .select("*")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false })
-        .limit(9);
+    const [featuredResult, latestResult] = await Promise.all([
+        supabase
+            .from("articles")
+            .select("*")
+            .eq("is_published", true)
+            .eq("is_featured", true)
+            .order("published_at", { ascending: false })
+            .limit(5),
+        supabase
+            .from("articles")
+            .select("*")
+            .eq("is_published", true)
+            .order("published_at", { ascending: false })
+            .limit(12),
+    ]);
 
-    const articles = (articlesData ?? []) as ArticleRow[];
+    const featuredArticles = (featuredResult.data ?? []) as ArticleRow[];
+    const latestArticles = (latestResult.data ?? []) as ArticleRow[];
 
-    // Featured = first is_featured article; fall back to the very latest
-    const featured   = articles.find(a => a.is_featured) ?? articles[0] ?? null;
-    const others     = articles.filter(a => a.id !== featured?.id);
+    const storyMap = new Map<number, ArticleRow>();
+    for (const article of [...featuredArticles, ...latestArticles]) {
+        storyMap.set(article.id, article);
+    }
 
-    // Hero slideshow: featured first, then the latest stories (up to 5 slides)
-    const heroStories = (featured ? [featured, ...others] : others).slice(0, 5);
-
-    // Grid stories: everything except featured (up to 6)
-    const gridStories = others.slice(0, 6);
+    const stories = Array.from(storyMap.values());
+    const heroStories = stories.slice(0, 5);
+    const featuredIds = new Set(featuredArticles.map(article => article.id));
+    const gridStories = latestArticles
+        .filter(article => !featuredIds.has(article.id))
+        .slice(0, 6);
 
     // ── Upcoming events
     const { data: eventsData } = await supabase
