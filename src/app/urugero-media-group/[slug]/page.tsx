@@ -16,7 +16,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 const FALLBACK_CARD = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getMediaGroupArticle(slug: string): Promise<ArticleRow | null> {
     const { data: article } = await supabase
