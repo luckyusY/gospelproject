@@ -107,6 +107,7 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
         const articles = await getMediaGroupPageArticles(page.slug);
         const leadArticle = articles[0] ?? null;
         const restArticles = articles.slice(1);
+        const layoutVariant = page.layout_variant ?? "feature";
 
         return (
             <SectionPage
@@ -117,6 +118,7 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
                 color={page.color ?? "#B80000"}
                 heroImage={page.hero_image ?? undefined}
                 breadcrumb={[{ label: "Urugero Media Group", href: "/urugero-media-group" }]}
+                layoutVariant={layoutVariant}
                 wideContent
             >
                 {page.content && (
@@ -126,7 +128,11 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
                     />
                 )}
 
-                <section className={styles.articleSection} aria-label={`Inkuru za ${page.title}`}>
+                <section
+                    className={styles.articleSection}
+                    data-layout={layoutVariant}
+                    aria-label={`Inkuru za ${page.title}`}
+                >
                     <div className={styles.articleHeader}>
                         <div>
                             <p className={styles.kicker}>Inkuru n&apos;amakuru</p>
@@ -137,7 +143,11 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
 
                     {leadArticle ? (
                         <>
-                            <Link href={`/urugero-media-group/${leadArticle.slug}`} className={styles.leadStory}>
+                            <Link
+                                href={`/urugero-media-group/${leadArticle.slug}`}
+                                className={styles.leadStory}
+                                data-layout={layoutVariant}
+                            >
                                 <div className={styles.leadImageWrap}>
                                     <Image
                                         src={leadArticle.image_url ?? FALLBACK_CARD}
@@ -165,7 +175,7 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
                             </Link>
 
                             {restArticles.length > 0 && (
-                                <div className={styles.articleGrid}>
+                                <div className={styles.articleGrid} data-layout={layoutVariant}>
                                     {restArticles.map((article) => (
                                         <ArticleCard
                                             key={article.id}

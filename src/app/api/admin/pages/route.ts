@@ -4,6 +4,16 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { sanitizeArticleContent } from "@/lib/articleContent";
 import type { PageInsert } from "@/types/database";
 
+const ALLOWED_LAYOUTS = new Set(["standard", "feature", "compact", "magazine"]);
+
+function layoutVariant(value: unknown) {
+    return typeof value === "string" && ALLOWED_LAYOUTS.has(value) ? value : "standard";
+}
+
+function isMissingLayoutColumn(error: { code?: string; message?: string }) {
+    return error.code === "PGRST204" || (error.message ?? "").includes("layout_variant");
+}
+
 async function requireAuth() {
     return Boolean(await getCurrentAdmin());
 }
@@ -51,14 +61,24 @@ export async function POST(req: NextRequest) {
         color: (raw.color ?? "").trim() || "#B80000",
         content: sanitizeArticleContent(raw.content ?? ""),
         nav_group: (raw.nav_group ?? "").trim() || null,
+        layout_variant: layoutVariant(raw.layout_variant),
         is_published: raw.is_published ?? true,
         sort_order: Number(raw.sort_order ?? 0) || 0,
     };
 
-    const { data, error } = await supabaseAdmin()
+    let { data, error } = await supabaseAdmin()
         .from("pages")
         .insert(insert as never)
         .select();
+
+    if (error && isMissingLayoutColumn(error)) {
+        const legacyInsert: Partial<PageInsert> = { ...insert };
+        delete legacyInsert.layout_variant;
+        ({ data, error } = await supabaseAdmin()
+            .from("pages")
+            .insert(legacyInsert as never)
+            .select());
+    }
 
     if (error) {
         const message = error.code === "23505"

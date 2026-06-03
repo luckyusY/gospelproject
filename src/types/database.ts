@@ -203,6 +203,7 @@ export interface PageRow {
     color:        string;
     content:      string;          // rich HTML
     nav_group:    string | null;   // e.g. 'media-group'
+    layout_variant: string | null; // 'standard' | 'feature' | 'compact' | 'magazine'
     is_published: boolean;
     sort_order:   number;
     created_at:   string;

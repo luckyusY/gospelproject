@@ -27,7 +27,24 @@ type SectionPageProps = {
     subSections?: SubSection[];
     children?:   React.ReactNode;  // rich content rendered below the hero
     wideContent?: boolean;
+    layoutVariant?: string;
 };
+
+const GRID_LAYOUT_CLASSES: Record<string, string | undefined> = {
+    feature: styles.subSectionsGridFeature,
+    compact: styles.subSectionsGridCompact,
+    magazine: styles.subSectionsGridMagazine,
+};
+
+const CARD_LAYOUT_CLASSES: Record<string, string | undefined> = {
+    feature: styles.subSectionCardFeature,
+    compact: styles.subSectionCardCompact,
+    magazine: styles.subSectionCardMagazine,
+};
+
+function cx(...classes: Array<string | undefined | false>) {
+    return classes.filter(Boolean).join(" ");
+}
 
 export default function SectionPage({
     title,
@@ -40,6 +57,7 @@ export default function SectionPage({
     subSections = [],
     children,
     wideContent = false,
+    layoutVariant = "standard",
 }: SectionPageProps) {
     return (
         <div className={styles.page}>
@@ -130,7 +148,7 @@ export default function SectionPage({
             {subSections.length > 0 && (
                 <div className="container">
                     <motion.div
-                        className={styles.subSectionsGrid}
+                        className={cx(styles.subSectionsGrid, GRID_LAYOUT_CLASSES[layoutVariant])}
                         variants={staggerContainer}
                         initial="hidden"
                         whileInView="visible"
@@ -140,7 +158,7 @@ export default function SectionPage({
                             <motion.div key={s.href} variants={fadeUp}>
                                 <Link
                                     href={s.href}
-                                    className={styles.subSectionCard}
+                                    className={cx(styles.subSectionCard, CARD_LAYOUT_CLASSES[layoutVariant])}
                                     style={{ borderTopColor: color }}
                                 >
                                     <h3 className={styles.subSectionTitle}>{s.label}</h3>

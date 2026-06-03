@@ -4,6 +4,16 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { sanitizeArticleContent } from "@/lib/articleContent";
 import type { PageInsert } from "@/types/database";
 
+const ALLOWED_LAYOUTS = new Set(["standard", "feature", "compact", "magazine"]);
+
+function layoutVariant(value: unknown) {
+    return typeof value === "string" && ALLOWED_LAYOUTS.has(value) ? value : "standard";
+}
+
+function isMissingLayoutColumn(error: { code?: string; message?: string }) {
+    return error.code === "PGRST204" || (error.message ?? "").includes("layout_variant");
+}
+
 async function requireAuth() {
     return Boolean(await getCurrentAdmin());
 }
@@ -36,6 +46,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
         const g = typeof raw.nav_group === "string" ? raw.nav_group.trim() : "";
         patch.nav_group = g || null;
     }
+    if (raw.layout_variant !== undefined) patch.layout_variant = layoutVariant(raw.layout_variant);
     if (typeof raw.is_published === "boolean") patch.is_published = raw.is_published;
     if (raw.sort_order !== undefined) patch.sort_order = Number(raw.sort_order) || 0;
 
@@ -43,11 +54,21 @@ export async function PUT(req: NextRequest, { params }: Params) {
         return NextResponse.json({ error: "No changes were provided." }, { status: 400 });
     }
 
-    const { data, error } = await supabaseAdmin()
+    let { data, error } = await supabaseAdmin()
         .from("pages")
         .update(patch as never)
         .eq("id", Number(id))
         .select();
+
+    if (error && isMissingLayoutColumn(error)) {
+        const legacyPatch = { ...patch };
+        delete legacyPatch.layout_variant;
+        ({ data, error } = await supabaseAdmin()
+            .from("pages")
+            .update(legacyPatch as never)
+            .eq("id", Number(id))
+            .select());
+    }
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 

@@ -72,6 +72,7 @@ export default async function UrugeroMediaGroupPage() {
             color={page?.color ?? FALLBACK.color}
             heroImage={page?.hero_image ?? FALLBACK.hero}
             subSections={subSections}
+            layoutVariant={page?.layout_variant ?? "feature"}
         >
             {page?.content && <div dangerouslySetInnerHTML={{ __html: page.content }} />}
         </SectionPage>

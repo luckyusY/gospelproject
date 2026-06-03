@@ -76,11 +76,15 @@ create table if not exists public.pages (
     color        text not null default '#B80000',
     content      text not null default '',
     nav_group    text,           -- e.g. 'media-group' for Urugero Media Group children
+    layout_variant text not null default 'standard',
     is_published boolean not null default true,
     sort_order   integer not null default 0,
     created_at   timestamptz not null default now(),
     updated_at   timestamptz not null default now()
 );
+
+alter table public.pages
+    add column if not exists layout_variant text not null default 'standard';
 
 drop trigger if exists pages_updated_at on public.pages;
 create trigger pages_updated_at

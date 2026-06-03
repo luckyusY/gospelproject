@@ -135,6 +135,70 @@
     margin: 0;
 }
 
+.subSectionsGridFeature {
+    grid-template-columns: minmax(280px, 1.25fr) repeat(2, minmax(180px, 0.88fr));
+    align-items: stretch;
+}
+
+.subSectionsGridFeature > div:first-child {
+    grid-row: span 2;
+}
+
+.subSectionsGridFeature > div:first-child .subSectionCardFeature {
+    min-height: 100%;
+    padding: 1.65rem;
+}
+
+.subSectionsGridFeature > div:first-child .subSectionTitle {
+    font-size: 1.35rem;
+}
+
+.subSectionCardFeature {
+    min-height: 172px;
+}
+
+.subSectionsGridCompact {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+}
+
+.subSectionCardCompact {
+    display: grid;
+    min-height: 0;
+    padding: 0.95rem 1rem;
+    border-left: 3px solid var(--gold);
+    border-top-width: 1.5px;
+    border-radius: var(--r-md);
+}
+
+.subSectionCardCompact:hover {
+    transform: translateX(4px);
+}
+
+.subSectionCardCompact .subSectionTitle {
+    margin-bottom: 0.2rem;
+}
+
+.subSectionsGridMagazine {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.subSectionsGridMagazine > div {
+    grid-column: span 2;
+}
+
+.subSectionsGridMagazine > div:nth-child(1),
+.subSectionsGridMagazine > div:nth-child(2) {
+    grid-column: span 3;
+}
+
+.subSectionCardMagazine {
+    min-height: 190px;
+    background:
+        linear-gradient(135deg, rgba(184, 0, 0, 0.05), transparent 52%),
+        var(--bg-card);
+}
+
 /* ── Coming Soon placeholder ───────────��────────────── */
 .richContent {
     max-width: 760px;
@@ -207,5 +271,17 @@
     .heroContent { flex-direction: column; gap: 0.75rem; }
     .heroIcon { font-size: 2rem; }
     .subSectionsGrid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .subSectionsGridFeature,
+    .subSectionsGridCompact,
+    .subSectionsGridMagazine {
+        grid-template-columns: 1fr;
+    }
+    .subSectionsGridFeature > div:first-child,
+    .subSectionsGridMagazine > div,
+    .subSectionsGridMagazine > div:nth-child(1),
+    .subSectionsGridMagazine > div:nth-child(2) {
+        grid-column: auto;
+        grid-row: auto;
+    }
     .comingSoon { padding: 2rem 1rem; }
 }

@@ -13,6 +13,13 @@ const GROUPS = [
     { value: "media-group", label: "Urugero Media Group child" },
 ];
 
+const LAYOUTS = [
+    { value: "standard", label: "Standard cards" },
+    { value: "feature", label: "Featured lead" },
+    { value: "compact", label: "Compact list" },
+    { value: "magazine", label: "Magazine grid" },
+];
+
 type Props = { page?: PageRow };
 
 function slugify(val: string) {
@@ -48,6 +55,7 @@ export default function PageForm({ page }: Props) {
             color:        data.get("color") as string,
             hero_image:   heroImage || null,
             nav_group:    pageType === "media-group" ? "media-group" : "",
+            layout_variant: data.get("layout_variant") as string,
             is_published: data.get("is_published") === "1",
             sort_order:   Number(data.get("sort_order")) || 0,
         };
@@ -139,6 +147,22 @@ export default function PageForm({ page }: Props) {
                             </select>
                             <span className={styles.hint}>
                                 Landing edits <strong>/urugero-media-group</strong>; child pages appear as cards and open under that page.
+                            </span>
+                        </label>
+
+                        <label className={styles.label}>
+                            Layout template
+                            <select
+                                name="layout_variant"
+                                defaultValue={page?.layout_variant ?? "standard"}
+                                className={styles.select}
+                            >
+                                {LAYOUTS.map(layout => (
+                                    <option key={layout.value} value={layout.value}>{layout.label}</option>
+                                ))}
+                            </select>
+                            <span className={styles.hint}>
+                                Choose how page cards and stories are arranged.
                             </span>
                         </label>
 
