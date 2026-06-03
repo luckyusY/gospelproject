@@ -8,12 +8,12 @@ import form from "../../form.module.css";
 
 const SECTIONS = [
     { value: "homepage", label: "Homepage" },
-    { value: "tv-radio", label: "Urugero TV & Radio" },
+    { value: "tv-radio-featured", label: "TV & Radio - Featured/Hero" },
+    { value: "tv-radio-latest", label: "TV & Radio - Latest videos" },
+    { value: "tv-radio-sports", label: "TV & Radio - Sports" },
+    { value: "tv-radio-library", label: "TV & Radio - Library" },
+    { value: "tv-radio", label: "TV & Radio - Legacy featured" },
 ];
-
-function sectionLabel(value: string) {
-    return SECTIONS.find(s => s.value === value)?.label ?? value;
-}
 
 export default function VideoManager({ videos }: { videos: VideoRow[] }) {
     const router = useRouter();
@@ -135,20 +135,53 @@ export default function VideoManager({ videos }: { videos: VideoRow[] }) {
 
             {/* List */}
             <div className={styles.table}>
-                <div className={styles.tableHead} style={{ gridTemplateColumns: "1fr auto auto auto auto" }}>
-                    <span>Title</span><span>Section</span><span>Order</span><span>Status</span><span>Actions</span>
+                <div className={styles.tableHead} style={{ gridTemplateColumns: "1.1fr 1fr 1fr 90px 90px 120px" }}>
+                    <span>Title</span><span>YouTube</span><span>Section</span><span>Order</span><span>Status</span><span>Actions</span>
                 </div>
                 {videos.map(v => (
                     <div
                         key={v.id}
                         className={`${styles.tableRow} ${busyId === v.id ? styles.rowBusy : ""}`}
-                        style={{ gridTemplateColumns: "1fr auto auto auto auto", alignItems: "center" }}
+                        style={{ gridTemplateColumns: "1.1fr 1fr 1fr 90px 90px 120px", alignItems: "center" }}
                     >
-                        <div>
-                            <span className={styles.rowTitle}>{v.title}</span>
-                            <div className={styles.catSlug}>youtu.be/{v.youtube_id}</div>
+                        <div style={{ display: "grid", gap: "0.4rem" }}>
+                            <input
+                                defaultValue={v.title}
+                                onBlur={e => {
+                                    const next = e.target.value.trim();
+                                    if (next && next !== v.title) patch(v, { title: next });
+                                }}
+                                className={form.input}
+                                aria-label={`Title for ${v.title}`}
+                            />
+                            <input
+                                defaultValue={v.description}
+                                onBlur={e => {
+                                    const next = e.target.value.trim();
+                                    if (next !== v.description) patch(v, { description: next });
+                                }}
+                                className={form.input}
+                                aria-label={`Description for ${v.title}`}
+                                placeholder="Description"
+                            />
                         </div>
-                        <span className={styles.catChip}>{sectionLabel(v.section)}</span>
+                        <input
+                            defaultValue={v.youtube_id}
+                            onBlur={e => {
+                                const next = e.target.value.trim();
+                                if (next && next !== v.youtube_id) patch(v, { youtube_id: next });
+                            }}
+                            className={form.input}
+                            aria-label={`YouTube link for ${v.title}`}
+                        />
+                        <select
+                            defaultValue={v.section}
+                            onChange={e => patch(v, { section: e.target.value })}
+                            className={form.input}
+                            aria-label={`Section for ${v.title}`}
+                        >
+                            {SECTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                        </select>
                         <input
                             type="number"
                             defaultValue={v.sort_order}

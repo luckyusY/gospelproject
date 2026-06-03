@@ -309,3 +309,20 @@ create policy "read nav items" on public.nav_items
 drop policy if exists "read homepage sections" on public.homepage_sections;
 create policy "read homepage sections" on public.homepage_sections
     for select using (true);
+
+-- TV & Radio editable settings
+insert into public.site_settings (key, value, label, description) values
+    ('youtube_channel_url', 'https://www.youtube.com/@Urugerotv-r4o',
+     'Urugero TV channel URL', 'YouTube channel ikoreshwa kuri page ya TV & Radio'),
+    ('youtube_playlist_id', 'UU_ifGgLzPhW4lRUIA95lfEQ',
+     'YouTube playlist ID', 'Playlist cyangwa uploads ID igaragara kuri TV & Radio'),
+    ('tv_radio_hero_description',
+     'Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel, sport, ubuhamya n''amashusho mashya ava kuri YouTube.',
+     'TV & Radio hero description', 'Amagambo agaragara munsi y''umutwe wa page'),
+    ('tv_radio_program_cards',
+     'Live Radio|Indirimbo, inyigisho n''amakuru byumvikana buri munsi.|#radio-live' || chr(10) ||
+     'Urugero TV|Ibiganiro, amakuru, ubuhamya n''inkuru zigezweho.|#featured-videos' || chr(10) ||
+     'Sport Gospel|Inshundura Sports News n''inkuru za ruhago.|#sports' || chr(10) ||
+     'Video Library|Playlist yose ya YouTube iri hano ku rubuga.|#playlist',
+     'TV & Radio program cards', 'Umurongo umwe = Title|Description|Link')
+on conflict (key) do nothing;

@@ -38,6 +38,14 @@ INSERT INTO public.site_settings (key, value, label, description) VALUES
 ('social_twitter',   'https://x.com/UrugeroR98356',                      'Twitter / X',    'Aho Twitter/X account yawe iherereye'),
 ('radio_stream_url', 'https://s11.citrus3.com:8604/stream',              'Live radio stream URL', 'Stream ya radio ikoreshwa kuri player ya live radio'),
 ('radio_station_name','Urugero Live Radio',                              'Izina rya radio', 'Izina rigaragara kuri live radio player'),
+('youtube_channel_url','https://www.youtube.com/@Urugerotv-r4o',          'Urugero TV channel URL', 'YouTube channel ikoreshwa kuri page ya TV & Radio'),
+('youtube_playlist_id','UU_ifGgLzPhW4lRUIA95lfEQ',                        'YouTube playlist ID', 'Playlist cyangwa uploads ID igaragara kuri TV & Radio'),
+('tv_radio_hero_description','Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel, sport, ubuhamya n''amashusho mashya ava kuri YouTube.', 'TV & Radio hero description', 'Amagambo agaragara munsi y''umutwe wa page'),
+('tv_radio_program_cards','Live Radio|Indirimbo, inyigisho n''amakuru byumvikana buri munsi.|#radio-live' || chr(10) ||
+                          'Urugero TV|Ibiganiro, amakuru, ubuhamya n''inkuru zigezweho.|#featured-videos' || chr(10) ||
+                          'Sport Gospel|Inshundura Sports News n''inkuru za ruhago.|#sports' || chr(10) ||
+                          'Video Library|Playlist yose ya YouTube iri hano ku rubuga.|#playlist',
+                          'TV & Radio program cards', 'Umurongo umwe = Title|Description|Link'),
 ('ad_home_top_image','/ads/urugero-live-radio-banner.svg',               'Homepage banner ad image', 'Ifoto ya ad igaragara hagati y''inkuru na live radio'),
 ('ad_home_top_link', '/urugero-tv-radio',                                'Homepage banner ad link', 'Aho umuntu ajya iyo akanze kuri banner ad'),
 ('ad_home_sidebar_image','/ads/urugero-gospel-news-square.svg',          'Sidebar ad image', 'Ifoto ya ad igaragara muri sidebar yo ku rupapuro rubanza'),

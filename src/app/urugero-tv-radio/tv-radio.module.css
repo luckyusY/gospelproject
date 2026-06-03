@@ -148,6 +148,32 @@
     line-height: 1.55;
 }
 
+.pageContent {
+    max-width: 920px;
+    padding: 1.35rem 1.5rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    border-radius: var(--r-md);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    line-height: 1.75;
+}
+
+.pageContent h2,
+.pageContent h3 {
+    margin: 1.2rem 0 0.5rem;
+    color: var(--text);
+}
+
+.pageContent p {
+    margin: 0 0 1rem;
+}
+
+.pageContent > div > :last-child {
+    margin-bottom: 0;
+}
+
 .featuredSection,
 .videoSection,
 .moreSection {

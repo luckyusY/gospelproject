@@ -23,6 +23,10 @@ const ICONS: Record<string, React.ElementType> = {
     social_twitter: TwitterLogo,
     radio_stream_url: RadioButton,
     radio_station_name: RadioButton,
+    youtube_channel_url: YoutubeLogo,
+    youtube_playlist_id: YoutubeLogo,
+    tv_radio_hero_description: YoutubeLogo,
+    tv_radio_program_cards: YoutubeLogo,
     ad_home_top_image: ImageSquare,
     ad_home_top_link: ImageSquare,
     ad_home_sidebar_image: ImageSquare,
@@ -39,6 +43,11 @@ const GROUPS: Array<{ id: SettingGroup; title: string; description: string }> = 
         id: "radio",
         title: "Live radio",
         description: "Set the radio stream and the player name shown on the site.",
+    },
+    {
+        id: "videos",
+        title: "TV & video",
+        description: "Set TV & Radio page copy, YouTube channel links, playlists, and program cards.",
     },
     {
         id: "ads",

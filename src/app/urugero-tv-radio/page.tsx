@@ -19,10 +19,23 @@ export const metadata: Metadata = buildMeta({
     path: "/urugero-tv-radio",
 });
 
-const CHANNEL_URL = "https://www.youtube.com/@Urugerotv-r4o";
-const PLAYLIST_ID = "UU_ifGgLzPhW4lRUIA95lfEQ";
+type TvVideo = {
+    videoId: string;
+    title: string;
+    description: string;
+    category?: string;
+};
 
-const featuredVideos = [
+type ProgramCard = {
+    title: string;
+    text: string;
+    href: string;
+};
+
+const DEFAULT_CHANNEL_URL = "https://www.youtube.com/@Urugerotv-r4o";
+const DEFAULT_PLAYLIST_ID = "UU_ifGgLzPhW4lRUIA95lfEQ";
+
+const fallbackFeaturedVideos: TvVideo[] = [
     {
         videoId: "a1IfX2-RIrk",
         title: "Aciye impaka abahangisha King James na Mbonyi",
@@ -42,9 +55,9 @@ const featuredVideos = [
         category: "Ubuzima",
     },
 ];
-const heroVideo = featuredVideos[0] as (typeof featuredVideos)[number];
+const heroVideo = fallbackFeaturedVideos[0] as TvVideo;
 
-const latestVideos = [
+const fallbackLatestVideos: TvVideo[] = [
     {
         videoId: "u5TFSRPjUdE",
         title: "Amakuru mashya ya Gospel",
@@ -87,7 +100,7 @@ const latestVideos = [
     },
 ];
 
-const sportsVideos = [
+const fallbackSportsVideos: TvVideo[] = [
     {
         videoId: "hdcWJLKejn0",
         title: "Inshundura Sports News: Rayon, Mukura na Marine",
@@ -105,45 +118,79 @@ const sportsVideos = [
     },
 ];
 
-const moreVideos = [
-    "YRRNCbtzGh0",
-    "4nW5S6-_RdE",
-    "pgb3Dblq8So",
-    "_V5GbAkfioc",
-    "vRuEuhVHNU4",
-    "liSLPETkyJY",
-    "_hBAT5IP3Cc",
-    "dtxhlmfkGnI",
+const fallbackLibraryVideos: TvVideo[] = [
+    { videoId: "YRRNCbtzGh0", title: "Urugero TV video 1", description: "Reba kuri YouTube" },
+    { videoId: "4nW5S6-_RdE", title: "Urugero TV video 2", description: "Reba kuri YouTube" },
+    { videoId: "pgb3Dblq8So", title: "Urugero TV video 3", description: "Reba kuri YouTube" },
+    { videoId: "_V5GbAkfioc", title: "Urugero TV video 4", description: "Reba kuri YouTube" },
+    { videoId: "vRuEuhVHNU4", title: "Urugero TV video 5", description: "Reba kuri YouTube" },
+    { videoId: "liSLPETkyJY", title: "Urugero TV video 6", description: "Reba kuri YouTube" },
+    { videoId: "_hBAT5IP3Cc", title: "Urugero TV video 7", description: "Reba kuri YouTube" },
+    { videoId: "dtxhlmfkGnI", title: "Urugero TV video 8", description: "Reba kuri YouTube" },
 ];
 
-const programCards = [
+const fallbackProgramCards: ProgramCard[] = [
     { title: "Live Radio", text: "Indirimbo, inyigisho n'amakuru byumvikana buri munsi.", href: "#radio-live" },
     { title: "Urugero TV", text: "Ibiganiro, amakuru, ubuhamya n'inkuru zigezweho.", href: "#featured-videos" },
     { title: "Sport Gospel", text: "Inshundura Sports News n'inkuru za ruhago.", href: "#sports" },
     { title: "Video Library", text: "Playlist yose ya YouTube iri hano ku rubuga.", href: "#playlist" },
 ];
 
+function videosForSection(videos: VideoRow[], sections: string[], fallback: TvVideo[], category?: string): TvVideo[] {
+    const rows = videos
+        .filter(video => sections.includes(video.section))
+        .map(video => ({
+            videoId: video.youtube_id,
+            title: video.title,
+            description: video.description,
+            category,
+        }));
+
+    return rows.length > 0 ? rows : fallback;
+}
+
+function programCardsFromSetting(value: string | undefined): ProgramCard[] {
+    const cards = (value ?? "")
+        .split("\n")
+        .map(line => {
+            const [title, text, href] = line.split("|").map(part => part.trim());
+            return title && text
+                ? { title, text, href: href || "#" }
+                : null;
+        })
+        .filter((card): card is ProgramCard => Boolean(card));
+
+    return cards.length > 0 ? cards : fallbackProgramCards;
+}
+
 export default async function UrgeroTvRadioPage() {
     const settings = await getPublicSiteSettings();
     const streamUrl = settings.radio_stream_url ?? DEFAULT_RADIO_STREAM_URL;
+    const channelUrl = settings.youtube_channel_url || settings.social_youtube || DEFAULT_CHANNEL_URL;
+    const playlistId = settings.youtube_playlist_id || DEFAULT_PLAYLIST_ID;
+    const programCards = programCardsFromSetting(settings.tv_radio_program_cards);
 
     // Editable hero copy + admin-managed featured videos (fall back to defaults).
     const page = await getPage("urugero-tv-radio");
     const { data: tvVideosData } = await supabase
         .from("videos")
         .select("*")
-        .eq("section", "tv-radio")
+        .in("section", ["tv-radio", "tv-radio-featured", "tv-radio-latest", "tv-radio-sports", "tv-radio-library"])
         .eq("is_published", true)
+        .order("section", { ascending: true })
         .order("sort_order", { ascending: true });
     const tvVideos = (tvVideosData ?? []) as VideoRow[];
 
-    const featured = tvVideos.length > 0
-        ? tvVideos.map(v => ({ videoId: v.youtube_id, title: v.title, description: v.description, category: "Urugero TV" }))
-        : featuredVideos;
+    const featured = videosForSection(tvVideos, ["tv-radio-featured", "tv-radio"], fallbackFeaturedVideos, "Urugero TV");
+    const latest = videosForSection(tvVideos, ["tv-radio-latest"], fallbackLatestVideos);
+    const sports = videosForSection(tvVideos, ["tv-radio-sports"], fallbackSportsVideos);
+    const library = videosForSection(tvVideos, ["tv-radio-library"], fallbackLibraryVideos);
     const hero = featured[0] ?? heroVideo;
 
     const heroEyebrow = page?.subtitle || "URUGERO MEDIA GROUP";
     const heroTitle = page?.title || "Urugero TV & Radio";
+    const heroDescription = settings.tv_radio_hero_description
+        || "Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel, sport, ubuhamya n'amashusho mashya ava kuri YouTube.";
 
     return (
         <div className={styles.page}>
@@ -153,8 +200,7 @@ export default async function UrgeroTvRadioPage() {
                         <p className={styles.eyebrow}>{heroEyebrow}</p>
                         <h1 className={styles.title}>{heroTitle}</h1>
                         <p className={styles.description}>
-                            Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel,
-                            sport, ubuhamya n&apos;amashusho mashya ava kuri YouTube.
+                            {heroDescription}
                         </p>
                         <div className={styles.heroActions}>
                             <a href="#featured-videos" className={styles.primaryAction}>Reba videos</a>
@@ -190,13 +236,19 @@ export default async function UrgeroTvRadioPage() {
                     </div>
                 </section>
 
+                {page?.content && (
+                    <section className={styles.pageContent} aria-label="TV & Radio introduction">
+                        <div dangerouslySetInnerHTML={{ __html: page.content }} />
+                    </section>
+                )}
+
                 <section className={styles.featuredSection} id="featured-videos" aria-labelledby="featured-title">
                     <div className={styles.sectionHeader}>
                         <div>
                             <p className={styles.sectionEyebrow}>URUGERO TV</p>
                             <h2 id="featured-title">Ibiganiro bikunzwe</h2>
                         </div>
-                        <a href={CHANNEL_URL} target="_blank" rel="noopener noreferrer" className={styles.channelButton}>
+                        <a href={channelUrl} target="_blank" rel="noopener noreferrer" className={styles.channelButton}>
                             Reba channel
                         </a>
                     </div>
@@ -222,7 +274,7 @@ export default async function UrgeroTvRadioPage() {
                         </div>
                     </div>
                     <div className={styles.videoGrid}>
-                        {latestVideos.map((video) => (
+                        {latest.map((video) => (
                             <YoutubeEmbed
                                 key={video.videoId}
                                 videoId={video.videoId}
@@ -241,7 +293,7 @@ export default async function UrgeroTvRadioPage() {
                         </div>
                     </div>
                     <div className={styles.videoGridThree}>
-                        {sportsVideos.map((video) => (
+                        {sports.map((video) => (
                             <YoutubeEmbed
                                 key={video.videoId}
                                 videoId={video.videoId}
@@ -260,20 +312,20 @@ export default async function UrgeroTvRadioPage() {
                         </div>
                     </div>
                     <div className={styles.moreGrid}>
-                        {moreVideos.map((videoId, index) => (
+                        {library.map((video, index) => (
                             <a
-                                key={videoId}
-                                href={`https://www.youtube.com/watch?v=${videoId}`}
+                                key={video.videoId}
+                                href={`https://www.youtube.com/watch?v=${video.videoId}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={styles.moreCard}
                             >
                                 <img
-                                    src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
-                                    alt={`Urugero TV video ${index + 1}`}
+                                    src={`https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`}
+                                    alt={video.title || `Urugero TV video ${index + 1}`}
                                     loading="lazy"
                                 />
-                                <span>Reba kuri YouTube</span>
+                                <span>{video.title || video.description || "Reba kuri YouTube"}</span>
                             </a>
                         ))}
                     </div>
@@ -282,8 +334,8 @@ export default async function UrgeroTvRadioPage() {
                 <section id="playlist">
                     <YouTubePlaylistEmbed
                         title="Playlist yose ya Urugero TV"
-                        playlistId={PLAYLIST_ID}
-                        channelUrl={CHANNEL_URL}
+                        playlistId={playlistId}
+                        channelUrl={channelUrl}
                     />
                 </section>
             </div>

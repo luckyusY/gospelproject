@@ -217,7 +217,7 @@ export interface VideoRow {
     title:        string;
     description:  string;
     youtube_id:   string;
-    section:      string;          // 'homepage' | 'tv-radio'
+    section:      string;          // 'homepage' | 'tv-radio-featured' | 'tv-radio-latest' | ...
     sort_order:   number;
     is_published: boolean;
     created_at:   string;
