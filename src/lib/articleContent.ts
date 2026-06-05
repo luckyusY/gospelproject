@@ -65,6 +65,15 @@ function cleanUrl(value: string) {
         .trim();
 }
 
+function textFromInlineHtml(value: string) {
+    return value
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .trim();
+}
+
 function escapeHtml(value: string) {
     return value
         .replace(/&/g, "&amp;")
@@ -129,9 +138,9 @@ export function renderArticleContent(content: string) {
             },
         )
         .replace(
-            /<p>\s*(https?:\/\/[^\s<]+)\s*<\/p>/gi,
-            (full, href: string) => {
-                return embedForUrl(href) ?? full;
+            /<p\b[^>]*>([\s\S]*?)<\/p>/gi,
+            (full, innerHtml: string) => {
+                return embedForUrl(textFromInlineHtml(innerHtml)) ?? full;
             },
         );
 }
