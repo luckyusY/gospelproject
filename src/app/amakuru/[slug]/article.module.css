@@ -109,10 +109,13 @@
 
 /* Keep embedded media/tables/code inside the column on mobile */
 .body :global(img),
-.body :global(video),
-.body :global(iframe) {
+.body :global(video) {
     max-width: 100%;
     height: auto;
+    border-radius: 12px;
+}
+.body :global(iframe:not(.article-embed-youtube)) {
+    max-width: 100%;
     border-radius: 12px;
 }
 .body :global(figure) { max-width: 100%; margin: 1.5rem 0; }

@@ -16,6 +16,17 @@
     justify-content: center;
 }
 
+.embed :global(.twitter-tweet),
+.embed :global(.twitter-tweet-rendered),
+.embed :global(.instagram-media),
+.embed :global(.fb-post) {
+    margin: 0 auto !important;
+}
+
+.embed :global(iframe) {
+    max-width: 100%;
+}
+
 .youtube {
     width: 100%;
     aspect-ratio: 16 / 9;
