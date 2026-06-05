@@ -6,7 +6,9 @@ import { supabase, supabaseAdmin }    from "@/lib/supabase";
 import { ensureDefaultArticleCategories, getDefaultCategoryBySlug } from "@/lib/categories";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons    from "@/components/ShareButtons";
+import TwitterEmbeds   from "@/components/TwitterEmbeds";
 import CategoryListing from "@/components/CategoryListing";
+import { renderArticleContent } from "@/lib/articleContent";
 import type { ArticleRow, CategoryRow } from "@/types/database";
 import styles          from "./article.module.css";
 
@@ -171,8 +173,9 @@ export default async function ArticleOrCategoryPage({ params }: Props) {
                 {/* ── Article Body (HTML rendered safely) ── */}
                 <article
                     className={styles.body}
-                    dangerouslySetInnerHTML={{ __html: a.content }}
+                    dangerouslySetInnerHTML={{ __html: renderArticleContent(a.content) }}
                 />
+                <TwitterEmbeds />
 
                 {/* ── Share ──────────────────────────────── */}
                 <ShareButtons url={absoluteUrl(`/amakuru/${a.slug}`)} title={a.title} />

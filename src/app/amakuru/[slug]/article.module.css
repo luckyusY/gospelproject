@@ -161,6 +161,13 @@
     margin: 0;
     font-size: 1.05rem;
 }
+.body :global(.twitter-tweet) {
+    margin: 2rem auto !important;
+    max-width: 550px;
+}
+.body :global(.twitter-tweet-rendered) {
+    margin: 2rem auto !important;
+}
 .body :global(ul),
 .body :global(ol) {
     padding-left: 1.6rem;

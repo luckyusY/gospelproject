@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons from "@/components/ShareButtons";
+import TwitterEmbeds from "@/components/TwitterEmbeds";
+import { renderArticleContent } from "@/lib/articleContent";
 import type { ArticleRow } from "@/types/database";
 import styles from "@/app/amakuru/[slug]/article.module.css";
 
@@ -125,8 +127,9 @@ export default async function TumenyeBibiliyaArticlePage({ params }: Props) {
 
                 <article
                     className={styles.body}
-                    dangerouslySetInnerHTML={{ __html: article.content }}
+                    dangerouslySetInnerHTML={{ __html: renderArticleContent(article.content) }}
                 />
+                <TwitterEmbeds />
 
                 <ShareButtons
                     url={absoluteUrl(`/tumenye-bibiliya/${article.slug}`)}

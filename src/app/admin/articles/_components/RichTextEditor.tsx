@@ -95,7 +95,8 @@ export default function RichTextEditor({ value, onChange }: Props) {
             <span className={styles.hint}>
                 Write as you see it: headings, links, bullet lists and quotes. Add as many
                 images as you like — click the image button, drag &amp; drop, or paste them.
-                They&apos;re uploaded to Cloudinary and embedded in the story.
+                They&apos;re uploaded to Cloudinary and embedded in the story. Paste a Twitter/X
+                post link on its own line to embed it in the published article.
             </span>
             {editorTimedOut && (
                 <div className={styles.editorWarning} role="status">

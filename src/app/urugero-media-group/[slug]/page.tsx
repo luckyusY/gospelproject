@@ -6,8 +6,10 @@ import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
 import { getPage } from "@/lib/pages";
 import ShareButtons from "@/components/ShareButtons";
+import TwitterEmbeds from "@/components/TwitterEmbeds";
 import SectionPage from "@/components/SectionPage";
 import { ArticleCard } from "@/components/ui";
+import { renderArticleContent } from "@/lib/articleContent";
 import type { ArticleRow } from "@/types/database";
 import articleStyles from "@/app/amakuru/[slug]/article.module.css";
 import styles from "./media-group-detail.module.css";
@@ -282,8 +284,9 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
 
                 <article
                     className={articleStyles.body}
-                    dangerouslySetInnerHTML={{ __html: article.content }}
+                    dangerouslySetInnerHTML={{ __html: renderArticleContent(article.content) }}
                 />
+                <TwitterEmbeds />
 
                 <ShareButtons url={absoluteUrl(`/urugero-media-group/${article.slug}`)} title={article.title} />
 
