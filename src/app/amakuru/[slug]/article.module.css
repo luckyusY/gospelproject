@@ -165,8 +165,46 @@
     margin: 2rem auto !important;
     max-width: 550px;
 }
-.body :global(.twitter-tweet-rendered) {
+.body :global(.twitter-tweet-rendered),
+.body :global(.instagram-media),
+.body :global(.fb-post) {
     margin: 2rem auto !important;
+}
+.body :global(.article-embed-youtube) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    margin: 2rem auto;
+    background: var(--bg-subtle);
+}
+.body :global(.article-link-card) {
+    display: grid;
+    gap: 0.35rem;
+    margin: 1.75rem 0;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    border-radius: var(--r-md);
+    background: var(--bg-card);
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+}
+.body :global(.article-link-card:hover) {
+    border-left-color: var(--gold);
+    box-shadow: var(--shadow-md);
+}
+.body :global(.article-link-card-label) {
+    color: var(--red);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.body :global(.article-link-card span:last-child) {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 .body :global(ul),
 .body :global(ol) {

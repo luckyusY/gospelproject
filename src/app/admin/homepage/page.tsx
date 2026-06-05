@@ -28,6 +28,8 @@ export default async function AdminHomepagePage() {
             verseText={settings.verse_text ?? ""}
             verseReference={settings.verse_reference ?? ""}
             tickerLines={settings.ticker_lines ?? ""}
+            embedTitle={settings.homepage_embed_title ?? ""}
+            embedUrl={settings.homepage_embed_url ?? ""}
         />
     );
 }

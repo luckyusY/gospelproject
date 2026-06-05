@@ -11,21 +11,50 @@ declare global {
                 load: (element?: HTMLElement) => void;
             };
         };
+        instgrm?: {
+            Embeds?: {
+                process: () => void;
+            };
+        };
+        FB?: {
+            XFBML?: {
+                parse: () => void;
+            };
+        };
     }
 }
 
 export default function TwitterEmbeds() {
     const pathname = usePathname();
 
-    useEffect(() => {
+    function loadEmbeds() {
         window.twttr?.widgets?.load();
+        window.instgrm?.Embeds?.process();
+        window.FB?.XFBML?.parse();
+    }
+
+    useEffect(() => {
+        loadEmbeds();
     }, [pathname]);
 
     return (
-        <Script
-            src="https://platform.twitter.com/widgets.js"
-            strategy="afterInteractive"
-            onLoad={() => window.twttr?.widgets?.load()}
-        />
+        <>
+            <div id="fb-root" />
+            <Script
+                src="https://platform.twitter.com/widgets.js"
+                strategy="afterInteractive"
+                onLoad={loadEmbeds}
+            />
+            <Script
+                src="https://www.instagram.com/embed.js"
+                strategy="afterInteractive"
+                onLoad={loadEmbeds}
+            />
+            <Script
+                src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0"
+                strategy="afterInteractive"
+                onLoad={loadEmbeds}
+            />
+        </>
     );
 }

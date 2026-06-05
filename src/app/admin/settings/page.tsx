@@ -179,7 +179,7 @@ export default function SettingsPage() {
                                         : definition?.group === "homepage"
                                             ? ""
                                             : "https://...";
-                                    const required = definition?.group !== "ads";
+                                    const required = definition?.group !== "ads" && definition?.value !== "";
 
                                     return (
                                         <label key={setting.key} className={settStyles.field}>

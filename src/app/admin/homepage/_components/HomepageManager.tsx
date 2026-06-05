@@ -14,9 +14,11 @@ type Props = {
     verseText: string;
     verseReference: string;
     tickerLines: string;
+    embedTitle: string;
+    embedUrl: string;
 };
 
-export default function HomepageManager({ sections, articles, verseText, verseReference, tickerLines }: Props) {
+export default function HomepageManager({ sections, articles, verseText, verseReference, tickerLines, embedTitle, embedUrl }: Props) {
     const router = useRouter();
     const [, startTransition] = useTransition();
     const refresh = () => startTransition(() => router.refresh());
@@ -60,6 +62,8 @@ export default function HomepageManager({ sections, articles, verseText, verseRe
     const [verse, setVerse] = useState(verseText);
     const [ref, setRef] = useState(verseReference);
     const [ticker, setTicker] = useState(tickerLines);
+    const [homeEmbedTitle, setHomeEmbedTitle] = useState(embedTitle);
+    const [homeEmbedUrl, setHomeEmbedUrl] = useState(embedUrl);
     const [savingContent, setSavingContent] = useState(false);
     const [contentMsg, setContentMsg] = useState<string | null>(null);
 
@@ -70,7 +74,13 @@ export default function HomepageManager({ sections, articles, verseText, verseRe
         const res = await fetch("/api/admin/settings", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ verse_text: verse, verse_reference: ref, ticker_lines: ticker }),
+            body: JSON.stringify({
+                verse_text: verse,
+                verse_reference: ref,
+                ticker_lines: ticker,
+                homepage_embed_title: homeEmbedTitle,
+                homepage_embed_url: homeEmbedUrl,
+            }),
         });
         setSavingContent(false);
         setContentMsg(res.ok ? "Saved." : "Could not save.");
@@ -140,7 +150,7 @@ export default function HomepageManager({ sections, articles, verseText, verseRe
 
             {/* ── Verse + ticker ───────────────────────── */}
             <form className={form.form} onSubmit={saveContent} style={{ marginBottom: "2.5rem" }}>
-                <h2 className={styles.heading} style={{ fontSize: "1.05rem" }}>Verse of the day &amp; news ticker</h2>
+                <h2 className={styles.heading} style={{ fontSize: "1.05rem" }}>Verse of the day, news ticker &amp; homepage embed</h2>
                 <label className={form.label}>
                     Verse text
                     <textarea className={form.textarea} rows={3} value={verse} onChange={e => setVerse(e.target.value)} />
@@ -152,6 +162,28 @@ export default function HomepageManager({ sections, articles, verseText, verseRe
                 <label className={form.label}>
                     Breaking-news ticker (one line per item)
                     <textarea className={form.textarea} rows={4} value={ticker} onChange={e => setTicker(e.target.value)} />
+                </label>
+                <label className={form.label}>
+                    Featured embed/link title
+                    <input
+                        className={form.input}
+                        value={homeEmbedTitle}
+                        onChange={e => setHomeEmbedTitle(e.target.value)}
+                        placeholder="Inkuru yo ku mbuga nkoranyambaga"
+                    />
+                </label>
+                <label className={form.label}>
+                    Featured embed/link URL
+                    <input
+                        className={form.input}
+                        type="url"
+                        value={homeEmbedUrl}
+                        onChange={e => setHomeEmbedUrl(e.target.value)}
+                        placeholder="https://x.com/... or https://facebook.com/..."
+                    />
+                    <span className={form.hint}>
+                        Supports Twitter/X, Facebook, Instagram, YouTube and normal webpage links. Leave empty to hide it.
+                    </span>
                 </label>
                 <button type="submit" className={form.submitBtn} style={{ maxWidth: 220 }} disabled={savingContent}>
                     {savingContent ? "Saving..." : "Save content"}

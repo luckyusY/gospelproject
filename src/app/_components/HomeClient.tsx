@@ -11,6 +11,7 @@ import AdSlot from "@/components/AdSlot";
 import FadeIn from "@/components/ui/FadeIn";
 import LiveRadioPlayer from "@/components/LiveRadioPlayer";
 import RadioEmbed from "@/components/RadioEmbed";
+import ExternalEmbed from "@/components/ExternalEmbed";
 import StoriesSlider from "@/components/StoriesSlider";
 import NewsletterWidget from "./NewsletterWidget";
 import {
@@ -129,6 +130,8 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
 
     const verseText = settings.verse_text ?? defaultSettings.verse_text ?? "";
     const verseRef  = settings.verse_reference ?? defaultSettings.verse_reference ?? "";
+    const homepageEmbedTitle = settings.homepage_embed_title ?? defaultSettings.homepage_embed_title ?? "";
+    const homepageEmbedUrl = (settings.homepage_embed_url ?? defaultSettings.homepage_embed_url ?? "").trim();
 
     const videoList = videos.length > 0 ? videos : FALLBACK_VIDEOS;
     const categoryBasePaths = Object.fromEntries(
@@ -438,7 +441,20 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
             )}
 
             {/* ── Flow sections (verse / latest / testimonies / videos) ── */}
-            {flowOrder.map(key => flowRenderers[key]())}
+            {flowOrder.flatMap(key => {
+                const section = flowRenderers[key]();
+
+                if (key !== "verse" || !homepageEmbedUrl) return [section];
+
+                return [
+                    section,
+                    <ExternalEmbed
+                        key="homepage-embed"
+                        title={homepageEmbedTitle}
+                        url={homepageEmbedUrl}
+                    />,
+                ];
+            })}
 
         </div>
     );

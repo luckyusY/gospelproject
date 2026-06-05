@@ -169,6 +169,22 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
         group: "homepage",
         input: "textarea",
     },
+    {
+        key: "homepage_embed_title",
+        value: "Inkuru yo ku mbuga nkoranyambaga",
+        label: "Homepage embed/link title",
+        description: "Title shown above the optional homepage embed/link block.",
+        group: "homepage",
+        input: "text",
+    },
+    {
+        key: "homepage_embed_url",
+        value: "",
+        label: "Homepage embed/link URL",
+        description: "Paste a Twitter/X, Instagram, Facebook, YouTube, or webpage URL. Leave empty to hide the block.",
+        group: "homepage",
+        input: "url",
+    },
 ];
 
 /** Split a newline-separated setting (e.g. ticker_lines) into trimmed, non-empty lines. */
