@@ -67,7 +67,7 @@ export default async function TumenyeBibiliyaArticlePage({ params }: Props) {
 
     const relatedArticles = (related ?? []) as ArticleRow[];
     const pubDate = article.published_at
-        ? new Date(article.published_at).toLocaleDateString("fr-RW", {
+        ? new Date(article.published_at).toLocaleDateString("en-US", {
             day: "numeric",
             month: "long",
             year: "numeric",

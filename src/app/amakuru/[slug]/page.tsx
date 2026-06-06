@@ -108,7 +108,7 @@ export default async function ArticleOrCategoryPage({ params }: Props) {
 
     /* Published date */
     const pubDate = a.published_at
-        ? new Date(a.published_at).toLocaleDateString("fr-RW", {
+        ? new Date(a.published_at).toLocaleDateString("en-US", {
             day: "numeric", month: "long", year: "numeric",
           })
         : null;
