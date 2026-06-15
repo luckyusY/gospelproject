@@ -14,8 +14,20 @@ export const revalidate = 60; // ISR: re-fetch every 60 s in production
 
 export default async function Home() {
 
-    // ── Latest published articles (newest first, up to 9)
-    const [featuredResult, latestResult] = await Promise.all([
+    // Fetch everything the homepage needs in parallel — these queries are
+    // independent, so running them together (instead of awaiting one after
+    // another) cuts the homepage's load time to a single round-trip's worth.
+    const today = new Date().toISOString().slice(0, 10);
+    const [
+        featuredResult,
+        latestResult,
+        eventsResult,
+        testimoniesResult,
+        videosResult,
+        sectionsResult,
+        catsResult,
+        settings,
+    ] = await Promise.all([
         supabase
             .from("articles")
             .select("*")
@@ -29,6 +41,36 @@ export default async function Home() {
             .eq("is_published", true)
             .order("published_at", { ascending: false })
             .limit(12),
+        supabase
+            .from("events")
+            .select("*")
+            .eq("is_published", true)
+            .gte("event_date", today)
+            .order("event_date", { ascending: true })
+            .limit(3),
+        supabase
+            .from("testimonies")
+            .select("*")
+            .eq("is_published", true)
+            .order("is_featured", { ascending: false })
+            .order("published_at", { ascending: false })
+            .limit(3),
+        supabase
+            .from("videos")
+            .select("*")
+            .eq("section", "homepage")
+            .eq("is_published", true)
+            .order("sort_order", { ascending: true })
+            .limit(6),
+        supabase
+            .from("homepage_sections")
+            .select("*")
+            .order("sort_order", { ascending: true }),
+        supabase
+            .from("categories")
+            .select("slug, name, color, nav_group")
+            .order("name", { ascending: true }),
+        getPublicSiteSettings(),
     ]);
 
     const featuredArticles = (featuredResult.data ?? []) as ArticleRow[];
@@ -46,55 +88,11 @@ export default async function Home() {
         .filter(article => !featuredIds.has(article.id))
         .slice(0, 6);
 
-    // ── Upcoming events
-    const { data: eventsData } = await supabase
-        .from("events")
-        .select("*")
-        .eq("is_published", true)
-        .gte("event_date", new Date().toISOString().slice(0, 10))
-        .order("event_date", { ascending: true })
-        .limit(3);
-
-    const events = (eventsData ?? []) as EventRow[];
-
-    // ── Featured / latest testimonies (featured first)
-    const { data: testimoniesData } = await supabase
-        .from("testimonies")
-        .select("*")
-        .eq("is_published", true)
-        .order("is_featured", { ascending: false })
-        .order("published_at", { ascending: false })
-        .limit(3);
-
-    const testimonies = (testimoniesData ?? []) as TestimonyRow[];
-
-    // ── Homepage featured videos
-    const { data: videosData } = await supabase
-        .from("videos")
-        .select("*")
-        .eq("section", "homepage")
-        .eq("is_published", true)
-        .order("sort_order", { ascending: true })
-        .limit(6);
-
-    const videos = (videosData ?? []) as VideoRow[];
-
-    // ── Homepage section toggles / order
-    const { data: sectionsData } = await supabase
-        .from("homepage_sections")
-        .select("*")
-        .order("sort_order", { ascending: true });
-
-    const sections = (sectionsData ?? []) as HomepageSectionRow[];
-
-    // ── Categories (for labelled filter pills)
-    const { data: catsData } = await supabase
-        .from("categories")
-        .select("slug, name, color, nav_group")
-        .order("name", { ascending: true });
-
-    const categories = (catsData ?? []) as Pick<CategoryRow, "slug" | "name" | "color" | "nav_group">[];
-    const settings = await getPublicSiteSettings();
+    const events = (eventsResult.data ?? []) as EventRow[];
+    const testimonies = (testimoniesResult.data ?? []) as TestimonyRow[];
+    const videos = (videosResult.data ?? []) as VideoRow[];
+    const sections = (sectionsResult.data ?? []) as HomepageSectionRow[];
+    const categories = (catsResult.data ?? []) as Pick<CategoryRow, "slug" | "name" | "color" | "nav_group">[];
 
     return (
         <HomeClient
