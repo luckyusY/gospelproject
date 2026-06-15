@@ -64,6 +64,7 @@ export const FALLBACK_NAV: NavNode[] = [
         ],
     },
     { href: "/tumenye-bibiliya", label: "Tumenye Bibiliya", isMega: false, children: [] },
+    { href: "/amatora", label: "Amatora", isMega: false, children: [] },
     { href: "/urugero-tv-radio", label: "Urugero TV & Radio", isMega: false, children: [] },
     {
         href: "/urugero-media-group", label: "Urugero Media Group", isMega: true, children: [
