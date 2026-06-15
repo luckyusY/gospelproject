@@ -14,6 +14,23 @@ const REQUIRED_AMAKURU_CHILDREN: NavChild[] = [
     { href: "/amakuru/ibaruwa", label: "Ibaruwa" },
 ];
 
+/** Maps a category's `nav_group` to the top-level menu item it belongs under. */
+const NAV_GROUP_TO_TOP_HREF: Record<string, string> = {
+    amakuru: "/amakuru",
+    inyigisho: "/inyigisho",
+    ibigwi: "/ibigwi",
+    "tumenye-bibiliya": "/tumenye-bibiliya",
+    "media-group": "/urugero-media-group",
+};
+
+type CategoryNavRow = {
+    slug: string;
+    name: string;
+    nav_group: string | null;
+    sort_order: number;
+    show_in_nav: boolean;
+};
+
 /**
  * Hardcoded fallback used when the `nav_items` table is empty or unavailable,
  * so the site menu never disappears. Mirrors the original Header menu.
@@ -66,33 +83,68 @@ export const FALLBACK_NAV: NavNode[] = [
 
 /** Build the navigation tree from the `nav_items` table, with a safe fallback. */
 export async function getNavTree(): Promise<NavNode[]> {
-    const { data, error } = await supabase
-        .from("nav_items")
-        .select("*")
-        .eq("is_visible", true)
-        .order("sort_order", { ascending: true })
-        .order("id", { ascending: true });
+    const [navResult, categories] = await Promise.all([
+        supabase
+            .from("nav_items")
+            .select("*")
+            .eq("is_visible", true)
+            .order("sort_order", { ascending: true })
+            .order("id", { ascending: true }),
+        getNavCategories(),
+    ]);
 
+    const { data, error } = navResult;
     const rows = (data ?? []) as NavItemRow[];
-    if (error || rows.length === 0) return FALLBACK_NAV;
 
-    const tops = rows.filter(r => r.parent_id == null);
-    return tops.map(t => ({
-        href: t.href,
-        label: t.label,
-        isMega: t.is_mega,
-        children: mergeRequiredChildren(t.href, rows
-            .filter(c => c.parent_id === t.id)
-            .map(c => ({ href: c.href, label: c.label }))),
+    // Start from the DB menu when it exists, otherwise the built-in fallback.
+    const baseTree: NavNode[] =
+        error || rows.length === 0
+            ? FALLBACK_NAV
+            : rows
+                  .filter(r => r.parent_id == null)
+                  .map(t => ({
+                      href: t.href,
+                      label: t.label,
+                      isMega: t.is_mega,
+                      children: rows
+                          .filter(c => c.parent_id === t.id)
+                          .map(c => ({ href: c.href, label: c.label })),
+                  }));
+
+    // Fold every "show in menu" category into the matching top-level dropdown so
+    // adding a category in the admin is enough — no separate Menu edit needed.
+    return baseTree.map(node => ({
+        ...node,
+        children: mergeChildren(node.href, node.children, categories),
     }));
 }
 
-function mergeRequiredChildren(parentHref: string, children: NavChild[]) {
-    if (parentHref !== "/amakuru") return children;
+/** Fetch categories that should appear in the menu, sorted within each group. */
+async function getNavCategories(): Promise<CategoryNavRow[]> {
+    const { data, error } = await supabase
+        .from("categories")
+        .select("slug, name, nav_group, sort_order, show_in_nav")
+        .order("sort_order", { ascending: true });
 
+    if (error || !data) return [];
+    return (data as CategoryNavRow[]).filter(c => c.show_in_nav !== false && c.nav_group != null);
+}
+
+function mergeChildren(parentHref: string, children: NavChild[], categories: CategoryNavRow[]) {
     const merged = new Map(children.map(child => [child.href, child]));
-    for (const child of REQUIRED_AMAKURU_CHILDREN) {
-        if (!merged.has(child.href)) merged.set(child.href, child);
+
+    // Append categories whose group maps to this top-level item.
+    for (const cat of categories) {
+        if (cat.nav_group == null) continue;
+        if (NAV_GROUP_TO_TOP_HREF[cat.nav_group] !== parentHref) continue;
+        const href = `${parentHref}/${cat.slug}`;
+        if (!merged.has(href)) merged.set(href, { href, label: cat.name });
+    }
+
+    if (parentHref === "/amakuru") {
+        for (const child of REQUIRED_AMAKURU_CHILDREN) {
+            if (!merged.has(child.href)) merged.set(child.href, child);
+        }
     }
 
     return Array.from(merged.values());
