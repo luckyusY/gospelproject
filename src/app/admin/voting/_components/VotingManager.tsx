@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ContestEntryRow, ContestRow } from "@/types/database";
+import CloudinaryUploader from "../../articles/_components/CloudinaryUploader";
 import styles from "../../crud.module.css";
 import form from "../../form.module.css";
 
@@ -235,43 +236,54 @@ export default function VotingManager({ contests, entries, tableMissing }: Props
                             aria-label="Description"
                         />
 
+                        <div style={{ marginTop: "0.75rem", maxWidth: 320 }}>
+                            <span className={form.label} style={{ fontWeight: 600, fontSize: "0.85rem" }}>Contest picture</span>
+                            <CloudinaryUploader
+                                value={contest.image_url ?? ""}
+                                onChange={url => patchContest(contest, { image_url: url || null })}
+                            />
+                        </div>
+
                         {/* Entries */}
                         <div style={{ marginTop: "0.85rem", paddingLeft: "1.25rem", borderLeft: "2px solid var(--border, #D8D8D8)" }}>
                             {contestEntries.map(entry => (
-                                <div key={entry.id} style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap", opacity: busyId === entry.id ? 0.6 : 1 }}>
-                                    <input
-                                        defaultValue={entry.name}
-                                        onBlur={e => { if (e.target.value.trim() && e.target.value !== entry.name) patchEntry(entry, { name: e.target.value.trim() }); }}
-                                        className={form.input}
-                                        style={{ flex: "1 1 140px" }}
-                                        aria-label="Entry name"
-                                    />
-                                    <input
-                                        defaultValue={entry.subtitle}
-                                        onBlur={e => { if (e.target.value !== entry.subtitle) patchEntry(entry, { subtitle: e.target.value }); }}
-                                        className={form.input}
-                                        style={{ flex: "1 1 140px" }}
-                                        placeholder="subtitle (e.g. itorero / umujyi)"
-                                        aria-label="Entry subtitle"
-                                    />
-                                    <input
-                                        defaultValue={entry.image_url ?? ""}
-                                        onBlur={e => { if ((e.target.value || null) !== entry.image_url) patchEntry(entry, { image_url: e.target.value }); }}
-                                        className={form.input}
-                                        style={{ flex: "1 1 140px" }}
-                                        placeholder="image URL"
-                                        aria-label="Entry image URL"
-                                    />
-                                    <input
-                                        defaultValue={entry.youtube_id ?? ""}
-                                        onBlur={e => { if ((e.target.value || null) !== entry.youtube_id) patchEntry(entry, { youtube_id: e.target.value }); }}
-                                        className={form.input}
-                                        style={{ width: 120 }}
-                                        placeholder="YouTube ID"
-                                        aria-label="Entry YouTube ID"
-                                    />
-                                    <span style={{ fontSize: "0.85rem", fontWeight: 600, whiteSpace: "nowrap" }}>{entry.vote_count} ✓</span>
-                                    <button type="button" className={styles.deleteRowBtn} onClick={() => removeEntry(entry)}>✕</button>
+                                <div
+                                    key={entry.id}
+                                    style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap", alignItems: "flex-start", border: "1px solid var(--border, #D8D8D8)", borderRadius: 10, padding: "0.75rem", marginBottom: "0.6rem", opacity: busyId === entry.id ? 0.6 : 1 }}
+                                >
+                                    <div style={{ width: 160 }}>
+                                        <CloudinaryUploader
+                                            value={entry.image_url ?? ""}
+                                            onChange={url => patchEntry(entry, { image_url: url || null })}
+                                        />
+                                    </div>
+                                    <div style={{ flex: "1 1 220px", display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+                                        <input
+                                            defaultValue={entry.name}
+                                            onBlur={e => { if (e.target.value.trim() && e.target.value !== entry.name) patchEntry(entry, { name: e.target.value.trim() }); }}
+                                            className={form.input}
+                                            placeholder="Contestant / song name"
+                                            aria-label="Entry name"
+                                        />
+                                        <input
+                                            defaultValue={entry.subtitle}
+                                            onBlur={e => { if (e.target.value !== entry.subtitle) patchEntry(entry, { subtitle: e.target.value }); }}
+                                            className={form.input}
+                                            placeholder="subtitle (e.g. itorero / artist / umujyi)"
+                                            aria-label="Entry subtitle"
+                                        />
+                                        <input
+                                            defaultValue={entry.youtube_id ?? ""}
+                                            onBlur={e => { if ((e.target.value || null) !== entry.youtube_id) patchEntry(entry, { youtube_id: e.target.value }); }}
+                                            className={form.input}
+                                            placeholder="YouTube ID or link (for songs) — e.g. dQw4w9WgXcQ"
+                                            aria-label="Entry YouTube ID"
+                                        />
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.15rem" }}>
+                                            <span style={{ fontSize: "0.85rem", fontWeight: 600 }}>🗳️ {entry.vote_count} {entry.vote_count === 1 ? "ijwi" : "amajwi"}</span>
+                                            <button type="button" className={styles.deleteRowBtn} onClick={() => removeEntry(entry)}>Remove</button>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                             <AddEntry contestId={contest.id} childCount={contestEntries.length} onAdd={addEntry} />

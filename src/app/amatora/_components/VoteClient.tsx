@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import YoutubeEmbed from "@/components/ui/YoutubeEmbed";
 import styles from "../amatora.module.css";
+
+/** Accepts a raw YouTube ID or any common YouTube URL and returns the ID. */
+function extractYouTubeId(value: string | null): string | null {
+    if (!value) return null;
+    const v = value.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
+    const m = v.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
+    return m?.[1] ?? null;
+}
 
 export type VoteEntry = {
     id: number;
@@ -115,28 +125,25 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
                     const isLeader = revealResults && count > 0 && count === maxCount;
                     const isMine = votedEntryId === entry.id;
 
+                    const ytId = extractYouTubeId(entry.youtube_id);
                     return (
                         <div key={entry.id} className={`${styles.entry} ${isLeader ? styles.entryLeader : ""}`}>
-                            <div className={styles.entryImgWrap}>
-                                {entry.image_url ? (
-                                    <Image src={entry.image_url} alt={entry.name} fill className={styles.entryImg} />
-                                ) : (
-                                    <div className={styles.imgPlaceholder}>🎤</div>
-                                )}
-                            </div>
+                            {ytId ? (
+                                <div className={styles.entryEmbed}>
+                                    <YoutubeEmbed videoId={ytId} title={entry.name} aspect="16/9" />
+                                </div>
+                            ) : (
+                                <div className={styles.entryImgWrap}>
+                                    {entry.image_url ? (
+                                        <Image src={entry.image_url} alt={entry.name} fill className={styles.entryImg} />
+                                    ) : (
+                                        <div className={styles.imgPlaceholder}>🎤</div>
+                                    )}
+                                </div>
+                            )}
                             <div className={styles.entryBody}>
                                 <h3 className={styles.entryName}>{entry.name}</h3>
                                 {entry.subtitle && <p className={styles.entrySub}>{entry.subtitle}</p>}
-                                {entry.youtube_id && (
-                                    <a
-                                        className={styles.watchLink}
-                                        href={`https://www.youtube.com/watch?v=${entry.youtube_id}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        ▶ Reba video
-                                    </a>
-                                )}
 
                                 {revealResults && (
                                     <div className={styles.bar}>

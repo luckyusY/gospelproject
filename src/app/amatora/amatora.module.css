@@ -100,6 +100,9 @@
 }
 .entryImg { object-fit: cover; }
 
+/* YouTube embed sits flush at the top of the card, same as the image. */
+.entryEmbed > * { border-radius: 0; }
+
 .entryBody { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .entryName { font-size: 1.05rem; font-weight: 700; margin: 0; }
 .entrySub { font-size: 0.85rem; color: var(--text-muted, #666); margin: 0; }
