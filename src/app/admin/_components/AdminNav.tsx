@@ -15,6 +15,7 @@ const NAV_LINKS = [
     { href: "/admin/testimonies", label: "Testimonies",  icon: "🙌" },
     { href: "/admin/videos",      label: "Videos",       icon: "🎬" },
     { href: "/admin/media",       label: "Media",        icon: "🎵" },
+    { href: "/admin/voting",      label: "Voting",       icon: "🗳️" },
     { href: "/admin/menu",        label: "Menu",         icon: "🧭" },
     { href: "/admin/settings",    label: "Settings",     icon: "⚙️" },
 ];

@@ -72,9 +72,43 @@ export interface Database {
                 Update: Partial<HomepageSectionInsert> & Record<string, unknown>;
                 Relationships: [];
             };
+            analytics_page_views: {
+                Row:    AnalyticsPageViewRow & Record<string, unknown>;
+                Insert: AnalyticsPageViewInsert & Record<string, unknown>;
+                Update: Partial<AnalyticsPageViewInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
+            contests: {
+                Row:    ContestRow & Record<string, unknown>;
+                Insert: ContestInsert & Record<string, unknown>;
+                Update: Partial<ContestInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
+            contest_entries: {
+                Row:    ContestEntryRow & Record<string, unknown>;
+                Insert: ContestEntryInsert & Record<string, unknown>;
+                Update: Partial<ContestEntryInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
+            contest_votes: {
+                Row:    ContestVoteRow & Record<string, unknown>;
+                Insert: ContestVoteInsert & Record<string, unknown>;
+                Update: Partial<ContestVoteInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
         };
         Views:     Record<string, never>;
-        Functions: Record<string, never>;
+        Functions: {
+            cast_contest_vote: {
+                Args: {
+                    p_contest_id: number;
+                    p_entry_id:   number;
+                    p_voter_id:   string;
+                    p_ip_hash:    string | null;
+                };
+                Returns: string;
+            };
+        };
         Enums:     Record<string, never>;
     };
 }
@@ -246,3 +280,58 @@ export interface HomepageSectionRow {
     sort_order: number;
 }
 export type HomepageSectionInsert = Omit<HomepageSectionRow, "id">;
+
+// First-party analytics page views
+export interface AnalyticsPageViewRow {
+    id:         number;
+    path:       string;
+    title:      string | null;
+    referrer:   string | null;
+    visitor_id: string | null;
+    session_id: string | null;
+    country:    string | null;
+    user_agent: string | null;
+    ip_hash:    string | null;
+    created_at: string;
+}
+export type AnalyticsPageViewInsert = Omit<AnalyticsPageViewRow, "id" | "created_at">;
+
+// ── Voting: contests, entries, votes ───────────────────────
+export interface ContestRow {
+    id:           number;
+    title:        string;
+    slug:         string;
+    description:  string;
+    image_url:    string | null;
+    is_active:    boolean;        // open for voting & visible publicly
+    show_results: boolean;        // show live counts to voters
+    ends_at:      string | null;  // optional auto-close time (ISO)
+    created_at:   string;
+    updated_at:   string;
+}
+export type ContestInsert = Omit<ContestRow, "id" | "created_at" | "updated_at">;
+
+export interface ContestEntryRow {
+    id:          number;
+    contest_id:  number;
+    name:        string;
+    subtitle:    string;
+    image_url:   string | null;
+    youtube_id:  string | null;
+    vote_count:  number;
+    sort_order:  number;
+    created_at:  string;
+}
+export type ContestEntryInsert = Omit<ContestEntryRow, "id" | "created_at" | "vote_count"> & {
+    vote_count?: number;
+};
+
+export interface ContestVoteRow {
+    id:         number;
+    contest_id: number;
+    entry_id:   number;
+    voter_id:   string;
+    ip_hash:    string | null;
+    created_at: string;
+}
+export type ContestVoteInsert = Omit<ContestVoteRow, "id" | "created_at">;

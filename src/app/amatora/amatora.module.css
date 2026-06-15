@@ -1,0 +1,175 @@
+.page {
+    padding-bottom: 4rem;
+}
+
+/* ── Listing ─────────────────────────────────── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.contestCard {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border, #e3e3e3);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface, #fff);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.contestCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contestImgWrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--muted, #f0f0f0);
+}
+.contestImg { object-fit: cover; }
+.imgPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 2.5rem;
+}
+
+.contestBody { padding: 1.1rem 1.2rem 1.3rem; }
+.contestTitle { font-size: 1.15rem; font-weight: 700; margin: 0 0 0.4rem; }
+.contestDesc { font-size: 0.9rem; color: var(--text-muted, #666); margin: 0 0 0.9rem; line-height: 1.5; }
+
+.statusRow { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+.badgeOpen {
+    background: #059669; color: #fff; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 600;
+}
+.badgeClosed {
+    background: #6b7280; color: #fff; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 600;
+}
+.voteTotal { color: var(--text-muted, #666); }
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted, #666);
+}
+
+/* ── Voting (detail) ─────────────────────────── */
+.intro { margin: 1.5rem 0 0.5rem; }
+.note {
+    margin: 0.5rem 0 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #666);
+}
+.closedBanner {
+    margin: 1rem 0;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.entryList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.entry {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border, #e3e3e3);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface, #fff);
+}
+.entryLeader { border-color: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15); }
+
+.entryImgWrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--muted, #f0f0f0);
+}
+.entryImg { object-fit: cover; }
+
+.entryBody { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.55rem; }
+.entryName { font-size: 1.05rem; font-weight: 700; margin: 0; }
+.entrySub { font-size: 0.85rem; color: var(--text-muted, #666); margin: 0; }
+
+.watchLink {
+    font-size: 0.82rem;
+    color: #B80000;
+    text-decoration: none;
+    font-weight: 600;
+}
+.watchLink:hover { text-decoration: underline; }
+
+/* result bar */
+.bar {
+    position: relative;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--muted, #eee);
+    overflow: hidden;
+}
+.barFill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: linear-gradient(90deg, #059669, #10b981);
+    transition: width 0.4s ease;
+}
+.barText {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #083d2c;
+}
+
+.voteBtn {
+    margin-top: 0.2rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #B80000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.voteBtn:hover { background: #960000; }
+.voteBtn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+.votedTag {
+    margin-top: 0.2rem;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    background: #ecfdf5;
+    color: #059669;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.feedback {
+    margin: 1rem 0;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.feedbackOk { background: #ecfdf5; color: #059669; }
+.feedbackErr { background: #fef2f2; color: #B80000; }
