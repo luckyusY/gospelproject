@@ -157,6 +157,18 @@ select {
 }
 img { max-width: 100%; height: auto; display: block; }
 
+/* On phones, iOS Safari auto-zooms the page whenever a form field smaller
+   than 16px is focused (search box, contact form, newsletter, admin login).
+   Force a 16px minimum on small screens to stop the jarring zoom. */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    /* !important is needed to beat per-component CSS-module classes. */
+    font-size: 16px !important;
+  }
+}
+
 /* ── Layout ───────────────────────────────────────────── */
 .container {
   width: 100%;
