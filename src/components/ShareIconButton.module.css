@@ -1,0 +1,26 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1F1F1F;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.btn:hover {
+    background: #B80000;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}

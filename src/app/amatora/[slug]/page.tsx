@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { buildMeta } from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
 import PageHeader from "@/components/ui/PageHeader";
+import ShareButtons from "@/components/ShareButtons";
 import type { ContestEntryRow, ContestRow } from "@/types/database";
 import VoteClient from "../_components/VoteClient";
 import styles from "../amatora.module.css";
@@ -74,6 +75,8 @@ export default async function ContestPage({ params }: Params) {
                     votingOpen={votingOpen}
                     ended={ended}
                 />
+
+                <ShareButtons url={absoluteUrl(`/amatora/${contest.slug}`)} title={contest.title} />
             </div>
         </div>
     );

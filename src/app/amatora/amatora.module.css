@@ -11,19 +11,33 @@
 }
 
 .contestCard {
+    position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border, #e3e3e3);
     border-radius: 14px;
     overflow: hidden;
     background: var(--surface, #fff);
-    text-decoration: none;
-    color: inherit;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .contestCard:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contestCardMain {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.cardShare {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    z-index: 3;
 }
 
 .contestImgWrap {

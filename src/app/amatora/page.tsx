@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { buildMeta } from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
 import PageHeader from "@/components/ui/PageHeader";
+import ShareIconButton from "@/components/ShareIconButton";
 import type { ContestEntryRow, ContestRow } from "@/types/database";
 import styles from "./amatora.module.css";
 
@@ -54,25 +55,32 @@ export default async function AmatoraPage() {
                             const ended = Boolean(contest.ends_at && new Date(contest.ends_at).getTime() < now);
                             const total = totalsByContest.get(contest.id) ?? 0;
                             return (
-                                <Link key={contest.id} href={`/amatora/${contest.slug}`} className={styles.contestCard}>
-                                    <div className={styles.contestImgWrap}>
-                                        {contest.image_url ? (
-                                            <Image src={contest.image_url} alt={contest.title} fill className={styles.contestImg} />
-                                        ) : (
-                                            <div className={styles.imgPlaceholder}>🗳️</div>
-                                        )}
-                                    </div>
-                                    <div className={styles.contestBody}>
-                                        <h2 className={styles.contestTitle}>{contest.title}</h2>
-                                        {contest.description && <p className={styles.contestDesc}>{contest.description}</p>}
-                                        <div className={styles.statusRow}>
-                                            <span className={ended ? styles.badgeClosed : styles.badgeOpen}>
-                                                {ended ? "Yarafunze" : "Iri gukomeza"}
-                                            </span>
-                                            <span className={styles.voteTotal}>{total} amajwi</span>
+                                <article key={contest.id} className={styles.contestCard}>
+                                    <Link href={`/amatora/${contest.slug}`} className={styles.contestCardMain}>
+                                        <div className={styles.contestImgWrap}>
+                                            {contest.image_url ? (
+                                                <Image src={contest.image_url} alt={contest.title} fill className={styles.contestImg} />
+                                            ) : (
+                                                <div className={styles.imgPlaceholder}>🗳️</div>
+                                            )}
                                         </div>
-                                    </div>
-                                </Link>
+                                        <div className={styles.contestBody}>
+                                            <h2 className={styles.contestTitle}>{contest.title}</h2>
+                                            {contest.description && <p className={styles.contestDesc}>{contest.description}</p>}
+                                            <div className={styles.statusRow}>
+                                                <span className={ended ? styles.badgeClosed : styles.badgeOpen}>
+                                                    {ended ? "Yarafunze" : "Iri gukomeza"}
+                                                </span>
+                                                <span className={styles.voteTotal}>{total} amajwi</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <ShareIconButton
+                                        url={absoluteUrl(`/amatora/${contest.slug}`)}
+                                        title={contest.title}
+                                        className={styles.cardShare}
+                                    />
+                                </article>
                             );
                         })}
                     </div>
