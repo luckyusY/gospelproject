@@ -143,6 +143,7 @@ export default function Header({
                             <BellRinging size={14} weight="fill" />
                             Iyandikishe
                         </button>
+                        <GoogleTranslate />
                         <ThemeToggle />
                         <button
                             type="button"
@@ -240,7 +241,6 @@ export default function Header({
                     </ul>
 
                     <div className={styles.navRight}>
-                        <GoogleTranslate />
                         <button
                             type="button"
                             className={styles.radioToggle}

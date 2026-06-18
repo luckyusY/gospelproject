@@ -47,5 +47,13 @@ export default function GoogleTranslate() {
         }
     }, []);
 
-    return <div id="google_translate_element" aria-label="Hindura ururimi" />;
+    return (
+        <div className="gtranslate">
+            <svg className="gtranslate-globe" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.6" />
+            </svg>
+            <div id="google_translate_element" aria-label="Translate / Hindura ururimi" />
+        </div>
+    );
 }
