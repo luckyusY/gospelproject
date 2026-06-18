@@ -58,11 +58,11 @@ export async function POST(req: NextRequest) {
     // account = one vote per contest.
     const token = getBearerToken(req);
     if (!token) {
-        return NextResponse.json({ error: "Injira na Google kugira ngo utore." }, { status: 401 });
+        return NextResponse.json({ error: "Sign in with Google to vote." }, { status: 401 });
     }
     const { data: userData, error: userError } = await admin.auth.getUser(token);
     if (userError || !userData?.user) {
-        return NextResponse.json({ error: "Injira yawe yarangiye. Ongera winjire." }, { status: 401 });
+        return NextResponse.json({ error: "Your session expired. Please sign in again." }, { status: 401 });
     }
     const voterId = userData.user.id;
 
@@ -75,10 +75,10 @@ export async function POST(req: NextRequest) {
     const contest = contestData as Pick<ContestRow, "id" | "is_active" | "ends_at"> | null;
 
     if (!contest || !contest.is_active) {
-        return NextResponse.json({ error: "Amatora arafunze." }, { status: 403 });
+        return NextResponse.json({ error: "Voting is closed." }, { status: 403 });
     }
     if (contest.ends_at && new Date(contest.ends_at).getTime() < Date.now()) {
-        return NextResponse.json({ error: "Igihe cyo gutora cyararangiye." }, { status: 403 });
+        return NextResponse.json({ error: "The voting period has ended." }, { status: 403 });
     }
 
     const { data: entryData } = await admin
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
 
     if (error) {
         console.error("[vote]", error);
-        return NextResponse.json({ error: "Kwemeza itora byanze. Ongera ugerageze." }, { status: 500 });
+        return NextResponse.json({ error: "Could not record your vote. Please try again." }, { status: 500 });
     }
 
     const counts = await entryCounts(admin, contestId);

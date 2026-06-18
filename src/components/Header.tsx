@@ -18,6 +18,7 @@ import {
 } from "@phosphor-icons/react";
 import styles from "./Header.module.css";
 import ThemeToggle from "./ThemeToggle";
+import GoogleTranslate from "./GoogleTranslate";
 import { useSharedRadio } from "@/hooks/useSharedRadio";
 import { FALLBACK_NAV, type NavNode } from "@/lib/nav";
 
@@ -239,6 +240,7 @@ export default function Header({
                     </ul>
 
                     <div className={styles.navRight}>
+                        <GoogleTranslate />
                         <button
                             type="button"
                             className={styles.radioToggle}

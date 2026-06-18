@@ -81,16 +81,18 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
         setSigningIn(true);
         setFeedback(null);
         try {
-            const next = window.location.pathname + window.location.search;
+            // Remember where to return to; the redirect URL itself stays static
+            // (no query string) so it's easy to allowlist exactly in Supabase.
+            try { localStorage.setItem("post_login_next", window.location.pathname + window.location.search); } catch { /* ignore */ }
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+                    redirectTo: `${window.location.origin}/auth/callback`,
                 },
             });
             if (error) {
                 setSigningIn(false);
-                setFeedback({ kind: "err", text: "Kwinjira byanze. Ongera ugerageze." });
+                setFeedback({ kind: "err", text: "Sign-in failed. Please try again." });
             }
         } catch {
             setSigningIn(false);
@@ -115,7 +117,7 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData.session?.access_token;
         if (!token) {
-            setFeedback({ kind: "err", text: "Injira na Google mbere yo gutora." });
+            setFeedback({ kind: "err", text: "Sign in with Google before voting." });
             return;
         }
 
@@ -142,29 +144,29 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
             if (res.ok && json.ok) {
                 setVotedEntryId(entryId);
                 try { localStorage.setItem(`urugero_voted_${contestId}`, String(entryId)); } catch { /* ignore */ }
-                setFeedback({ kind: "ok", text: "Murakoze! Itora ryawe ryakiriwe." });
+                setFeedback({ kind: "ok", text: "Thank you! Your vote has been counted." });
             } else if (json.alreadyVoted) {
                 setVotedEntryId(entryId);
                 try { localStorage.setItem(`urugero_voted_${contestId}`, String(entryId)); } catch { /* ignore */ }
-                setFeedback({ kind: "err", text: "Watoye kuri iri rushanwa." });
+                setFeedback({ kind: "err", text: "You have already voted in this contest." });
             } else {
-                setFeedback({ kind: "err", text: json.error ?? "Itora ryanze. Ongera ugerageze." });
+                setFeedback({ kind: "err", text: json.error ?? "Vote failed. Please try again." });
             }
         } catch {
-            setFeedback({ kind: "err", text: "Itora ryanze. Reba interineti yawe." });
+            setFeedback({ kind: "err", text: "Vote failed. Check your internet connection." });
         } finally {
             setPendingId(null);
         }
     }
 
     if (entries.length === 0) {
-        return <p className={styles.empty}>Nta bakandida bashyizweho ubu.</p>;
+        return <p className={styles.empty}>No contestants have been added yet.</p>;
     }
 
     return (
         <>
-            {ended && <div className={styles.closedBanner}>Amatora yarafunze. Dore ibyavuyemo.</div>}
-            {!ended && !votingOpen && <div className={styles.closedBanner}>Amatora ntabwo afunguye ubu.</div>}
+            {ended && <div className={styles.closedBanner}>Voting has closed. Here are the results.</div>}
+            {!ended && !votingOpen && <div className={styles.closedBanner}>Voting is not open right now.</div>}
             {feedback && (
                 <div className={`${styles.feedback} ${feedback.kind === "ok" ? styles.feedbackOk : styles.feedbackErr}`} role="status">
                     {feedback.text}
@@ -173,10 +175,10 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
 
             {votingOpen && authReady && !user && (
                 <div className={styles.signInPrompt}>
-                    <p>Injira na Google kugira ngo utore. Buri muntu atora rimwe.</p>
+                    <p>Sign in with Google to vote. One vote per person — click the <strong>Vote</strong> button on your favourite below.</p>
                     <button type="button" className={styles.googleBtn} onClick={signIn} disabled={signingIn}>
                         <GoogleIcon />
-                        {signingIn ? "Biragenda..." : "Injira na Google"}
+                        {signingIn ? "Loading..." : "Sign in with Google"}
                     </button>
                 </div>
             )}
@@ -184,8 +186,8 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
             {user && (
                 <div className={styles.signedIn}>
                     <GoogleIcon />
-                    <span>Winjiye nka <strong>{user.email}</strong></span>
-                    <button type="button" className={styles.signOutBtn} onClick={signOut}>Sohoka</button>
+                    <span>Signed in as <strong>{user.email}</strong></span>
+                    <button type="button" className={styles.signOutBtn} onClick={signOut}>Sign out</button>
                 </div>
             )}
 
@@ -221,13 +223,13 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
                                         <span className={styles.barFill} style={{ width: `${pct}%` }} />
                                         <span className={styles.barText}>
                                             <span>{pct}%</span>
-                                            <span>{count} {count === 1 ? "ijwi" : "amajwi"}</span>
+                                            <span>{count} {count === 1 ? "vote" : "votes"}</span>
                                         </span>
                                     </div>
                                 )}
 
                                 {isMine ? (
-                                    <div className={styles.votedTag}>✓ Watoye uyu</div>
+                                    <div className={styles.votedTag}>✓ You voted for this</div>
                                 ) : votingOpen && !hasVoted && user ? (
                                     <button
                                         type="button"
@@ -235,7 +237,7 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
                                         onClick={() => vote(entry.id)}
                                         disabled={pendingId != null}
                                     >
-                                        {pendingId === entry.id ? "Biragenda..." : "Tora"}
+                                        {pendingId === entry.id ? "Voting..." : "Vote"}
                                     </button>
                                 ) : null}
                             </div>

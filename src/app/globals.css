@@ -346,3 +346,29 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
 .justify-between { justify-content: space-between; }
 .gap-2           { gap: 0.5rem; }
 .gap-4           { gap: 1rem; }
+
+/* ── Google Translate widget ───────────────────────────────
+   Hide Google's injected top banner and tidy the navbar picker. */
+.goog-te-banner-frame,
+.skiptranslate iframe { display: none !important; }
+body { top: 0 !important; }
+
+#google_translate_element {
+    display: inline-flex;
+    align-items: center;
+}
+#google_translate_element .goog-te-gadget {
+    color: transparent;
+    font-size: 0;
+}
+#google_translate_element .goog-te-gadget .goog-te-combo {
+    margin: 0;
+    padding: 3px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    background: #ffffff;
+    color: #1f1f1f;
+    font-size: 12px;
+    line-height: 1.2;
+    cursor: pointer;
+}

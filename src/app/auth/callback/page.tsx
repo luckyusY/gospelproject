@@ -1,19 +1,22 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-function CallbackInner() {
+export default function AuthCallbackPage() {
     const router = useRouter();
-    const params = useSearchParams();
 
     useEffect(() => {
-        const next = params.get("next") || "/";
         let done = false;
         const go = () => {
             if (done) return;
             done = true;
+            let next = "/";
+            try {
+                next = localStorage.getItem("post_login_next") || "/";
+                localStorage.removeItem("post_login_next");
+            } catch { /* ignore */ }
             router.replace(next);
         };
 
@@ -32,15 +35,7 @@ function CallbackInner() {
             sub.subscription.unsubscribe();
             clearTimeout(timer);
         };
-    }, [params, router]);
+    }, [router]);
 
     return <p style={{ padding: "3rem", textAlign: "center" }}>Turimo kukwinjiza...</p>;
-}
-
-export default function AuthCallbackPage() {
-    return (
-        <Suspense fallback={<p style={{ padding: "3rem", textAlign: "center" }}>Turimo kukwinjiza...</p>}>
-            <CallbackInner />
-        </Suspense>
-    );
 }
