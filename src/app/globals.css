@@ -357,18 +357,29 @@ body { top: 0 !important; }
     display: inline-flex;
     align-items: center;
 }
+/* Hide the "Powered by Google Translate" text + logo link (the logo is an
+   anchor to translate.google.com — hiding it stops the navigation-away). */
 #google_translate_element .goog-te-gadget {
-    color: transparent;
-    font-size: 0;
+    color: transparent !important;
+    font-size: 0 !important;
+}
+#google_translate_element .goog-te-gadget > span,
+#google_translate_element .goog-logo-link,
+#google_translate_element .goog-te-gadget img {
+    display: none !important;
 }
 #google_translate_element .goog-te-gadget .goog-te-combo {
-    margin: 0;
-    padding: 3px 6px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    margin: 0 !important;
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 6px;
     background: #ffffff;
     color: #1f1f1f;
-    font-size: 12px;
+    font-size: 13px;
+    font-family: inherit;
     line-height: 1.2;
     cursor: pointer;
+    max-width: 150px;
 }
+/* Keep the page from being shoved down by the (hidden) Google banner. */
+.skiptranslate { line-height: 0 !important; }

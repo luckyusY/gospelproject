@@ -29,7 +29,7 @@ export default function GoogleTranslate() {
             new ctor(
                 {
                     pageLanguage: "rw",
-                    includedLanguages: "en,fr,rw,sw",
+                    includedLanguages: "rw,en,fr,sw,ar,zh-CN,es,pt,de,it,ru,hi,ja,ko,nl,tr",
                     autoDisplay: false,
                 },
                 "google_translate_element",
