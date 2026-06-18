@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import type { User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 import YoutubeEmbed from "@/components/ui/YoutubeEmbed";
 import styles from "../amatora.module.css";
 
@@ -31,21 +33,6 @@ type Props = {
     ended: boolean;
 };
 
-const VOTER_KEY = "urugero_voter_id";
-
-function getVoterId() {
-    try {
-        let id = localStorage.getItem(VOTER_KEY);
-        if (!id) {
-            id = (crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`);
-            localStorage.setItem(VOTER_KEY, id);
-        }
-        return id;
-    } catch {
-        return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    }
-}
-
 export default function VoteClient({ contestId, entries, showResults, votingOpen, ended }: Props) {
     const [counts, setCounts] = useState<Record<number, number>>(
         () => Object.fromEntries(entries.map(e => [e.id, e.vote_count])),
@@ -53,6 +40,22 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
     const [votedEntryId, setVotedEntryId] = useState<number | null>(null);
     const [pendingId, setPendingId] = useState<number | null>(null);
     const [feedback, setFeedback] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [authReady, setAuthReady] = useState(false);
+    const [signingIn, setSigningIn] = useState(false);
+
+    // Track the Google sign-in session.
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data }) => {
+            setUser(data.session?.user ?? null);
+            setAuthReady(true);
+        });
+        const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+            setAuthReady(true);
+        });
+        return () => sub.subscription.unsubscribe();
+    }, []);
 
     // Read this browser's existing vote (if any) after mount.
     useEffect(() => {
@@ -62,6 +65,29 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
         } catch { /* ignore */ }
     }, [contestId]);
 
+    async function signIn() {
+        setSigningIn(true);
+        setFeedback(null);
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: "google",
+                options: { redirectTo: window.location.href },
+            });
+            if (error) {
+                setSigningIn(false);
+                setFeedback({ kind: "err", text: "Kwinjira byanze. Ongera ugerageze." });
+            }
+        } catch {
+            setSigningIn(false);
+            setFeedback({ kind: "err", text: "Kwinjira byanze. Ongera ugerageze." });
+        }
+    }
+
+    async function signOut() {
+        await supabase.auth.signOut();
+        setUser(null);
+    }
+
     const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
     const maxCount = Math.max(...Object.values(counts), 0);
     const hasVoted = votedEntryId != null;
@@ -69,13 +95,25 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
 
     async function vote(entryId: number) {
         if (!votingOpen || hasVoted || pendingId != null) return;
+
+        // A valid Google session is required — the access token proves identity.
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token;
+        if (!token) {
+            setFeedback({ kind: "err", text: "Injira na Google mbere yo gutora." });
+            return;
+        }
+
         setPendingId(entryId);
         setFeedback(null);
         try {
             const res = await fetch("/api/vote", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contestId, entryId, voterId: getVoterId() }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ contestId, entryId }),
             });
             const json = await res.json().catch(() => ({})) as {
                 ok?: boolean; alreadyVoted?: boolean; error?: string;
@@ -118,6 +156,22 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
                 </div>
             )}
 
+            {votingOpen && authReady && !user && (
+                <div className={styles.signInPrompt}>
+                    <p>Injira na Google kugira ngo utore. Buri muntu atora rimwe.</p>
+                    <button type="button" className={styles.googleBtn} onClick={signIn} disabled={signingIn}>
+                        {signingIn ? "Biragenda..." : "Injira na Google"}
+                    </button>
+                </div>
+            )}
+
+            {user && (
+                <div className={styles.signedIn}>
+                    <span>{user.email}</span>
+                    <button type="button" className={styles.signOutBtn} onClick={signOut}>Sohoka</button>
+                </div>
+            )}
+
             <div className={styles.entryList}>
                 {entries.map(entry => {
                     const count = counts[entry.id] ?? 0;
@@ -157,7 +211,7 @@ export default function VoteClient({ contestId, entries, showResults, votingOpen
 
                                 {isMine ? (
                                     <div className={styles.votedTag}>✓ Watoye uyu</div>
-                                ) : votingOpen && !hasVoted ? (
+                                ) : votingOpen && !hasVoted && user ? (
                                     <button
                                         type="button"
                                         className={styles.voteBtn}

@@ -6,8 +6,14 @@ import type { ContestEntryRow, ContestRow } from "@/types/database";
 type VotePayload = {
     contestId?: number | string;
     entryId?: number | string;
-    voterId?: string;
 };
+
+// Pulls the "Bearer <token>" access token from the Authorization header.
+function getBearerToken(req: NextRequest) {
+    const header = req.headers.get("authorization") ?? "";
+    const match = header.match(/^Bearer\s+(.+)$/i);
+    return match?.[1]?.trim() ?? "";
+}
 
 function getClientIp(req: NextRequest) {
     const forwardedFor = req.headers.get("x-forwarded-for");
@@ -40,13 +46,25 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({})) as VotePayload;
     const contestId = Number(body.contestId);
     const entryId = Number(body.entryId);
-    const voterId = typeof body.voterId === "string" ? body.voterId.trim().slice(0, 100) : "";
 
-    if (!contestId || !entryId || !voterId) {
+    if (!contestId || !entryId) {
         return NextResponse.json({ error: "Invalid vote." }, { status: 400 });
     }
 
     const admin = supabaseAdmin();
+
+    // Identify the voter from their Google sign-in token. The voter id is the
+    // verified Supabase user id — the browser can't fake it, so one Google
+    // account = one vote per contest.
+    const token = getBearerToken(req);
+    if (!token) {
+        return NextResponse.json({ error: "Injira na Google kugira ngo utore." }, { status: 401 });
+    }
+    const { data: userData, error: userError } = await admin.auth.getUser(token);
+    if (userError || !userData?.user) {
+        return NextResponse.json({ error: "Injira yawe yarangiye. Ongera winjire." }, { status: 401 });
+    }
+    const voterId = userData.user.id;
 
     // Confirm the contest is open and the entry belongs to it.
     const { data: contestData } = await admin

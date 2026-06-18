@@ -190,3 +190,55 @@
 }
 .feedbackOk { background: #ecfdf5; color: #059669; }
 .feedbackErr { background: #fef2f2; color: #B80000; }
+
+/* ── Google sign-in gate ───────────────────────────────── */
+.signInPrompt {
+    margin: 1rem 0 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+    text-align: center;
+}
+.signInPrompt p {
+    margin: 0 0 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+}
+.googleBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    color: #111827;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.googleBtn:hover { background: #f3f4f6; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.googleBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.signedIn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1.25rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+.signOutBtn {
+    border: none;
+    background: none;
+    padding: 0;
+    color: #B80000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
