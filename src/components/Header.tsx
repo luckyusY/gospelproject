@@ -93,11 +93,15 @@ export default function Header({
                         <CaretRight size={13} weight="bold" className={styles.tickerArrow} />
                     </div>
                     <div className={styles.breakingRight}>
-                        <span className={styles.topBarDate}>{today}</span>
-                        <span className={styles.topDivider}>|</span>
-                        <span className={styles.topLink}>Injira</span>
-                        <span className={styles.topDivider}>|</span>
-                        <span className={styles.topLink}>Iyandikishe</span>
+                        <GoogleTranslate />
+                        <span className={styles.breakingMeta}>
+                            <span className={styles.topDivider}>|</span>
+                            <span className={styles.topBarDate}>{today}</span>
+                            <span className={styles.topDivider}>|</span>
+                            <span className={styles.topLink}>Injira</span>
+                            <span className={styles.topDivider}>|</span>
+                            <span className={styles.topLink}>Iyandikishe</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -143,7 +147,6 @@ export default function Header({
                             <BellRinging size={14} weight="fill" />
                             Iyandikishe
                         </button>
-                        <GoogleTranslate />
                         <ThemeToggle />
                         <button
                             type="button"

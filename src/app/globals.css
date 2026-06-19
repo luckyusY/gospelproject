@@ -359,7 +359,7 @@ body { top: 0 !important; }
     gap: 4px;
     flex-shrink: 0;
 }
-.gtranslate-globe { color: #8A8A8A; flex-shrink: 0; }
+.gtranslate-globe { color: rgba(255, 255, 255, 0.55); flex-shrink: 0; }
 
 #google_translate_element {
     display: inline-flex;
@@ -380,12 +380,12 @@ body { top: 0 !important; }
    header — the selected text simply truncates with an ellipsis. */
 #google_translate_element .goog-te-gadget .goog-te-combo {
     margin: 0 !important;
-    padding: 5px 6px;
-    border: 1.5px solid #D8D8D8;
-    border-radius: 8px;
-    background: #F2F2F2;
-    color: #1f1f1f;
-    font-size: 13px;
+    padding: 3px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
     font-family: inherit;
     line-height: 1.2;
     cursor: pointer;
@@ -395,13 +395,13 @@ body { top: 0 !important; }
     overflow: hidden;
     text-overflow: ellipsis;
 }
+/* Native dropdown options render on white, so keep their text dark. */
+#google_translate_element .goog-te-gadget .goog-te-combo option { color: #1f1f1f; }
 /* Smaller screens: shrink to roughly an icon-sized control. */
 @media (max-width: 640px) {
     #google_translate_element .goog-te-gadget .goog-te-combo {
-        width: 64px;
-        max-width: 64px;
-        font-size: 12px;
-        padding: 5px 4px;
+        width: 70px;
+        max-width: 70px;
     }
 }
 /* Keep the page from being shoved down by the (hidden) Google banner. */

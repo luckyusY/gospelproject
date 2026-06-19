@@ -68,13 +68,20 @@
 }
 
 .breakingRight {
-    display: none;
+    display: flex;
     align-items: center;
     gap: 0.6rem;
     flex-shrink: 0;
 }
+
+/* Date + auth links: hidden on phones, the language picker stays. */
+.breakingMeta {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+}
 @media (min-width: 768px) {
-    .breakingRight { display: flex; }
+    .breakingMeta { display: inline-flex; }
 }
 
 .topBarDate {
