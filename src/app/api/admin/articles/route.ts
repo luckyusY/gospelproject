@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdmin } from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { sanitizeArticleContent } from "@/lib/articleContent";
+import { sanitizeSlug } from "@/lib/slug";
 import type { ArticleInsert } from "@/types/database";
 
 function unauthorized() {
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
     const rawBody = await req.json() as ArticleInsert;
     const body = {
         ...rawBody,
+        slug: sanitizeSlug(rawBody.slug || rawBody.title || "") || `story-${Date.now()}`,
         content: sanitizeArticleContent(rawBody.content),
     };
     const { data, error } = await supabaseAdmin()
