@@ -42,6 +42,12 @@ export interface Database {
                 Update: Partial<RadioCommentInsert> & Record<string, unknown>;
                 Relationships: [];
             };
+            article_comments: {
+                Row:    ArticleCommentRow & Record<string, unknown>;
+                Insert: ArticleCommentInsert & Record<string, unknown>;
+                Update: Partial<ArticleCommentInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
             radio_tracks: {
                 Row:    RadioTrackRow & Record<string, unknown>;
                 Insert: RadioTrackInsert & Record<string, unknown>;
@@ -213,6 +219,19 @@ export interface RadioCommentRow {
     created_at:    string;
 }
 export type RadioCommentInsert = Omit<RadioCommentRow, "id" | "created_at">;
+
+// Article Comments
+export interface ArticleCommentRow {
+    id:            number;
+    article_id:    number;
+    author_name:   string;
+    author_email:  string | null;
+    message:       string;
+    is_approved:   boolean;
+    created_at:    string;
+    updated_at:    string;
+}
+export type ArticleCommentInsert = Omit<ArticleCommentRow, "id" | "created_at" | "updated_at">;
 
 // Radio Fallback Tracks
 export interface RadioTrackRow {

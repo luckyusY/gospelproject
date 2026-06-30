@@ -21,6 +21,7 @@ export default async function AdminDashboard() {
         testimoniesTotal,
         testimoniesPublished,
         pendingComments,
+        pendingArticleComments,
         analyticsTotal,
         analyticsToday,
         analyticsRecentResult,
@@ -37,6 +38,7 @@ export default async function AdminDashboard() {
         admin.from("testimonies").select("*", { count: "exact", head: true }),
         admin.from("testimonies").select("*", { count: "exact", head: true }).eq("is_published", true),
         admin.from("radio_comments").select("*", { count: "exact", head: true }).eq("is_approved", false),
+        admin.from("article_comments").select("*", { count: "exact", head: true }).eq("is_approved", false),
         admin.from("analytics_page_views").select("*", { count: "exact", head: true }),
         admin
             .from("analytics_page_views")
@@ -123,6 +125,7 @@ export default async function AdminDashboard() {
     ];
 
     const pending = pendingComments.count ?? 0;
+    const pendingArticleTotal = pendingArticleComments.count ?? 0;
 
     return (
         <div className={styles.page}>
@@ -273,6 +276,11 @@ export default async function AdminDashboard() {
                 {pending > 0 && (
                     <a href="/admin/media" className={styles.alertBanner}>
                         💬 {pending} radio {pending === 1 ? "comment is" : "comments are"} waiting for approval.
+                    </a>
+                )}
+                {pendingArticleTotal > 0 && (
+                    <a href="/admin/comments" className={styles.alertBanner}>
+                        {pendingArticleTotal} article {pendingArticleTotal === 1 ? "comment is" : "comments are"} waiting for approval.
                     </a>
                 )}
             </div>

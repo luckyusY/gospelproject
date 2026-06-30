@@ -6,10 +6,11 @@ import { supabase, supabaseAdmin }    from "@/lib/supabase";
 import { ensureDefaultArticleCategories, getDefaultCategoryBySlug } from "@/lib/categories";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons    from "@/components/ShareButtons";
+import ArticleComments from "@/components/ArticleComments";
 import TwitterEmbeds   from "@/components/TwitterEmbeds";
 import CategoryListing from "@/components/CategoryListing";
 import { renderArticleContent } from "@/lib/articleContent";
-import type { ArticleRow, CategoryRow } from "@/types/database";
+import type { ArticleCommentRow, ArticleRow, CategoryRow } from "@/types/database";
 import styles          from "./article.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -29,6 +30,27 @@ async function getCategory(slug: string): Promise<CategoryRow | null> {
     return category?.nav_group === "amakuru" ? category : null;
 }
 
+async function getArticle(slug: string): Promise<ArticleRow | null> {
+    const { data: exact } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("slug", slug)
+        .eq("is_published", true)
+        .maybeSingle();
+
+    if (exact) return exact as ArticleRow;
+    if (slug.endsWith("!")) return null;
+
+    const { data: punctuationFallback } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("slug", `${slug}!`)
+        .eq("is_published", true)
+        .maybeSingle();
+
+    return (punctuationFallback as ArticleRow | null) ?? null;
+}
+
 /* ── SEO metadata ─────────────────────────────────────────── */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
@@ -42,13 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         });
     }
 
-    const result = await supabase
-        .from("articles")
-        .select("*")
-        .eq("slug", slug)
-        .eq("is_published", true)
-        .maybeSingle();
-    const data = result.data as ArticleRow | null;
+    const data = await getArticle(slug);
 
     if (!data) return {};
     return buildMeta({
@@ -83,16 +99,9 @@ export default async function ArticleOrCategoryPage({ params }: Props) {
     }
 
     /* Otherwise it's a single article. */
-    const { data: article } = await supabase
-        .from("articles")
-        .select("*")
-        .eq("slug", slug)
-        .eq("is_published", true)
-        .maybeSingle();
+    const a = await getArticle(slug);
 
-    if (!article) notFound();
-
-    const a = article as ArticleRow;
+    if (!a) notFound();
 
     /* Fetch related articles (same category, different slug) */
     const { data: related } = await supabase
@@ -105,6 +114,14 @@ export default async function ArticleOrCategoryPage({ params }: Props) {
         .limit(3);
 
     const relatedArticles = (related ?? []) as ArticleRow[];
+    const { data: comments } = await supabase
+        .from("article_comments")
+        .select("id, article_id, author_name, message, is_approved, created_at, updated_at")
+        .eq("article_id", a.id)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(100);
+    const approvedComments = (comments ?? []) as ArticleCommentRow[];
 
     /* Published date */
     const pubDate = a.published_at
@@ -179,6 +196,7 @@ export default async function ArticleOrCategoryPage({ params }: Props) {
 
                 {/* ── Share ──────────────────────────────── */}
                 <ShareButtons url={absoluteUrl(`/amakuru/${a.slug}`)} title={a.title} />
+                <ArticleComments articleId={a.id} initialComments={approvedComments} />
 
                 {/* ── Footer ─────────────────────────────── */}
                 <div className={styles.footer}>

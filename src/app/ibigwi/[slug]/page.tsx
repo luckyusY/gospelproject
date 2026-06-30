@@ -5,9 +5,10 @@ import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons from "@/components/ShareButtons";
+import ArticleComments from "@/components/ArticleComments";
 import TwitterEmbeds from "@/components/TwitterEmbeds";
 import { renderArticleContent } from "@/lib/articleContent";
-import type { ArticleRow } from "@/types/database";
+import type { ArticleCommentRow, ArticleRow } from "@/types/database";
 import styles from "@/app/amakuru/[slug]/article.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -63,6 +64,14 @@ export default async function IbigwiArticlePage({ params }: Props) {
         .limit(3);
 
     const relatedArticles = (related ?? []) as ArticleRow[];
+    const { data: comments } = await supabase
+        .from("article_comments")
+        .select("id, article_id, author_name, message, is_approved, created_at, updated_at")
+        .eq("article_id", article.id)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(100);
+    const approvedComments = (comments ?? []) as ArticleCommentRow[];
     const pubDate = article.published_at
         ? new Date(article.published_at).toLocaleDateString("en-US", {
             day: "numeric",
@@ -129,6 +138,7 @@ export default async function IbigwiArticlePage({ params }: Props) {
                 <TwitterEmbeds />
 
                 <ShareButtons url={absoluteUrl(`/ibigwi/${article.slug}`)} title={article.title} />
+                <ArticleComments articleId={article.id} initialComments={approvedComments} />
 
                 <div className={styles.footer}>
                     <Link href="/ibigwi" className={styles.backLink}>

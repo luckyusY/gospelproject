@@ -6,11 +6,12 @@ import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
 import { getPage } from "@/lib/pages";
 import ShareButtons from "@/components/ShareButtons";
+import ArticleComments from "@/components/ArticleComments";
 import TwitterEmbeds from "@/components/TwitterEmbeds";
 import SectionPage from "@/components/SectionPage";
 import { ArticleCard } from "@/components/ui";
 import { renderArticleContent } from "@/lib/articleContent";
-import type { ArticleRow } from "@/types/database";
+import type { ArticleCommentRow, ArticleRow } from "@/types/database";
 import articleStyles from "@/app/amakuru/[slug]/article.module.css";
 import styles from "./media-group-detail.module.css";
 
@@ -221,6 +222,14 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
         .limit(3);
 
     const relatedArticles = (related ?? []) as ArticleRow[];
+    const { data: comments } = await supabase
+        .from("article_comments")
+        .select("id, article_id, author_name, message, is_approved, created_at, updated_at")
+        .eq("article_id", article.id)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(100);
+    const approvedComments = (comments ?? []) as ArticleCommentRow[];
     const pubDate = article.published_at
         ? new Date(article.published_at).toLocaleDateString("en-US", {
             day: "numeric",
@@ -289,6 +298,7 @@ export default async function MediaGroupPageOrArticle({ params }: Props) {
                 <TwitterEmbeds />
 
                 <ShareButtons url={absoluteUrl(`/urugero-media-group/${article.slug}`)} title={article.title} />
+                <ArticleComments articleId={article.id} initialComments={approvedComments} />
 
                 <div className={articleStyles.footer}>
                     <Link href={`/urugero-media-group/${article.category}`} className={articleStyles.backLink}>
