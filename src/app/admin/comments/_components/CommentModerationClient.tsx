@@ -42,6 +42,7 @@ export default function CommentModerationClient({ comments }: { comments: AdminA
         if (filter === "approved") return comment.is_approved;
         return true;
     }), [comments, filter]);
+    const latestComment = comments[0];
 
     async function setApproved(comment: AdminArticleComment, approved: boolean) {
         setBusyId(comment.id);
@@ -69,62 +70,93 @@ export default function CommentModerationClient({ comments }: { comments: AdminA
                     <h1 className={styles.heading}>Comments</h1>
                     <p className={styles.subheading}>Approve, hide, or delete reader comments.</p>
                 </div>
-                <div className={styles.filters} aria-label="Filter comments">
-                    {(["pending", "approved", "all"] as Filter[]).map(option => (
-                        <button
-                            key={option}
-                            type="button"
-                            className={filter === option ? styles.filterActive : styles.filterBtn}
-                            onClick={() => setFilter(option)}
-                        >
-                            {option.charAt(0).toUpperCase() + option.slice(1)} ({counts[option]})
-                        </button>
-                    ))}
-                </div>
+            </div>
+
+            <div className={styles.summaryGrid}>
+                <button
+                    type="button"
+                    className={filter === "pending" ? styles.summaryActive : styles.summaryCard}
+                    onClick={() => setFilter("pending")}
+                >
+                    <span>Pending</span>
+                    <strong>{counts.pending}</strong>
+                    <small>Need review</small>
+                </button>
+                <button
+                    type="button"
+                    className={filter === "approved" ? styles.summaryActive : styles.summaryCard}
+                    onClick={() => setFilter("approved")}
+                >
+                    <span>Approved</span>
+                    <strong>{counts.approved}</strong>
+                    <small>Visible on stories</small>
+                </button>
+                <button
+                    type="button"
+                    className={filter === "all" ? styles.summaryActive : styles.summaryCard}
+                    onClick={() => setFilter("all")}
+                >
+                    <span>Total</span>
+                    <strong>{counts.all}</strong>
+                    <small>
+                        {latestComment
+                            ? `Latest ${formatter.format(new Date(latestComment.created_at))}`
+                            : "No comments yet"}
+                    </small>
+                </button>
             </div>
 
             <div className={styles.list}>
                 {visible.map(comment => (
                     <article key={comment.id} className={styles.card}>
                         <div className={styles.cardTop}>
-                            <div>
-                                <p className={styles.name}>{comment.author_name}</p>
-                                {comment.author_email && <p className={styles.email}>{comment.author_email}</p>}
-                                <p className={styles.meta}>{formatter.format(new Date(comment.created_at))}</p>
-                                {comment.article && (
-                                    <p className={styles.article}>
-                                        Story:{" "}
-                                        <Link href={comment.article.href} target="_blank">
-                                            {comment.article.title}
-                                        </Link>
-                                    </p>
-                                )}
+                            <div className={styles.identity}>
+                                <span className={styles.avatar} aria-hidden>
+                                    {comment.author_name.trim().charAt(0).toUpperCase() || "U"}
+                                </span>
+                                <div>
+                                    <p className={styles.name}>{comment.author_name}</p>
+                                    <p className={styles.meta}>{formatter.format(new Date(comment.created_at))}</p>
+                                </div>
                             </div>
                             <span className={comment.is_approved ? styles.badge : styles.badgePending}>
                                 {comment.is_approved ? "Approved" : "Pending"}
                             </span>
                         </div>
                         <p className={styles.message}>{comment.message}</p>
-                        <div className={styles.actions}>
-                            {comment.is_approved ? (
-                                <button
-                                    type="button"
-                                    className={styles.unapproveBtn}
-                                    disabled={busyId === comment.id || isPending}
-                                    onClick={() => setApproved(comment, false)}
-                                >
-                                    Hide
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className={styles.approveBtn}
-                                    disabled={busyId === comment.id || isPending}
-                                    onClick={() => setApproved(comment, true)}
-                                >
-                                    Approve
-                                </button>
+                        <div className={styles.details}>
+                            <span>{comment.author_email || "No email provided"}</span>
+                            {comment.article && (
+                                <span>
+                                    Story:{" "}
+                                    <Link href={comment.article.href} target="_blank">
+                                        {comment.article.title}
+                                    </Link>
+                                </span>
                             )}
+                        </div>
+                        <div className={styles.actions}>
+                            <div className={styles.primaryActions}>
+                                {comment.is_approved ? (
+                                    <button
+                                        type="button"
+                                        className={styles.unapproveBtn}
+                                        disabled={busyId === comment.id || isPending}
+                                        onClick={() => setApproved(comment, false)}
+                                    >
+                                        Hide from story
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        className={styles.approveBtn}
+                                        disabled={busyId === comment.id || isPending}
+                                        onClick={() => setApproved(comment, true)}
+                                    >
+                                        Approve comment
+                                    </button>
+                                )}
+                            </div>
                             <button
                                 type="button"
                                 className={styles.deleteBtn}

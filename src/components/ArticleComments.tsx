@@ -32,6 +32,7 @@ export default function ArticleComments({ articleId, initialComments }: Props) {
         () => [...comments].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
         [comments],
     );
+    const remainingCharacters = 1200 - message.length;
 
     async function submitComment(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -77,41 +78,58 @@ export default function ArticleComments({ articleId, initialComments }: Props) {
                 <div>
                     <p className={styles.eyebrow}>Comments</p>
                     <h2 id="comments-title" className={styles.title}>Ibitekerezo by&apos;abasomyi</h2>
+                    <p className={styles.intro}>
+                        Sangiza abandi icyo iyi nkuru yakubwiye. Igitekerezo kigaragara nyuma yo kwemezwa.
+                    </p>
                 </div>
-                <span className={styles.count} aria-label={`${sortedComments.length} comments`}>
-                    {sortedComments.length}
-                </span>
+                <div className={styles.count} aria-label={`${sortedComments.length} comments`}>
+                    <strong>{sortedComments.length}</strong>
+                    <span>{sortedComments.length === 1 ? "comment" : "comments"}</span>
+                </div>
             </div>
 
             <form className={styles.form} onSubmit={submitComment}>
                 <div className={styles.fields}>
-                    <input
-                        className={styles.input}
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                        placeholder="Izina ryawe"
-                        maxLength={80}
+                    <label className={styles.field}>
+                        <span>Izina</span>
+                        <input
+                            className={styles.input}
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            placeholder="Izina ryawe"
+                            maxLength={80}
+                            required
+                        />
+                    </label>
+                    <label className={styles.field}>
+                        <span>Email</span>
+                        <input
+                            className={styles.input}
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            placeholder="Optional"
+                            type="email"
+                            maxLength={120}
+                        />
+                    </label>
+                </div>
+                <label className={styles.field}>
+                    <span>Igitekerezo</span>
+                    <textarea
+                        className={styles.textarea}
+                        value={message}
+                        onChange={(event) => setMessage(event.target.value)}
+                        placeholder="Andika igitekerezo cyawe..."
+                        maxLength={1200}
                         required
                     />
-                    <input
-                        className={styles.input}
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        placeholder="Email (optional)"
-                        type="email"
-                        maxLength={120}
-                    />
-                </div>
-                <textarea
-                    className={styles.textarea}
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
-                    placeholder="Andika igitekerezo cyawe..."
-                    maxLength={1200}
-                    required
-                />
+                </label>
                 <div className={styles.submitRow}>
-                    <p className={styles.hint}>Ibitekerezo bigaragazwa nyuma yo kwemezwa.</p>
+                    <p className={styles.hint}>
+                        <span aria-hidden>i</span>
+                        Ibitekerezo bigaragazwa nyuma yo kwemezwa.
+                    </p>
+                    <span className={styles.characterCount}>{remainingCharacters} characters left</span>
                     <button className={styles.submit} type="submit" disabled={submitting}>
                         {submitting ? "Kohereza..." : "Ohereza igitekerezo"}
                     </button>
@@ -127,16 +145,26 @@ export default function ArticleComments({ articleId, initialComments }: Props) {
                 {sortedComments.map((comment) => (
                     <article key={comment.id} className={styles.comment}>
                         <div className={styles.commentTop}>
-                            <p className={styles.name}>{comment.author_name}</p>
-                            <time className={styles.date} dateTime={comment.created_at}>
-                                {formatter.format(new Date(comment.created_at))}
-                            </time>
+                            <div className={styles.identity}>
+                                <span className={styles.avatar} aria-hidden>
+                                    {comment.author_name.trim().charAt(0).toUpperCase() || "U"}
+                                </span>
+                                <div>
+                                    <p className={styles.name}>{comment.author_name}</p>
+                                    <time className={styles.date} dateTime={comment.created_at}>
+                                        {formatter.format(new Date(comment.created_at))}
+                                    </time>
+                                </div>
+                            </div>
                         </div>
                         <p className={styles.message}>{comment.message}</p>
                     </article>
                 ))}
                 {sortedComments.length === 0 && (
-                    <p className={styles.empty}>Nta gitekerezo kiragaragara. Ba uwa mbere gutanga igitekerezo.</p>
+                    <div className={styles.empty}>
+                        <strong>Nta gitekerezo kiragaragara.</strong>
+                        <span>Ba uwa mbere gutanga igitekerezo kuri iyi nkuru.</span>
+                    </div>
                 )}
             </div>
         </section>

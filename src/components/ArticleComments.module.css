@@ -1,18 +1,22 @@
 .comments {
-    max-width: 720px;
-    margin: 2rem auto 0;
-    padding: 1.5rem;
+    max-width: 760px;
+    margin: 2.25rem auto 0;
+    padding: 1.25rem;
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
-    background: var(--bg-card);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--gold) 8%, transparent), transparent 44%),
+        var(--bg-card);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
 }
 
 .header {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: flex-start;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
+    padding: 0.25rem 0.25rem 0;
 }
 
 .eyebrow {
@@ -27,27 +31,52 @@
 .title {
     margin: 0;
     color: var(--text);
-    font-size: 1.35rem;
+    font-size: 1.45rem;
     font-weight: 900;
+}
+
+.intro {
+    max-width: 520px;
+    margin: 0.4rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
 }
 
 .count {
     flex: 0 0 auto;
-    min-width: 2.25rem;
-    height: 2.25rem;
+    min-width: 5.25rem;
+    min-height: 3.4rem;
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: var(--r-full);
-    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--bg) 72%, var(--bg-card));
     color: var(--text-muted);
-    font-weight: 800;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+}
+
+.count strong {
+    color: var(--text);
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.count span {
+    margin-top: 0.2rem;
 }
 
 .form {
     display: grid;
-    gap: 0.85rem;
-    margin-bottom: 1.5rem;
+    gap: 0.95rem;
+    margin: 0 0 1.4rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: color-mix(in srgb, var(--bg) 80%, var(--bg-card));
 }
 
 .fields {
@@ -56,15 +85,27 @@
     gap: 0.85rem;
 }
 
+.field {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.field > span {
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
 .input,
 .textarea {
     width: 100%;
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: 8px;
     background: var(--bg);
     color: var(--text);
     font: inherit;
-    padding: 0.8rem 0.9rem;
+    padding: 0.82rem 0.9rem;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
 .textarea {
@@ -76,30 +117,62 @@
 .textarea:focus {
     outline: 2px solid color-mix(in srgb, var(--gold) 35%, transparent);
     border-color: var(--gold);
+    background: var(--bg-card);
 }
 
 .submitRow {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
     flex-wrap: wrap;
 }
 
 .hint {
-    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 auto 0 0;
     color: var(--text-muted);
     font-size: 0.85rem;
 }
 
+.hint span {
+    width: 1.15rem;
+    height: 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r-full);
+    background: color-mix(in srgb, var(--gold) 18%, var(--bg-subtle));
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.characterCount {
+    margin: 0;
+    color: var(--text-faint);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
 .submit {
     border: none;
-    border-radius: var(--r-full);
+    border-radius: 8px;
     background: var(--navy);
     color: #fff;
     cursor: pointer;
     font-weight: 800;
+    min-height: 2.75rem;
     padding: 0.75rem 1.2rem;
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--navy) 22%, transparent);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--navy) 28%, transparent);
 }
 
 .submit:disabled {
@@ -110,34 +183,60 @@
 .status {
     margin: 0;
     padding: 0.75rem 0.9rem;
-    border-radius: var(--r-md);
-    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--green-light) 45%, var(--bg-subtle));
     color: var(--text);
     font-size: 0.9rem;
 }
 
 .statusError {
+    border-color: color-mix(in srgb, #b80000 30%, var(--border));
     background: color-mix(in srgb, #b80000 10%, var(--bg-subtle));
     color: #b80000;
 }
 
 .list {
     display: grid;
-    gap: 0.9rem;
+    gap: 0.8rem;
 }
 
 .comment {
     padding: 1rem;
     border: 1px solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: 8px;
     background: var(--bg);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.comment:hover {
+    border-color: color-mix(in srgb, var(--gold) 30%, var(--border));
+    transform: translateY(-1px);
 }
 
 .commentTop {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.identity {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.avatar {
+    width: 2.35rem;
+    height: 2.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r-full);
+    background: color-mix(in srgb, var(--gold) 22%, var(--bg-subtle));
+    color: var(--text);
+    font-weight: 900;
 }
 
 .name {
@@ -160,13 +259,39 @@
 }
 
 .empty {
+    display: grid;
+    gap: 0.25rem;
     margin: 0;
+    padding: 1.15rem;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--bg) 65%, transparent);
     color: var(--text-muted);
     font-size: 0.95rem;
+    text-align: center;
+}
+
+.empty strong {
+    color: var(--text);
 }
 
 @media (max-width: 640px) {
     .comments { padding: 1.1rem; }
     .fields { grid-template-columns: 1fr; }
-    .header { align-items: center; }
+    .header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .count {
+        width: 100%;
+        min-height: 3rem;
+    }
+    .submit {
+        width: 100%;
+    }
+    .characterCount {
+        order: 2;
+        width: 100%;
+        text-align: right;
+    }
 }
