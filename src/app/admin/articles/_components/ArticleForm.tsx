@@ -3,14 +3,23 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ArticleRow } from "@/types/database";
+import type { AdminRole } from "@/lib/adminAuth";
 import type { ArticleCategoryOption } from "@/lib/categories";
 import styles from "../../form.module.css";
 import RichTextEditor from "./RichTextEditor";
 import CloudinaryUploader from "./CloudinaryUploader";
 
-type Props = { article?: ArticleRow; categories: ArticleCategoryOption[]; initialCategory?: string };
+type Props = {
+    article?: ArticleRow;
+    categories: ArticleCategoryOption[];
+    initialCategory?: string;
+    currentUser: {
+        role: AdminRole;
+        displayName: string;
+    };
+};
 
-export default function ArticleForm({ article, categories, initialCategory = "" }: Props) {
+export default function ArticleForm({ article, categories, initialCategory = "", currentUser }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError]     = useState<string | null>(null);
@@ -18,7 +27,9 @@ export default function ArticleForm({ article, categories, initialCategory = "" 
     const [imageUrl, setImageUrl] = useState(article?.image_url ?? "");
 
     const isEdit = Boolean(article);
+    const isJournalist = currentUser.role === "journalist";
     const defaultCategory = (article?.category ?? initialCategory) || undefined;
+    const authorName = isJournalist ? currentUser.displayName : article?.author ?? "Urugero Media";
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -40,10 +51,10 @@ export default function ArticleForm({ article, categories, initialCategory = "" 
             image_url:      imageUrl || null,
             category:       data.get("category") as string,
             category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#B80000",
-            author:         data.get("author") as string,
+            author:         isJournalist ? currentUser.displayName : data.get("author") as string,
             read_time:      data.get("read_time") as string,
             is_published:   data.get("is_published") === "1",
-            is_featured:    data.get("is_featured") === "1",
+            is_featured:    !isJournalist && data.get("is_featured") === "1",
             published_at:   data.get("is_published") === "1" ? new Date().toISOString() : null,
         };
 
@@ -90,6 +101,11 @@ export default function ArticleForm({ article, categories, initialCategory = "" 
             </div>
 
             {error && <div className={styles.error} role="alert">{error}</div>}
+            {isJournalist && (
+                <div className={styles.error} role="note">
+                    You are writing as {currentUser.displayName}. You can publish and edit your own stories.
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGrid}>
@@ -158,8 +174,9 @@ export default function ArticleForm({ article, categories, initialCategory = "" 
                             Author <span className={styles.req}>*</span>
                             <input
                                 name="author"
-                                defaultValue={article?.author ?? "Urugero Media"}
+                                defaultValue={authorName}
                                 required
+                                readOnly={isJournalist}
                                 className={styles.input}
                             />
                         </label>
@@ -196,22 +213,26 @@ export default function ArticleForm({ article, categories, initialCategory = "" 
                             </label>
                         </div>
 
-                        <div className={styles.checkRow}>
-                            <input
-                                type="checkbox"
-                                name="is_featured"
-                                value="1"
-                                id="is_featured"
-                                defaultChecked={article?.is_featured}
-                                className={styles.checkbox}
-                            />
-                            <label htmlFor="is_featured" className={styles.checkLabel}>
-                                Featured article
-                            </label>
-                        </div>
+                        {!isJournalist && (
+                            <>
+                                <div className={styles.checkRow}>
+                                    <input
+                                        type="checkbox"
+                                        name="is_featured"
+                                        value="1"
+                                        id="is_featured"
+                                        defaultChecked={article?.is_featured}
+                                        className={styles.checkbox}
+                                    />
+                                    <label htmlFor="is_featured" className={styles.checkLabel}>
+                                        Featured article
+                                    </label>
+                                </div>
+                            </>
+                        )}
 
                         <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Publish article"}
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Save article"}
                         </button>
 
                         {isEdit && (

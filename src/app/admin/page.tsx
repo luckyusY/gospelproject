@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getCurrentAdmin, isFullAdmin } from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { AnalyticsPageViewRow, ArticleRow, EventRow, TestimonyRow } from "@/types/database";
 import styles from "./dashboard.module.css";
@@ -6,6 +8,11 @@ import styles from "./dashboard.module.css";
 export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function AdminDashboard() {
+    const currentAdmin = await getCurrentAdmin();
+    if (currentAdmin && !isFullAdmin(currentAdmin)) {
+        redirect("/admin/articles");
+    }
+
     const admin = supabaseAdmin();
     // Server component renders per-request; current time is stable within a render.
     // eslint-disable-next-line react-hooks/purity
