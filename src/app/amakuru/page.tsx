@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { buildMeta } from "@/lib/metadata";
-import { supabase } from "@/lib/supabase";
-import type { ArticleRow } from "@/types/database";
+import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { ensureDefaultArticleCategories, getDefaultArticleCategoryOptions } from "@/lib/categories";
+import type { ArticleRow, CategoryRow } from "@/types/database";
 import styles from "./amakuru.module.css";
 
 export const metadata: Metadata = buildMeta({
@@ -12,25 +13,38 @@ export const metadata: Metadata = buildMeta({
     path: "/amakuru",
 });
 
-const categories = [
-    { label: "Byose",              href: "/amakuru",                  slug: null },
-    { label: "Abahanzi",           href: "/amakuru/abahanzi",         slug: "abahanzi" },
-    { label: "Amakorali",          href: "/amakuru/amakorali",        slug: "amakorali" },
-    { label: "Amatorero",          href: "/amakuru/amatorero",        slug: "amatorero" },
-    { label: "Abanyempano",        href: "/amakuru/abanyempano",      slug: "abanyempano" },
-    { label: "Ibitaramo",          href: "/amakuru/ibitaramo",        slug: "ibitaramo" },
-    { label: "Sport",              href: "/amakuru/sport",            slug: "sport" },
-    { label: "Hanze y'u Rwanda",   href: "/amakuru/hanze-yu-rwanda",  slug: "hanze-yu-rwanda" },
-];
+export const revalidate = 60;
 
 export default async function AmakuruPage() {
-    const articlesResult = await supabase
-        .from("articles")
-        .select("*")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false })
-        .limit(18);
+    await ensureDefaultArticleCategories(supabaseAdmin());
+
+    const [articlesResult, catsResult] = await Promise.all([
+        supabase
+            .from("articles")
+            .select("*")
+            .eq("is_published", true)
+            .order("published_at", { ascending: false })
+            .limit(18),
+        supabase
+            .from("categories")
+            .select("slug, name, nav_group, sort_order, show_in_nav")
+            .eq("nav_group", "amakuru")
+            .order("sort_order", { ascending: true }),
+    ]);
+
     const articles = (articlesResult.data ?? []) as ArticleRow[];
+    const defaultAmakuruCategories = getDefaultArticleCategoryOptions()
+        .filter(c => c.nav_group === "amakuru")
+        .map(c => ({ ...c, show_in_nav: true }));
+    const categoryMap = new Map<string, Pick<CategoryRow, "slug" | "name" | "show_in_nav">>();
+
+    for (const category of defaultAmakuruCategories) categoryMap.set(category.slug, category);
+    for (const category of ((catsResult.data ?? []) as Pick<CategoryRow, "slug" | "name" | "show_in_nav">[])) {
+        categoryMap.set(category.slug, category);
+    }
+
+    const categories = Array.from(categoryMap.values())
+        .filter(c => c.show_in_nav !== false);
 
     const featured  = articles.find(a => a.is_featured);
     const rest       = articles.filter(a => !a.is_featured);
@@ -44,11 +58,12 @@ export default async function AmakuruPage() {
                     <p className={styles.pageDesc}>
                         Amakuru mashya y&apos;Ubukristu mu Rwanda no ku isi yose
                     </p>
-                    {/* Category nav */}
+                    {/* Category nav (database-driven) */}
                     <nav className={styles.catNav} aria-label="Ibyiciro by'amakuru">
+                        <Link href="/amakuru" className={`${styles.catLink} ${styles.catLinkActive}`}>Byose</Link>
                         {categories.map(cat => (
-                            <Link key={cat.label} href={cat.href} className={styles.catLink}>
-                                {cat.label}
+                            <Link key={cat.slug} href={`/amakuru/${cat.slug}`} className={styles.catLink}>
+                                {cat.name}
                             </Link>
                         ))}
                     </nav>

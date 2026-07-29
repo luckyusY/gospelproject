@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import type { SiteSettingRow } from "@/types/database";
 
-export type SettingGroup = "social" | "radio" | "ads" | "videos";
-export type SettingInput = "url" | "text";
+export type SettingGroup = "social" | "radio" | "ads" | "videos" | "homepage";
+export type SettingInput = "url" | "text" | "textarea";
 
 export type SettingDefinition = {
     key: string;
@@ -73,6 +73,43 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
         input: "url",
     },
     {
+        key: "youtube_channel_url",
+        value: "https://www.youtube.com/@Urugerotv-r4o",
+        label: "Urugero TV channel URL",
+        description: "The YouTube channel link used on the TV & Radio page buttons",
+        group: "videos",
+        input: "url",
+    },
+    {
+        key: "youtube_playlist_id",
+        value: "UU_ifGgLzPhW4lRUIA95lfEQ",
+        label: "YouTube playlist ID",
+        description: "Playlist or uploads ID embedded at the bottom of the TV & Radio page",
+        group: "videos",
+        input: "text",
+    },
+    {
+        key: "tv_radio_hero_description",
+        value: "Aho usangirira live radio, ibiganiro bya Urugero TV, amakuru ya Gospel, sport, ubuhamya n'amashusho mashya ava kuri YouTube.",
+        label: "TV & Radio hero description",
+        description: "Short introduction shown under the TV & Radio page title",
+        group: "videos",
+        input: "textarea",
+    },
+    {
+        key: "tv_radio_program_cards",
+        value: [
+            "Live Radio|Indirimbo, inyigisho n'amakuru byumvikana buri munsi.|#radio-live",
+            "Urugero TV|Ibiganiro, amakuru, ubuhamya n'inkuru zigezweho.|#featured-videos",
+            "Sport Gospel|Inshundura Sports News n'inkuru za ruhago.|#sports",
+            "Video Library|Playlist yose ya YouTube iri hano ku rubuga.|#playlist",
+        ].join("\n"),
+        label: "TV & Radio program cards",
+        description: "One card per line: Title|Description|Link",
+        group: "videos",
+        input: "textarea",
+    },
+    {
         key: "ad_home_top_image",
         value: "/ads/urugero-live-radio-banner.png",
         label: "Homepage banner ad image",
@@ -104,7 +141,59 @@ export const SETTING_DEFINITIONS: SettingDefinition[] = [
         group: "ads",
         input: "text",
     },
+    {
+        key: "verse_text",
+        value: "Kuko nzi imigambi ndimo ndibanza kuri wewe, ni Uhoraho uvuga, imigambi y'amahoro si iy'ibibazo, kugira ngo nkuhe amaherezo n'icyiringiro.",
+        label: "Verse of the day — text",
+        description: "The Bible verse shown in the 'Ijambo ry'umunsi' block on the homepage",
+        group: "homepage",
+        input: "textarea",
+    },
+    {
+        key: "verse_reference",
+        value: "— Yeremiya 29:11",
+        label: "Verse of the day — reference",
+        description: "Where the verse is found (e.g. — Yeremiya 29:11)",
+        group: "homepage",
+        input: "text",
+    },
+    {
+        key: "ticker_lines",
+        value: [
+            "Urugero Music Academy yarakoze ibitaramo by'abakunzi b'Imana mu Rwanda",
+            "Urugero Online Radio ikomeza guturika n'amajwi y'Imana buri munsi",
+            "Urugero Bible Quiz ifungura amashuri n'amatorero mu Rwanda hose",
+        ].join("\n"),
+        label: "Breaking-news ticker",
+        description: "Lines shown in the scrolling breaking-news bar. One line per news item.",
+        group: "homepage",
+        input: "textarea",
+    },
+    {
+        key: "homepage_embed_title",
+        value: "Inkuru yo ku mbuga nkoranyambaga",
+        label: "Homepage embed/link title",
+        description: "Title shown above the optional homepage embed/link block.",
+        group: "homepage",
+        input: "text",
+    },
+    {
+        key: "homepage_embed_url",
+        value: "",
+        label: "Homepage embed/link URL",
+        description: "Paste a Twitter/X, Instagram, Facebook, YouTube, or webpage URL. Leave empty to hide the block.",
+        group: "homepage",
+        input: "url",
+    },
 ];
+
+/** Split a newline-separated setting (e.g. ticker_lines) into trimmed, non-empty lines. */
+export function settingLines(value: string | undefined): string[] {
+    return (value ?? "")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+}
 
 export type SiteSettingsMap = Record<string, string>;
 

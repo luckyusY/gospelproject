@@ -157,6 +157,18 @@ select {
 }
 img { max-width: 100%; height: auto; display: block; }
 
+/* On phones, iOS Safari auto-zooms the page whenever a form field smaller
+   than 16px is focused (search box, contact form, newsletter, admin login).
+   Force a 16px minimum on small screens to stop the jarring zoom. */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    /* !important is needed to beat per-component CSS-module classes. */
+    font-size: 16px !important;
+  }
+}
+
 /* ── Layout ───────────────────────────────────────────── */
 .container {
   width: 100%;
@@ -334,3 +346,63 @@ p  { font-size: clamp(0.9rem,  0.5vw + 0.5rem, 1rem); }
 .justify-between { justify-content: space-between; }
 .gap-2           { gap: 0.5rem; }
 .gap-4           { gap: 1rem; }
+
+/* ── Google Translate widget ───────────────────────────────
+   Hide Google's injected top banner and tidy the navbar picker. */
+.goog-te-banner-frame,
+.skiptranslate iframe { display: none !important; }
+body { top: 0 !important; }
+
+.gtranslate {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.gtranslate-globe { color: rgba(255, 255, 255, 0.55); flex-shrink: 0; }
+
+#google_translate_element {
+    display: inline-flex;
+    align-items: center;
+}
+/* Hide the "Powered by Google Translate" text + logo link (the logo is an
+   anchor to translate.google.com — hiding it stops the navigation-away). */
+#google_translate_element .goog-te-gadget {
+    color: transparent !important;
+    font-size: 0 !important;
+}
+#google_translate_element .goog-te-gadget > span,
+#google_translate_element .goog-logo-link,
+#google_translate_element .goog-te-gadget img {
+    display: none !important;
+}
+/* Compact dropdown: fixed narrow width so a long label can't overflow the
+   header — the selected text simply truncates with an ellipsis. */
+#google_translate_element .goog-te-gadget .goog-te-combo {
+    margin: 0 !important;
+    padding: 3px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    font-family: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+    width: 96px;
+    max-width: 96px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* Native dropdown options render on white, so keep their text dark. */
+#google_translate_element .goog-te-gadget .goog-te-combo option { color: #1f1f1f; }
+/* Smaller screens: shrink to roughly an icon-sized control. */
+@media (max-width: 640px) {
+    #google_translate_element .goog-te-gadget .goog-te-combo {
+        width: 70px;
+        max-width: 70px;
+    }
+}
+/* Keep the page from being shoved down by the (hidden) Google banner. */
+.skiptranslate { line-height: 0 !important; }

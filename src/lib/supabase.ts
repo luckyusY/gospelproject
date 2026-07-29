@@ -5,7 +5,16 @@ const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Browser / Server Component client (anon key — respects RLS)
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnon);
+// Auth options let the browser keep the Google sign-in session and pick up
+// the OAuth redirect (?code=...) automatically when the user returns.
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnon, {
+    auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        flowType: "pkce",
+    },
+});
 
 // Admin client for API routes (service role — bypasses RLS)
 export function supabaseAdmin() {

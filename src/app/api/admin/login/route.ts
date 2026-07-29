@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     const res = NextResponse.redirect(new URL("/admin", req.url));
-    res.cookies.set(ADMIN_SESSION_COOKIE, createAdminSession(admin.username), {
+    res.cookies.set(ADMIN_SESSION_COOKIE, createAdminSession(admin), {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

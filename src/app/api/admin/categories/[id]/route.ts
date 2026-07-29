@@ -19,10 +19,19 @@ export async function PUT(req: NextRequest, { params }: Params) {
     const { id } = await params;
     const raw = await req.json() as Partial<CategoryInsert>;
 
-    // Only name + color are editable; slug is referenced by articles (FK).
-    const patch: Record<string, string> = {};
+    // Slug is referenced by articles (FK), so it stays fixed; everything else is editable.
+    const patch: Record<string, unknown> = {};
     if (typeof raw.name === "string" && raw.name.trim()) patch.name = raw.name.trim();
     if (typeof raw.color === "string" && raw.color.trim()) patch.color = raw.color.trim();
+    if (typeof raw.icon === "string") patch.icon = raw.icon.trim() || null;
+    if (typeof raw.description === "string") patch.description = raw.description.trim() || null;
+    if (typeof raw.hero_image === "string") patch.hero_image = raw.hero_image.trim() || null;
+    if (raw.nav_group !== undefined) {
+        const g = typeof raw.nav_group === "string" ? raw.nav_group.trim() : "";
+        patch.nav_group = g || null;
+    }
+    if (raw.sort_order !== undefined) patch.sort_order = Number(raw.sort_order) || 0;
+    if (typeof raw.show_in_nav === "boolean") patch.show_in_nav = raw.show_in_nav;
 
     if (Object.keys(patch).length === 0) {
         return NextResponse.json({ error: "No changes were provided." }, { status: 400 });

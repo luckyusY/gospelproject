@@ -34,11 +34,16 @@ const FALLBACK_SLIDE: Slide = {
     readTime: "5 min",
 };
 
-export default function StoriesSlider({ stories }: { stories: ArticleRow[] }) {
+type Props = {
+    stories: ArticleRow[];
+    categoryBasePaths?: Record<string, string>;
+};
+
+export default function StoriesSlider({ stories, categoryBasePaths = {} }: Props) {
     const slides: Slide[] = stories.length
         ? stories.map(s => ({
             id: s.id,
-            href: `/amakuru/${s.slug}`,
+            href: `${categoryBasePaths[s.category] ?? "/amakuru"}/${s.slug}`,
             image: s.image_url ?? FALLBACK_IMG,
             category: s.category,
             categoryColor: s.category_color,

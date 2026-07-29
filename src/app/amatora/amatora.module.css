@@ -1,0 +1,257 @@
+.page {
+    padding-bottom: 4rem;
+}
+
+/* ── Listing ─────────────────────────────────── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.contestCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border, #e3e3e3);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface, #fff);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.contestCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contestCardMain {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.cardShare {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    z-index: 3;
+}
+
+.contestImgWrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--muted, #f0f0f0);
+}
+.contestImg { object-fit: cover; }
+.imgPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 2.5rem;
+}
+
+.contestBody { padding: 1.1rem 1.2rem 1.3rem; }
+.contestTitle { font-size: 1.15rem; font-weight: 700; margin: 0 0 0.4rem; }
+.contestDesc { font-size: 0.9rem; color: var(--text-muted, #666); margin: 0 0 0.9rem; line-height: 1.5; }
+
+.statusRow { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+.badgeOpen {
+    background: #059669; color: #fff; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 600;
+}
+.badgeClosed {
+    background: #6b7280; color: #fff; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 600;
+}
+.voteTotal { color: var(--text-muted, #666); }
+
+.voteCta {
+    display: inline-block;
+    margin-top: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: #B80000;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: background 0.15s ease;
+}
+.contestCardMain:hover .voteCta { background: #960000; }
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted, #666);
+}
+
+/* ── Voting (detail) ─────────────────────────── */
+.intro { margin: 1.5rem 0 0.5rem; }
+.note {
+    margin: 0.5rem 0 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #666);
+}
+.closedBanner {
+    margin: 1rem 0;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.entryList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.entry {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border, #e3e3e3);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface, #fff);
+}
+.entryLeader { border-color: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15); }
+
+.entryImgWrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--muted, #f0f0f0);
+}
+.entryImg { object-fit: cover; }
+
+/* YouTube embed sits flush at the top of the card, same as the image. */
+.entryEmbed > * { border-radius: 0; }
+
+.entryBody { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.55rem; }
+.entryName { font-size: 1.05rem; font-weight: 700; margin: 0; }
+.entrySub { font-size: 0.85rem; color: var(--text-muted, #666); margin: 0; }
+
+.watchLink {
+    font-size: 0.82rem;
+    color: #B80000;
+    text-decoration: none;
+    font-weight: 600;
+}
+.watchLink:hover { text-decoration: underline; }
+
+/* result bar */
+.bar {
+    position: relative;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--muted, #eee);
+    overflow: hidden;
+}
+.barFill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: linear-gradient(90deg, #059669, #10b981);
+    transition: width 0.4s ease;
+}
+.barText {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #083d2c;
+}
+
+.voteBtn {
+    margin-top: 0.2rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #B80000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.voteBtn:hover { background: #960000; }
+.voteBtn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+.votedTag {
+    margin-top: 0.2rem;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    background: #ecfdf5;
+    color: #059669;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.feedback {
+    margin: 1rem 0;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.feedbackOk { background: #ecfdf5; color: #059669; }
+.feedbackErr { background: #fef2f2; color: #B80000; }
+
+/* ── Google sign-in gate ───────────────────────────────── */
+.signInPrompt {
+    margin: 1rem 0 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+    text-align: center;
+}
+.signInPrompt p {
+    margin: 0 0 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+}
+.googleBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    color: #111827;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.googleBtn:hover { background: #f3f4f6; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.googleBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.signedIn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1.25rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+.signOutBtn {
+    border: none;
+    background: none;
+    padding: 0;
+    color: #B80000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+}

@@ -14,6 +14,13 @@ export default function SmoothScrollProvider({
     children: React.ReactNode;
 }) {
     useEffect(() => {
+        // Use the browser's native scrolling on touch devices (phones/tablets).
+        // Lenis smooth-scroll feels laggy / hijacked on mobile, especially
+        // Android Chrome; native scroll is what users expect there.
+        const isTouchDevice = typeof window !== "undefined"
+            && (window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0);
+        if (isTouchDevice) return;
+
         const lenis = new Lenis({
             duration:        1.15,
             easing:          (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

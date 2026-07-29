@@ -1,0 +1,426 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import type { PageRow } from "@/types/database";
+import styles from "../../form.module.css";
+import RichTextEditor from "../../articles/_components/RichTextEditor";
+import CloudinaryUploader from "../../articles/_components/CloudinaryUploader";
+
+const GROUPS = [
+    { value: "", label: "Standalone page" },
+    { value: "media-group-home", label: "Urugero Media Group landing" },
+    { value: "media-group", label: "Urugero Media Group child" },
+];
+
+const LAYOUTS = [
+    { value: "standard", label: "Standard cards" },
+    { value: "feature", label: "Featured lead" },
+    { value: "compact", label: "Compact list" },
+    { value: "magazine", label: "Magazine grid" },
+];
+
+type Props = { page?: PageRow };
+
+type RelatedLink = {
+    title: string;
+    description: string;
+    href: string;
+};
+
+function slugify(val: string) {
+    return val.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+}
+
+function publicHref(page: PageRow) {
+    if (page.slug === "urugero-media-group") return "/urugero-media-group";
+    return page.nav_group === "media-group"
+        ? `/urugero-media-group/${page.slug}`
+        : `/${page.slug}`;
+}
+
+function articleCategoryForPage(page: PageRow) {
+    if (page.nav_group === "media-group") return page.slug;
+    if (page.slug === "tumenye-bibiliya") return "tumenye-bibiliya";
+    if (page.slug === "ibigwi") return "ibigwi";
+    return null;
+}
+
+function relatedLinksForPage(page?: PageRow): RelatedLink[] {
+    if (!page) {
+        return [
+            {
+                title: "Create page first",
+                description: "After saving, this editor will show links for related articles, videos, settings, and categories.",
+                href: "/admin/pages",
+            },
+        ];
+    }
+
+    const links: RelatedLink[] = [
+        {
+            title: "View public page",
+            description: `Open ${publicHref(page)} in a new tab.`,
+            href: publicHref(page),
+        },
+        {
+            title: "Menu item",
+            description: "Edit the navigation label, order, visibility, or dropdown placement.",
+            href: "/admin/menu",
+        },
+    ];
+
+    const category = articleCategoryForPage(page);
+    if (category) {
+        links.push(
+            {
+                title: "Articles on this page",
+                description: "Edit stories that appear on this page.",
+                href: `/admin/articles?category=${encodeURIComponent(category)}`,
+            },
+            {
+                title: "Add article here",
+                description: "Create a new article already pointed at this page category.",
+                href: `/admin/articles/new?category=${encodeURIComponent(category)}`,
+            },
+            {
+                title: "Category settings",
+                description: "Edit category name, color, description, order, and menu visibility.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "amakuru") {
+        links.push(
+            {
+                title: "All Amakuru articles",
+                description: "Edit news articles that feed the Amakuru section and homepage.",
+                href: "/admin/articles",
+            },
+            {
+                title: "Amakuru categories",
+                description: "Edit the categories under Amakuru, including menu visibility.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "inyigisho") {
+        links.push(
+            {
+                title: "Inyigisho categories",
+                description: "Edit teaching categories like Umuryango, Abana, and Urubyiruko.",
+                href: "/admin/categories",
+            },
+            {
+                title: "Inyigisho articles",
+                description: "Filter or edit teaching articles from the article manager.",
+                href: "/admin/articles",
+            },
+        );
+    }
+
+    if (page.slug === "urugero-media-group") {
+        links.push(
+            {
+                title: "Media Group child pages",
+                description: "Edit Music Academy, Films, Records, Podcast, and other cards.",
+                href: "/admin/pages",
+            },
+            {
+                title: "Media Group categories",
+                description: "Edit article categories connected to Media Group pages.",
+                href: "/admin/categories",
+            },
+        );
+    }
+
+    if (page.slug === "urugero-tv-radio") {
+        links.push(
+            {
+                title: "TV & video settings",
+                description: "Edit YouTube channel URL, playlist ID, hero copy, and program cards.",
+                href: "/admin/settings",
+            },
+            {
+                title: "Featured videos",
+                description: "Edit the hero and featured videos on this page.",
+                href: "/admin/videos?section=tv-radio-featured",
+            },
+            {
+                title: "Latest videos",
+                description: "Edit the Amakuru & Ibiganiro video grid.",
+                href: "/admin/videos?section=tv-radio-latest",
+            },
+            {
+                title: "Sports videos",
+                description: "Edit the Inshundura Sports News section.",
+                href: "/admin/videos?section=tv-radio-sports",
+            },
+            {
+                title: "Video library",
+                description: "Edit the small YouTube thumbnail library.",
+                href: "/admin/videos?section=tv-radio-library",
+            },
+            {
+                title: "Radio settings",
+                description: "Edit live stream URL and station name.",
+                href: "/admin/settings",
+            },
+        );
+    }
+
+    if (page.slug === "ubuhamya") {
+        links.push({
+            title: "Testimonies",
+            description: "Add or edit testimonies shown on the Ubuhamya page.",
+            href: "/admin/testimonies",
+        });
+    }
+
+    return links;
+}
+
+export default function PageForm({ page }: Props) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+    const [content, setContent] = useState(page?.content ?? "");
+    const [heroImage, setHeroImage] = useState(page?.hero_image ?? "");
+    const [layoutVariant, setLayoutVariant] = useState(page?.layout_variant ?? "standard");
+
+    const isEdit = Boolean(page);
+    const defaultPageType = page?.slug === "urugero-media-group"
+        ? "media-group-home"
+        : page?.nav_group ?? "";
+    const relatedLinks = relatedLinksForPage(page);
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setError(null);
+        const data = new FormData(e.currentTarget);
+
+        const pageType = data.get("nav_group") as string;
+        const isMediaGroupHome = pageType === "media-group-home";
+
+        const payload = {
+            title:        data.get("title") as string,
+            slug:         isMediaGroupHome ? "urugero-media-group" : data.get("slug") as string,
+            subtitle:     data.get("subtitle") as string,
+            content,
+            icon:         data.get("icon") as string,
+            color:        data.get("color") as string,
+            hero_image:   heroImage || null,
+            nav_group:    pageType === "media-group" ? "media-group" : "",
+            layout_variant: data.get("layout_variant") as string,
+            is_published: data.get("is_published") === "1",
+            sort_order:   Number(data.get("sort_order")) || 0,
+        };
+
+        const url = isEdit ? `/api/admin/pages/${page!.id}` : "/api/admin/pages";
+        const method = isEdit ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            const json = await res.json().catch(() => ({}));
+            setError((json as { error?: string }).error ?? "Something went wrong. Please try again.");
+            return;
+        }
+
+        startTransition(() => router.push("/admin/pages"));
+    }
+
+    return (
+        <div className={styles.page}>
+            <div className={styles.topBar}>
+                <h1 className={styles.heading}>{isEdit ? "Edit page" : "New page"}</h1>
+                <a href="/admin/pages" className={styles.backBtn}>← Back</a>
+            </div>
+
+            {error && <div className={styles.error} role="alert">{error}</div>}
+
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.formGrid}>
+                    <div className={styles.mainCol}>
+                        <label className={styles.label}>
+                            Title <span className={styles.req}>*</span>
+                            <input
+                                name="title"
+                                defaultValue={page?.title}
+                                required
+                                className={styles.input}
+                                onChange={e => {
+                                    if (!isEdit) {
+                                        const slugInput = document.querySelector<HTMLInputElement>('[name="slug"]');
+                                        if (slugInput) slugInput.value = slugify(e.target.value);
+                                    }
+                                }}
+                            />
+                        </label>
+
+                        <label className={styles.label}>
+                            Slug <span className={styles.req}>*</span>
+                            <input
+                                name="slug"
+                                defaultValue={page?.slug}
+                                required
+                                className={styles.input}
+                                pattern="[a-z0-9-]+"
+                                title="Lowercase letters, numbers and - only"
+                            />
+                            {page?.slug === "urugero-media-group" && (
+                                <span className={styles.hint}>
+                                    Keep this slug for the main Urugero Media Group page.
+                                </span>
+                            )}
+                        </label>
+
+                        <label className={styles.label}>
+                            Subtitle / tagline
+                            <input
+                                name="subtitle"
+                                defaultValue={page?.subtitle}
+                                className={styles.input}
+                                placeholder="Short tagline shown under the title"
+                            />
+                        </label>
+
+                        <div className={styles.label}>
+                            <span>Content</span>
+                            <RichTextEditor value={content} onChange={setContent} />
+                        </div>
+                    </div>
+
+                    <div className={styles.metaCol}>
+                        <label className={styles.label}>
+                            Type
+                            <select name="nav_group" defaultValue={defaultPageType} className={styles.select}>
+                                {GROUPS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
+                            </select>
+                            <span className={styles.hint}>
+                                Landing edits <strong>/urugero-media-group</strong>; child pages appear as cards and open under that page.
+                            </span>
+                        </label>
+
+                        <div className={styles.label}>
+                            <span>Layout template</span>
+                            <select
+                                name="layout_variant"
+                                value={layoutVariant}
+                                onChange={e => setLayoutVariant(e.target.value)}
+                                className={styles.select}
+                            >
+                                {LAYOUTS.map(layout => (
+                                    <option key={layout.value} value={layout.value}>{layout.label}</option>
+                                ))}
+                            </select>
+                            <span className={styles.hint}>
+                                Choose how page cards and stories are arranged.
+                            </span>
+                            <div className={styles.layoutPreviewGrid} aria-label="Layout previews">
+                                {LAYOUTS.map(layout => (
+                                    <button
+                                        key={layout.value}
+                                        type="button"
+                                        className={`${styles.layoutPreviewCard} ${layoutVariant === layout.value ? styles.layoutPreviewActive : ""}`}
+                                        onClick={() => setLayoutVariant(layout.value)}
+                                        aria-pressed={layoutVariant === layout.value}
+                                    >
+                                        <span className={styles.layoutPreviewTitle}>{layout.label}</span>
+                                        <span className={`${styles.layoutPreviewMock} ${styles[`layoutPreview_${layout.value}`]}`}>
+                                            <span />
+                                            <span />
+                                            <span />
+                                            <span />
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <label className={styles.label}>
+                            Icon (emoji)
+                            <input name="icon" defaultValue={page?.icon ?? ""} className={styles.input} placeholder="🎬" />
+                        </label>
+
+                        <label className={styles.label}>
+                            Accent colour
+                            <input type="color" name="color" defaultValue={page?.color ?? "#B80000"} className={styles.input} />
+                        </label>
+
+                        <label className={styles.label}>
+                            Sort order
+                            <input type="number" name="sort_order" defaultValue={page?.sort_order ?? 0} className={styles.input} />
+                        </label>
+
+                        <div className={styles.label}>
+                            Hero image
+                            <CloudinaryUploader value={heroImage} onChange={setHeroImage} />
+                        </div>
+
+                        <section className={styles.relatedPanel} aria-labelledby="related-content-title">
+                            <div>
+                                <h2 id="related-content-title" className={styles.relatedTitle}>Related content</h2>
+                                <p className={styles.relatedIntro}>
+                                    Save page text here, then use these links for connected articles, videos, settings, and menu data.
+                                </p>
+                            </div>
+                            <div className={styles.relatedList}>
+                                {relatedLinks.map(link => (
+                                    <a
+                                        key={`${link.title}-${link.href}`}
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className={styles.relatedLink}
+                                    >
+                                        <span className={styles.relatedLinkTitle}>{link.title}</span>
+                                        <span className={styles.relatedLinkDesc}>{link.description}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
+
+                        <div className={styles.checkRow}>
+                            <input
+                                type="checkbox"
+                                name="is_published"
+                                value="1"
+                                id="is_published"
+                                defaultChecked={page ? page.is_published : true}
+                                className={styles.checkbox}
+                            />
+                            <label htmlFor="is_published" className={styles.checkLabel}>
+                                Publish to site
+                            </label>
+                        </div>
+
+                        <button type="submit" className={styles.submitBtn} disabled={isPending}>
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Create page"}
+                        </button>
+
+                        {isEdit && (
+                            <button
+                                type="button"
+                                className={styles.deleteBtn}
+                                onClick={async () => {
+                                    if (!confirm("Delete this page? This cannot be undone.")) return;
+                                    await fetch(`/api/admin/pages/${page!.id}`, { method: "DELETE" });
+                                    router.push("/admin/pages");
+                                }}
+                            >
+                                Delete page
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </form>
+        </div>
+    );
+}

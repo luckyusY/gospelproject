@@ -2,24 +2,69 @@ import { notFound }    from "next/navigation";
 import Image           from "next/image";
 import Link            from "next/link";
 import type { Metadata } from "next";
-import { supabase }    from "@/lib/supabase";
+import { supabase, supabaseAdmin }    from "@/lib/supabase";
+import { ensureDefaultArticleCategories, getDefaultCategoryBySlug } from "@/lib/categories";
 import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import ShareButtons    from "@/components/ShareButtons";
-import type { ArticleRow } from "@/types/database";
+import ArticleComments from "@/components/ArticleComments";
+import TwitterEmbeds   from "@/components/TwitterEmbeds";
+import CategoryListing from "@/components/CategoryListing";
+import { renderArticleContent } from "@/lib/articleContent";
+import type { ArticleCommentRow, ArticleRow, CategoryRow } from "@/types/database";
 import styles          from "./article.module.css";
 
 type Props = { params: Promise<{ slug: string }> };
 
-/* ── SEO metadata ─────────────────────────────────────────── */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { slug } = await params;
-    const result = await supabase
+/** A slug at /amakuru/<slug> is either a category listing or a single article. */
+async function getCategory(slug: string): Promise<CategoryRow | null> {
+    const admin = supabaseAdmin();
+    await ensureDefaultArticleCategories(admin);
+
+    const { data } = await admin
+        .from("categories")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+
+    const category = (data as CategoryRow | null) ?? getDefaultCategoryBySlug(slug);
+    return category?.nav_group === "amakuru" ? category : null;
+}
+
+async function getArticle(slug: string): Promise<ArticleRow | null> {
+    const { data: exact } = await supabase
         .from("articles")
         .select("*")
         .eq("slug", slug)
         .eq("is_published", true)
-        .single();
-    const data = result.data as ArticleRow | null;
+        .maybeSingle();
+
+    if (exact) return exact as ArticleRow;
+    if (slug.endsWith("!")) return null;
+
+    const { data: punctuationFallback } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("slug", `${slug}!`)
+        .eq("is_published", true)
+        .maybeSingle();
+
+    return (punctuationFallback as ArticleRow | null) ?? null;
+}
+
+/* ── SEO metadata ─────────────────────────────────────────── */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params;
+
+    const category = await getCategory(slug);
+    if (category) {
+        return buildMeta({
+            title:       category.name,
+            description: category.description ?? `Amakuru ya ${category.name} kuri Urugero Gospel News.`,
+            path:        `/amakuru/${slug}`,
+        });
+    }
+
+    const data = await getArticle(slug);
 
     if (!data) return {};
     return buildMeta({
@@ -32,29 +77,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 /* ── Static params for build-time generation ─────────────── */
 export async function generateStaticParams() {
-    const { data } = await supabase
-        .from("articles")
-        .select("*")
-        .eq("is_published", true);
-    const rows = (data ?? []) as ArticleRow[];
-    return rows.map((a) => ({ slug: a.slug }));
+    const [{ data: articleData }, { data: catData }] = await Promise.all([
+        supabase.from("articles").select("slug").eq("is_published", true),
+        supabase.from("categories").select("slug"),
+    ]);
+    const slugs = [
+        ...((articleData ?? []) as { slug: string }[]),
+        ...((catData ?? []) as { slug: string }[]),
+    ];
+    return slugs.map((row) => ({ slug: row.slug }));
 }
 
 /* ── Page ──────────────────────────────────────────────────── */
-export default async function ArticlePage({ params }: Props) {
+export default async function ArticleOrCategoryPage({ params }: Props) {
     const { slug } = await params;
 
-    /* Fetch the article */
-    const { data: article } = await supabase
-        .from("articles")
-        .select("*")
-        .eq("slug", slug)
-        .eq("is_published", true)
-        .single();
+    /* If the slug is a category, render the shared listing page. */
+    const category = await getCategory(slug);
+    if (category) {
+        return <CategoryListing category={category} basePath="/amakuru" sectionLabel="Amakuru" />;
+    }
 
-    if (!article) notFound();
+    /* Otherwise it's a single article. */
+    const a = await getArticle(slug);
 
-    const a = article as ArticleRow;
+    if (!a) notFound();
 
     /* Fetch related articles (same category, different slug) */
     const { data: related } = await supabase
@@ -67,10 +114,18 @@ export default async function ArticlePage({ params }: Props) {
         .limit(3);
 
     const relatedArticles = (related ?? []) as ArticleRow[];
+    const { data: comments } = await supabase
+        .from("article_comments")
+        .select("id, article_id, author_name, message, is_approved, created_at, updated_at")
+        .eq("article_id", a.id)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(100);
+    const approvedComments = (comments ?? []) as ArticleCommentRow[];
 
     /* Published date */
     const pubDate = a.published_at
-        ? new Date(a.published_at).toLocaleDateString("fr-RW", {
+        ? new Date(a.published_at).toLocaleDateString("en-US", {
             day: "numeric", month: "long", year: "numeric",
           })
         : null;
@@ -135,11 +190,13 @@ export default async function ArticlePage({ params }: Props) {
                 {/* ── Article Body (HTML rendered safely) ── */}
                 <article
                     className={styles.body}
-                    dangerouslySetInnerHTML={{ __html: a.content }}
+                    dangerouslySetInnerHTML={{ __html: renderArticleContent(a.content) }}
                 />
+                <TwitterEmbeds />
 
                 {/* ── Share ──────────────────────────────── */}
                 <ShareButtons url={absoluteUrl(`/amakuru/${a.slug}`)} title={a.title} />
+                <ArticleComments articleId={a.id} initialComments={approvedComments} />
 
                 {/* ── Footer ─────────────────────────────── */}
                 <div className={styles.footer}>

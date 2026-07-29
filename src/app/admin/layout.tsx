@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
     return (
         <div className={styles.shell}>
-            <AdminNav username={admin.username} />
+            <AdminNav username={admin.displayName} role={admin.role} />
 
             <main className={styles.main}>
                 {children}

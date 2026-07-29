@@ -3,16 +3,27 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { AdminRole } from "@/lib/adminAuth";
 import styles from "../admin.module.css";
 
 const NAV_LINKS = [
     { href: "/admin",             label: "Dashboard",    icon: "📊" },
+    { href: "/admin/homepage",    label: "Homepage",     icon: "🏠" },
     { href: "/admin/articles",    label: "Articles",     icon: "📰" },
+    { href: "/admin/comments",    label: "Comments",     icon: "💬" },
     { href: "/admin/categories",  label: "Categories",   icon: "🏷️" },
+    { href: "/admin/pages",       label: "Pages",        icon: "📄" },
     { href: "/admin/events",      label: "Events",       icon: "📅" },
     { href: "/admin/testimonies", label: "Testimonies",  icon: "🙌" },
+    { href: "/admin/videos",      label: "Videos",       icon: "🎬" },
     { href: "/admin/media",       label: "Media",        icon: "🎵" },
+    { href: "/admin/voting",      label: "Voting",       icon: "🗳️" },
+    { href: "/admin/menu",        label: "Menu",         icon: "🧭" },
     { href: "/admin/settings",    label: "Settings",     icon: "⚙️" },
+];
+
+const JOURNALIST_NAV_LINKS = [
+    { href: "/admin/articles", label: "My stories", icon: "📰" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -20,9 +31,10 @@ function isActive(pathname: string, href: string) {
     return pathname === href || pathname.startsWith(href + "/");
 }
 
-export default function AdminNav({ username }: { username: string }) {
+export default function AdminNav({ username, role }: { username: string; role: AdminRole }) {
     const pathname = usePathname() ?? "";
     const [open, setOpen] = useState(false);
+    const links = role === "journalist" ? JOURNALIST_NAV_LINKS : NAV_LINKS;
 
     // Close the drawer whenever the route changes
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -65,12 +77,12 @@ export default function AdminNav({ username }: { username: string }) {
                     <span className={styles.logoIcon}>✝</span>
                     <div>
                         <p className={styles.logoName}>Urugero Media</p>
-                        <p className={styles.logoRole}>Admin: {username}</p>
+                        <p className={styles.logoRole}>{role === "journalist" ? "Journalist" : "Admin"}: {username}</p>
                     </div>
                 </div>
 
                 <nav className={styles.sideNav}>
-                    {NAV_LINKS.map(link => (
+                    {links.map(link => (
                         <Link
                             key={link.href}
                             href={link.href}

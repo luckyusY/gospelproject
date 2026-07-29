@@ -23,6 +23,9 @@ insert into public.categories (name, slug, color) values
     ('Ibitaramo',        'ibitaramo',         '#F59E0B'),
     ('Sport',            'sport',             '#047857'),
     ('Hanze y''u Rwanda','hanze-yu-rwanda',   '#0D1B2E'),
+    ('Inkuru yanjye',    'inkuru-yanjye',     '#B80000'),
+    ('Ibaruwa',          'ibaruwa',           '#7C2D12'),
+    ('Tumenye Bibiliya', 'tumenye-bibiliya',  '#1E40AF'),
     ('Ubuhamya',         'ubuhamya',          '#DC2626'),
     ('Inyigisho',        'inyigisho',         '#1E40AF')
 on conflict (slug) do nothing;

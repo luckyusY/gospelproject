@@ -3,14 +3,23 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ArticleRow } from "@/types/database";
+import type { AdminRole } from "@/lib/adminAuth";
+import type { ArticleCategoryOption } from "@/lib/categories";
 import styles from "../../form.module.css";
 import RichTextEditor from "./RichTextEditor";
 import CloudinaryUploader from "./CloudinaryUploader";
 
-type Category = { slug: string; name: string; color: string };
-type Props = { article?: ArticleRow; categories: Category[] };
+type Props = {
+    article?: ArticleRow;
+    categories: ArticleCategoryOption[];
+    initialCategory?: string;
+    currentUser: {
+        role: AdminRole;
+        displayName: string;
+    };
+};
 
-export default function ArticleForm({ article, categories }: Props) {
+export default function ArticleForm({ article, categories, initialCategory = "", currentUser }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError]     = useState<string | null>(null);
@@ -18,6 +27,9 @@ export default function ArticleForm({ article, categories }: Props) {
     const [imageUrl, setImageUrl] = useState(article?.image_url ?? "");
 
     const isEdit = Boolean(article);
+    const isJournalist = currentUser.role === "journalist";
+    const defaultCategory = (article?.category ?? initialCategory) || undefined;
+    const authorName = isJournalist ? currentUser.displayName : article?.author ?? "Urugero Media";
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -39,10 +51,10 @@ export default function ArticleForm({ article, categories }: Props) {
             image_url:      imageUrl || null,
             category:       data.get("category") as string,
             category_color: categories.find(c => c.slug === data.get("category"))?.color ?? "#B80000",
-            author:         data.get("author") as string,
+            author:         isJournalist ? currentUser.displayName : data.get("author") as string,
             read_time:      data.get("read_time") as string,
             is_published:   data.get("is_published") === "1",
-            is_featured:    data.get("is_featured") === "1",
+            is_featured:    !isJournalist && data.get("is_featured") === "1",
             published_at:   data.get("is_published") === "1" ? new Date().toISOString() : null,
         };
 
@@ -70,6 +82,15 @@ export default function ArticleForm({ article, categories }: Props) {
         return val.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     }
 
+    function groupLabel(group: string | null) {
+        if (group === "amakuru") return "Amakuru";
+        if (group === "inyigisho") return "Inyigisho";
+        if (group === "ibigwi") return "Ibigwi";
+        if (group === "tumenye-bibiliya") return "Tumenye Bibiliya";
+        if (group === "media-group") return "Urugero Media Group";
+        return "Ibindi";
+    }
+
     return (
         <div className={styles.page}>
             <div className={styles.topBar}>
@@ -80,6 +101,11 @@ export default function ArticleForm({ article, categories }: Props) {
             </div>
 
             {error && <div className={styles.error} role="alert">{error}</div>}
+            {isJournalist && (
+                <div className={styles.error} role="note">
+                    You are writing as {currentUser.displayName}. You can publish and edit your own stories.
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGrid}>
@@ -135,9 +161,11 @@ export default function ArticleForm({ article, categories }: Props) {
                     <div className={styles.metaCol}>
                         <label className={styles.label}>
                             Category <span className={styles.req}>*</span>
-                            <select name="category" defaultValue={article?.category} required className={styles.select}>
+                            <select name="category" defaultValue={defaultCategory} required className={styles.select}>
                                 {categories.map(c => (
-                                    <option key={c.slug} value={c.slug}>{c.name}</option>
+                                    <option key={c.slug} value={c.slug}>
+                                        {groupLabel(c.nav_group)} - {c.name}
+                                    </option>
                                 ))}
                             </select>
                         </label>
@@ -146,8 +174,9 @@ export default function ArticleForm({ article, categories }: Props) {
                             Author <span className={styles.req}>*</span>
                             <input
                                 name="author"
-                                defaultValue={article?.author ?? "Urugero Media"}
+                                defaultValue={authorName}
                                 required
+                                readOnly={isJournalist}
                                 className={styles.input}
                             />
                         </label>
@@ -184,22 +213,26 @@ export default function ArticleForm({ article, categories }: Props) {
                             </label>
                         </div>
 
-                        <div className={styles.checkRow}>
-                            <input
-                                type="checkbox"
-                                name="is_featured"
-                                value="1"
-                                id="is_featured"
-                                defaultChecked={article?.is_featured}
-                                className={styles.checkbox}
-                            />
-                            <label htmlFor="is_featured" className={styles.checkLabel}>
-                                Featured article
-                            </label>
-                        </div>
+                        {!isJournalist && (
+                            <>
+                                <div className={styles.checkRow}>
+                                    <input
+                                        type="checkbox"
+                                        name="is_featured"
+                                        value="1"
+                                        id="is_featured"
+                                        defaultChecked={article?.is_featured}
+                                        className={styles.checkbox}
+                                    />
+                                    <label htmlFor="is_featured" className={styles.checkLabel}>
+                                        Featured article
+                                    </label>
+                                </div>
+                            </>
+                        )}
 
                         <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Publish article"}
+                            {isPending ? "Saving..." : isEdit ? "Save changes" : "Save article"}
                         </button>
 
                         {isEdit && (

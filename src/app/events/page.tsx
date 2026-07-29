@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { buildMeta } from "@/lib/metadata";
+import { buildMeta, absoluteUrl } from "@/lib/metadata";
 import { supabase } from "@/lib/supabase";
+import ShareIconButton from "@/components/ShareIconButton";
 import type { EventRow } from "@/types/database";
 import styles from "./events.module.css";
 import { Search, MapPin, Grid } from "lucide-react";
@@ -92,43 +93,51 @@ export default async function EventsPage() {
                             const d = new Date(ev.event_date);
                             const month = MONTHS_RW[d.getMonth()] ?? "";
                             const day = String(d.getDate()).padStart(2, "0");
+                            const isPast = new Date(ev.event_date).getTime() < now;
                             return (
-                                <Link key={ev.id} href={`/events/${ev.slug}`} className={styles.eventCard}>
-                                    <div
-                                        className={styles.eventImage}
-                                        style={ev.image_url ? { backgroundImage: `url(${ev.image_url})` } : undefined}
-                                    >
-                                        <div className={styles.dateBadge}>
-                                            <span className={styles.badgeMonth}>{month}</span>
-                                            <span className={styles.badgeDay}>{day}</span>
-                                        </div>
-                                        {ev.tag && (
-                                            <span className="tag" style={{ backgroundColor: "#B80000" }}>
-                                                {ev.tag}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className={styles.eventContent}>
-                                        <div className={styles.eventMeta}>
-                                            <MapPin size={14} />
-                                            <span>{ev.location}</span>
-                                        </div>
-                                        <h2 className={styles.eventTitle}>{ev.title}</h2>
-                                        <p className={styles.eventExcerpt}>{ev.description}</p>
-                                        <div className={styles.eventFooter}>
-                                            <div className={styles.eventPrice}>
-                                                <span className={styles.priceLabel}>Kwinjira</span>
-                                                <span
-                                                    className={styles.priceValue}
-                                                    style={{ color: ev.is_free ? "#16a34a" : "var(--navy)" }}
-                                                >
-                                                    {ev.is_free ? "Kubuntu" : (ev.price ?? "Baza")}
-                                                </span>
+                                <article key={ev.id} className={styles.eventCard}>
+                                    <Link href={`/events/${ev.slug}`} className={styles.eventCardMain}>
+                                        <div
+                                            className={styles.eventImage}
+                                            style={ev.image_url ? { backgroundImage: `url(${ev.image_url})` } : undefined}
+                                        >
+                                            <div className={styles.imageOverlay} aria-hidden />
+                                            <div className={styles.dateBadge}>
+                                                <span className={styles.badgeMonth}>{month}</span>
+                                                <span className={styles.badgeDay}>{day}</span>
                                             </div>
-                                            <span className="btn btn-outline">Reba byinshi</span>
+                                            {ev.tag && (
+                                                <span className={styles.eventTag}>{ev.tag}</span>
+                                            )}
+                                            {isPast && <span className={styles.pastBadge}>Byarangiye</span>}
                                         </div>
-                                    </div>
-                                </Link>
+                                        <div className={styles.eventContent}>
+                                            <div className={styles.eventMeta}>
+                                                <MapPin size={14} />
+                                                <span>{ev.location}</span>
+                                            </div>
+                                            <h2 className={styles.eventTitle}>{ev.title}</h2>
+                                            <p className={styles.eventExcerpt}>{ev.description}</p>
+                                            <div className={styles.eventFooter}>
+                                                <div className={styles.eventPrice}>
+                                                    <span className={styles.priceLabel}>Kwinjira</span>
+                                                    <span
+                                                        className={styles.priceValue}
+                                                        style={{ color: ev.is_free ? "#16a34a" : "var(--navy)" }}
+                                                    >
+                                                        {ev.is_free ? "Kubuntu" : (ev.price ?? "Baza")}
+                                                    </span>
+                                                </div>
+                                                <span className="btn btn-outline">Reba byinshi</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <ShareIconButton
+                                        url={absoluteUrl(`/events/${ev.slug}`)}
+                                        title={ev.title}
+                                        className={styles.cardShare}
+                                    />
+                                </article>
                             );
                         })}
                     </div>
