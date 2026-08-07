@@ -132,6 +132,16 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
     const verseRef  = settings.verse_reference ?? defaultSettings.verse_reference ?? "";
     const homepageEmbedTitle = settings.homepage_embed_title ?? defaultSettings.homepage_embed_title ?? "";
     const homepageEmbedUrl = (settings.homepage_embed_url ?? defaultSettings.homepage_embed_url ?? "").trim();
+    const topAdImage = adImage(
+        settings.ad_home_top_image ?? defaultSettings.ad_home_top_image,
+        "/ads/urugero-live-radio-banner.png",
+    );
+    const sidebarAdImage = adImage(
+        settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image,
+        "/ads/urugero-media-square.png",
+    );
+    const topAdIsDefault = topAdImage === adImage(defaultSettings.ad_home_top_image, "/ads/urugero-live-radio-banner.png");
+    const sidebarAdIsDefault = sidebarAdImage === adImage(defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png");
 
     const videoList = videos.length > 0 ? videos : FALLBACK_VIDEOS;
     const categoryBasePaths = Object.fromEntries(
@@ -179,14 +189,14 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
             {/* Banner ad above the latest stories */}
             <div className={`container ${styles.homeAd}`}>
                 <AdSlot
-                    imageUrl={adImage(settings.ad_home_top_image ?? defaultSettings.ad_home_top_image, "/ads/urugero-live-radio-banner.png")}
+                    imageUrl={topAdImage}
                     href={settings.ad_home_top_link ?? defaultSettings.ad_home_top_link ?? "/urugero-tv-radio"}
                     title="Urugero Live Radio"
                     badge="Live Radio"
                     headline="Urugero Online Radio"
                     description="Indirimbo z'Imana, inyigisho, amakuru na gahunda za buri munsi."
                     cta="Umva nonaha"
-                    slides={BANNER_AD_SLIDES}
+                    slides={topAdIsDefault ? BANNER_AD_SLIDES : []}
                 />
             </div>
 
@@ -424,7 +434,7 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                     {/* ── After-hero: square ad + newsletter band ── */}
                     <div className={`container ${styles.afterHeroGrid}`}>
                         <AdSlot
-                            imageUrl={adImage(settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png")}
+                            imageUrl={sidebarAdImage}
                             href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
                             title="Kwamamaza kuri Urugero Media"
                             variant="square"
@@ -432,7 +442,7 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                             headline="Urugero Gospel News"
                             description="Amakuru, radio, sport n'ibiganiro bya Gospel."
                             cta="Menya byinshi"
-                            slides={SQUARE_AD_SLIDES}
+                            slides={sidebarAdIsDefault ? SQUARE_AD_SLIDES : []}
                         />
 
                         <NewsletterWidget band />

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getCurrentAdmin } from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabase";
 import {
@@ -59,5 +60,7 @@ export async function PUT(req: NextRequest) {
         .upsert(rows, { onConflict: "key" });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    revalidatePath("/");
+    revalidatePath("/urugero-tv-radio");
     return NextResponse.json({ ok: true });
 }
