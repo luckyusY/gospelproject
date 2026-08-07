@@ -43,6 +43,15 @@
 
 .fieldIcon { color: var(--text-muted); }
 
+.uploadField {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.uploadField :global(.imgUploader) {
+    margin-top: 0.25rem;
+}
+
 .successMsg {
     background-color: #d1fae5;
     color: #065f46;
