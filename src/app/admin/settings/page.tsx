@@ -12,6 +12,7 @@ import {
 import styles from "../form.module.css";
 import settStyles from "./settings.module.css";
 import { SETTING_DEFINITIONS, type SettingGroup } from "@/lib/siteSettings";
+import CloudinaryUploader from "../articles/_components/CloudinaryUploader";
 
 type Setting = { key: string; value: string; label: string; description?: string | null };
 type SettingsResponse = Setting[] | { error?: string; warning?: string; settings?: Setting[] };
@@ -32,6 +33,11 @@ const ICONS: Record<string, React.ElementType> = {
     ad_home_sidebar_image: ImageSquare,
     ad_home_sidebar_link: ImageSquare,
 };
+
+const IMAGE_UPLOAD_SETTINGS = new Set([
+    "ad_home_top_image",
+    "ad_home_sidebar_image",
+]);
 
 const GROUPS: Array<{ id: SettingGroup; title: string; description: string }> = [
     {
@@ -174,6 +180,7 @@ export default function SettingsPage() {
                                     const Icon = ICONS[setting.key];
                                     const inputType = definition?.input === "url" ? "url" : "text";
                                     const isTextarea = definition?.input === "textarea";
+                                    const isImageUpload = IMAGE_UPLOAD_SETTINGS.has(setting.key);
                                     const placeholder = definition?.group === "ads"
                                         ? "/ads/..."
                                         : definition?.group === "homepage"
@@ -190,7 +197,28 @@ export default function SettingsPage() {
                                             {(definition?.description ?? setting.description) && (
                                                 <span className={styles.hint}>{definition?.description ?? setting.description}</span>
                                             )}
-                                            {isTextarea ? (
+                                            {isImageUpload ? (
+                                                <div className={settStyles.uploadField}>
+                                                    <CloudinaryUploader
+                                                        value={values[setting.key] ?? setting.value ?? ""}
+                                                        onChange={url => setValues(v => ({
+                                                            ...v,
+                                                            [setting.key]: url,
+                                                        }))}
+                                                    />
+                                                    <input
+                                                        type={inputType}
+                                                        value={values[setting.key] ?? setting.value ?? ""}
+                                                        onChange={event => setValues(v => ({
+                                                            ...v,
+                                                            [setting.key]: event.target.value,
+                                                        }))}
+                                                        className={styles.input}
+                                                        placeholder={placeholder}
+                                                        required={required}
+                                                    />
+                                                </div>
+                                            ) : isTextarea ? (
                                                 <textarea
                                                     value={values[setting.key] ?? setting.value ?? ""}
                                                     onChange={event => setValues(v => ({
