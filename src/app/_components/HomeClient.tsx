@@ -48,30 +48,6 @@ const EVENTS_FALLBACK = [
     { month: "JUL", day: "20", title: "Urugero Music Academy Show",  subtitle: "Amahoro Stadium • 15:00" },
 ];
 
-const BANNER_AD_SLIDES = [
-    {
-        imageUrl: "/ads/urugero-tv-banner.png",
-        href: "/urugero-tv-radio",
-        title: "Urugero TV videos",
-        badge: "Urugero TV",
-        headline: "Amashusho mashya",
-        description: "Ibiganiro, ubuhamya, sport n'amakuru ya Gospel kuri YouTube.",
-        cta: "Reba videos",
-    },
-];
-
-const SQUARE_AD_SLIDES = [
-    {
-        imageUrl: "/ads/urugero-media-square.png",
-        href: "/inyigisho/bible-quiz",
-        title: "Urugero Bible Quiz",
-        badge: "Bible Quiz",
-        headline: "Inyigisho zubaka",
-        description: "Tumenye Bibiliya n'ibiganiro byubaka umuryango.",
-        cta: "Tangira",
-    },
-];
-
 function adImage(imageUrl: string | undefined, fallback: string) {
     if (!imageUrl) return fallback;
 
@@ -140,8 +116,14 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
         settings.ad_home_sidebar_image ?? defaultSettings.ad_home_sidebar_image,
         "/ads/urugero-media-square.png",
     );
-    const topAdIsDefault = topAdImage === adImage(defaultSettings.ad_home_top_image, "/ads/urugero-live-radio-banner.png");
-    const sidebarAdIsDefault = sidebarAdImage === adImage(defaultSettings.ad_home_sidebar_image, "/ads/urugero-media-square.png");
+    const topAdBadge = settings.ad_home_top_badge ?? defaultSettings.ad_home_top_badge ?? "Live Radio";
+    const topAdHeadline = settings.ad_home_top_headline ?? defaultSettings.ad_home_top_headline ?? "Urugero Online Radio";
+    const topAdDescription = settings.ad_home_top_description ?? defaultSettings.ad_home_top_description ?? "Indirimbo z'Imana, inyigisho, amakuru na gahunda za buri munsi.";
+    const topAdCta = settings.ad_home_top_cta ?? defaultSettings.ad_home_top_cta ?? "Umva nonaha";
+    const sidebarAdBadge = settings.ad_home_sidebar_badge ?? defaultSettings.ad_home_sidebar_badge ?? "Kwamamaza";
+    const sidebarAdHeadline = settings.ad_home_sidebar_headline ?? defaultSettings.ad_home_sidebar_headline ?? "Urugero Gospel News";
+    const sidebarAdDescription = settings.ad_home_sidebar_description ?? defaultSettings.ad_home_sidebar_description ?? "Amakuru, radio, sport n'ibiganiro bya Gospel.";
+    const sidebarAdCta = settings.ad_home_sidebar_cta ?? defaultSettings.ad_home_sidebar_cta ?? "Menya byinshi";
 
     const videoList = videos.length > 0 ? videos : FALLBACK_VIDEOS;
     const categoryBasePaths = Object.fromEntries(
@@ -192,11 +174,10 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                     imageUrl={topAdImage}
                     href={settings.ad_home_top_link ?? defaultSettings.ad_home_top_link ?? "/urugero-tv-radio"}
                     title="Urugero Live Radio"
-                    badge="Live Radio"
-                    headline="Urugero Online Radio"
-                    description="Indirimbo z'Imana, inyigisho, amakuru na gahunda za buri munsi."
-                    cta="Umva nonaha"
-                    slides={topAdIsDefault ? BANNER_AD_SLIDES : []}
+                    badge={topAdBadge}
+                    headline={topAdHeadline}
+                    description={topAdDescription}
+                    cta={topAdCta}
                 />
             </div>
 
@@ -438,11 +419,10 @@ export default function HomeClient({ heroStories, gridStories, events, testimoni
                             href={settings.ad_home_sidebar_link ?? defaultSettings.ad_home_sidebar_link ?? "/contact"}
                             title="Kwamamaza kuri Urugero Media"
                             variant="square"
-                            badge="Kwamamaza"
-                            headline="Urugero Gospel News"
-                            description="Amakuru, radio, sport n'ibiganiro bya Gospel."
-                            cta="Menya byinshi"
-                            slides={sidebarAdIsDefault ? SQUARE_AD_SLIDES : []}
+                            badge={sidebarAdBadge}
+                            headline={sidebarAdHeadline}
+                            description={sidebarAdDescription}
+                            cta={sidebarAdCta}
                         />
 
                         <NewsletterWidget band />
