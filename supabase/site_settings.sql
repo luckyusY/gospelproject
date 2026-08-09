@@ -46,10 +46,18 @@ INSERT INTO public.site_settings (key, value, label, description) VALUES
                           'Sport Gospel|Inshundura Sports News n''inkuru za ruhago.|#sports' || chr(10) ||
                           'Video Library|Playlist yose ya YouTube iri hano ku rubuga.|#playlist',
                           'TV & Radio program cards', 'Umurongo umwe = Title|Description|Link'),
-('ad_home_top_image','/ads/urugero-live-radio-banner.svg',               'Homepage banner ad image', 'Ifoto ya ad igaragara hagati y''inkuru na live radio'),
+('ad_home_top_image','/ads/urugero-live-radio-banner.png',               'Homepage banner ad image', 'Ifoto ya ad igaragara hagati y''inkuru na live radio. Size: 970 x 250 px'),
 ('ad_home_top_link', '/urugero-tv-radio',                                'Homepage banner ad link', 'Aho umuntu ajya iyo akanze kuri banner ad'),
-('ad_home_sidebar_image','/ads/urugero-gospel-news-square.svg',          'Sidebar ad image', 'Ifoto ya ad igaragara muri sidebar yo ku rupapuro rubanza'),
-('ad_home_sidebar_link','/contact',                                      'Sidebar ad link', 'Aho umuntu ajya iyo akanze kuri sidebar ad')
+('ad_home_top_badge','Live Radio',                                       'Banner overlay badge', 'Akamenyetso kagaragara hejuru ya banner ad'),
+('ad_home_top_headline','Urugero Online Radio',                          'Banner overlay headline', 'Umutwe munini ugaragara hejuru ya banner ad'),
+('ad_home_top_description','Indirimbo z''Imana, inyigisho, amakuru na gahunda za buri munsi.', 'Banner overlay description', 'Amagambo magufi agaragara hejuru ya banner ad'),
+('ad_home_top_cta','Umva nonaha',                                        'Banner overlay button text', 'Amagambo agaragara kuri button ya banner ad'),
+('ad_home_sidebar_image','/ads/urugero-media-square.png',                'Sidebar ad image', 'Ifoto ya ad igaragara kuri homepage. Size: 1080 x 1080 px cyangwa 1200 x 1200 px'),
+('ad_home_sidebar_link','/contact',                                      'Sidebar ad link', 'Aho umuntu ajya iyo akanze kuri sidebar ad'),
+('ad_home_sidebar_badge','Kwamamaza',                                   'Square ad overlay badge', 'Akamenyetso kagaragara hejuru ya square ad'),
+('ad_home_sidebar_headline','Urugero Gospel News',                       'Square ad overlay headline', 'Umutwe munini ugaragara hejuru ya square ad'),
+('ad_home_sidebar_description','Amakuru, radio, sport n''ibiganiro bya Gospel.', 'Square ad overlay description', 'Amagambo magufi agaragara hejuru ya square ad'),
+('ad_home_sidebar_cta','Menya byinshi',                                  'Square ad overlay button text', 'Amagambo agaragara kuri button ya square ad')
 ON CONFLICT (key) DO NOTHING;
 
 UPDATE public.site_settings
