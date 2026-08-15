@@ -1,5 +1,7 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
+import { supabaseAdmin } from "@/lib/supabase";
+import type { AdminUserRow } from "@/types/database";
 
 export const ADMIN_SESSION_COOKIE = "admin_auth";
 export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 24;
@@ -18,6 +20,13 @@ type AdminAccount = {
     password: string;
     role: AdminRole;
     displayName: string;
+};
+
+export type AdminAccountSummary = Omit<AdminAccount, "password"> & {
+    id: string | null;
+    source: "database" | "environment";
+    isActive: boolean;
+    createdAt: string | null;
 };
 
 export type CurrentAdmin = {
@@ -109,6 +118,27 @@ export function getAdminAccounts() {
     return [...accounts.values()];
 }
 
+function fromDatabaseAccount(account: AdminUserRow): AdminAccount {
+    return {
+        username: account.username,
+        password: account.password_hash,
+        role: normalizeRole(account.role),
+        displayName: account.display_name,
+    };
+}
+
+async function getDatabaseAccount(username: string) {
+    const { data, error } = await supabaseAdmin()
+        .from("admin_users")
+        .select("*")
+        .eq("username", username.trim().toLowerCase())
+        .eq("is_active", true)
+        .maybeSingle();
+
+    if (error || !data) return null;
+    return data as AdminUserRow;
+}
+
 function safeEqual(left: string, right: string) {
     const leftBuffer = Buffer.from(left);
     const rightBuffer = Buffer.from(right);
@@ -117,9 +147,32 @@ function safeEqual(left: string, right: string) {
         && timingSafeEqual(leftBuffer, rightBuffer);
 }
 
-export function verifyAdminCredentials(username: string, password: string) {
+export function hashAdminPassword(password: string) {
+    const salt = randomBytes(16).toString("hex");
+    const hash = scryptSync(password, salt, 64).toString("hex");
+    return `scrypt:${salt}:${hash}`;
+}
+
+function verifyHashedPassword(password: string, storedHash: string) {
+    const [algorithm, salt, expected] = storedHash.split(":");
+    if (algorithm !== "scrypt" || !salt || !expected) return false;
+    const actual = scryptSync(password, salt, 64).toString("hex");
+    return safeEqual(actual, expected);
+}
+
+export async function verifyAdminCredentials(username: string, password: string) {
     const cleanUsername = username.trim().toLowerCase();
     if (!cleanUsername || !password) return null;
+
+    const databaseAccount = await getDatabaseAccount(cleanUsername);
+    if (databaseAccount && verifyHashedPassword(password, databaseAccount.password_hash)) {
+        const account = fromDatabaseAccount(databaseAccount);
+        return {
+            username: account.username,
+            role: account.role,
+            displayName: account.displayName,
+        } satisfies CurrentAdmin;
+    }
 
     const account = getAdminAccounts().find(
         (candidate) => candidate.username.toLowerCase() === cleanUsername,
@@ -161,7 +214,7 @@ export function createAdminSession(admin: CurrentAdmin | string) {
     return `v1.${payload}.${signPayload(payload)}`;
 }
 
-export function verifyAdminSession(value: string | undefined) {
+export async function verifyAdminSession(value: string | undefined) {
     if (!value) return null;
 
     const [version, payload, signature] = value.split(".");
@@ -180,9 +233,12 @@ export function verifyAdminSession(value: string | undefined) {
         if (Date.now() - session.iat > ADMIN_SESSION_MAX_AGE * 1000) return null;
 
         const username = session.username;
-        const account = getAdminAccounts().find(
-            (account) => account.username.toLowerCase() === username.toLowerCase(),
-        );
+        const databaseAccount = await getDatabaseAccount(username);
+        const account = databaseAccount
+            ? fromDatabaseAccount(databaseAccount)
+            : getAdminAccounts().find(
+                candidate => candidate.username.toLowerCase() === username.toLowerCase(),
+            );
 
         return account
             ? ({
@@ -198,7 +254,34 @@ export function verifyAdminSession(value: string | undefined) {
 
 export async function getCurrentAdmin() {
     const cookieStore = await cookies();
-    return verifyAdminSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+    return await verifyAdminSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+}
+
+export async function listAdminAccounts(): Promise<AdminAccountSummary[]> {
+    const environmentAccounts = getAdminAccounts().map(account => ({
+        id: null,
+        username: account.username,
+        role: account.role,
+        displayName: account.displayName,
+        source: "environment" as const,
+        isActive: true,
+        createdAt: null,
+    }));
+    const { data } = await supabaseAdmin()
+        .from("admin_users")
+        .select("id, username, display_name, role, is_active, created_at")
+        .order("created_at", { ascending: false });
+    const databaseAccounts = (data ?? []).map(account => ({
+        id: String(account.id),
+        username: String(account.username),
+        role: normalizeRole(String(account.role)),
+        displayName: String(account.display_name),
+        source: "database" as const,
+        isActive: Boolean(account.is_active),
+        createdAt: String(account.created_at),
+    }));
+
+    return [...databaseAccounts, ...environmentAccounts];
 }
 
 export function isFullAdmin(admin: CurrentAdmin | null) {

@@ -102,6 +102,12 @@ export interface Database {
                 Update: Partial<ContestVoteInsert> & Record<string, unknown>;
                 Relationships: [];
             };
+            admin_users: {
+                Row:    AdminUserRow & Record<string, unknown>;
+                Insert: AdminUserInsert & Record<string, unknown>;
+                Update: Partial<AdminUserInsert> & Record<string, unknown>;
+                Relationships: [];
+            };
         };
         Views:     Record<string, never>;
         Functions: {
@@ -120,6 +126,19 @@ export interface Database {
 }
 
 // ── Categories ─────────────────────────────────────────────
+export interface AdminUserRow {
+    id:            string;
+    username:      string;
+    display_name:  string;
+    role:          "admin" | "journalist";
+    password_hash: string;
+    is_active:     boolean;
+    created_by:    string | null;
+    created_at:    string;
+    updated_at:    string;
+}
+export type AdminUserInsert = Omit<AdminUserRow, "id" | "created_at" | "updated_at">;
+
 export interface CategoryRow {
     id:          number;
     name:        string;
