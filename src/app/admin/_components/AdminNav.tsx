@@ -20,6 +20,7 @@ const NAV_LINKS = [
     { href: "/admin/voting",      label: "Voting",       icon: "🗳️" },
     { href: "/admin/menu",        label: "Menu",         icon: "🧭" },
     { href: "/admin/settings",    label: "Settings",     icon: "⚙️" },
+    { href: "/admin/users",       label: "Users",        icon: "👥" },
 ];
 
 const JOURNALIST_NAV_LINKS = [

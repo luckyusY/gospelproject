@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const form = await req.formData();
     const username = (form.get("username") as string | null)?.trim() || "admin";
     const password = form.get("password") as string | null;
-    const admin = password ? verifyAdminCredentials(username, password) : null;
+    const admin = password ? await verifyAdminCredentials(username, password) : null;
 
     if (!admin) {
         return NextResponse.redirect(new URL("/admin/login?error=1", req.url));
