@@ -12,25 +12,28 @@ export async function uploadToCloudinary(
     file: Blob,
     onProgress?: (percent: number) => void,
 ): Promise<string> {
-    const timestamp = Math.round(Date.now() / 1000);
-
-    // 1. Get a server-side signature
+    // 1. Get a server-side signature. The timestamp comes back from the server
+    //    too: signing the browser's clock makes Cloudinary reject the upload
+    //    with "Stale request" whenever the editor's PC clock is off.
     const signRes = await fetch("/api/cloudinary/sign", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({
-            paramsToSign: { folder: FOLDER, timestamp: String(timestamp) },
+            paramsToSign: { folder: FOLDER },
         }),
     });
 
     if (!signRes.ok) throw new Error("Could not get an upload signature.");
-    const { signature } = (await signRes.json()) as { signature: string };
+    const { signature, timestamp } = (await signRes.json()) as {
+        signature: string;
+        timestamp: string;
+    };
 
     // 2. Upload directly to Cloudinary with XHR (for progress)
     const fd = new FormData();
     fd.append("file",      file);
     fd.append("api_key",   API_KEY);
-    fd.append("timestamp", String(timestamp));
+    fd.append("timestamp", timestamp);
     fd.append("signature", signature);
     fd.append("folder",    FOLDER);
 
